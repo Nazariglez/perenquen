@@ -1,0 +1,25 @@
+{
+  "name": "PerenquenJS",
+  "version": "0.0.0",
+  "homepage" : "http://perenquenjs.com",
+  "description" : "HTML5 Game Framework for mobile, web and desktop development.",
+
+  "author" : "Nazari Gonzalez <nazari.nz@gmail.com> (http://www.nazariglez.com)",
+  "license" : "MIT",
+
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/Nazariglez/perenquenjs"
+  },
+
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gulp-concat": "^2.4.1",
+    "gulp-insert": "^0.4.0",
+    "gulp-jshint": "^1.8.4",
+    "gulp-sourcemaps": "^1.2.4",
+    "gulp-uglifyjs": "^0.4.2"
+  },
+
+  "private" : true
+}
