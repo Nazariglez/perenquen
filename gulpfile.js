@@ -49,35 +49,30 @@ var perenquenScripts = [
 ];
 
 var headerTxt = '/**\n' +
-    ' * PerenquenJS - http://perenquenjs.com\n' +
+    ' * Perenquen.js - http://perenquenjs.com\n' +
     ' * Version: ' + perenquenVersion + '\n' +
-    ' * Compiled: ' + (new Date()).toString() + '\n';
+    ' * Compiled: ' + (new Date()).toString() + '\n' +
+    ' * Pixi.js v' + pixiVersion + ' included. [http://pixijs.com]\n' +
+    ' */\n';
 
 gulp.task('compile', function(){
-    var header = headerTxt + ' *\n' +
-        ' * PixiJS v' + pixiVersion + ' included. [http://pixijs.com]\n' +
-        ' */\n';
-
     var scripts = (['./libs/pixi.dev.js']).concat(perenquenScripts);
+
     return gulp.src(scripts)
         .pipe(uglify('perenquen.js'))
-        .pipe(insert.prepend(header))
+        .pipe(insert.prepend(headerTxt))
         .pipe(gulp.dest('./build'));
 });
 
 //TODO: Los sourcemaps salen fatal si usas insert, no referencian nada.
 gulp.task('compileDev', function(){
-    var header = headerTxt + ' *\n' +
-        ' * Needs PixiJS v' + pixiVersion + ' to work. [http://pixijs.com]\n' +
-        ' */\n';
-
     var scripts = (['./libs/pixi.dev.js']).concat(perenquenScripts);
 
-    return gulp.src(perenquenScripts)
+    return gulp.src(scripts)
         //.pipe(sourcemaps.init())
         .pipe(concat('perenquen.dev.js'))
         //.pipe(sourcemaps.write('./'))
-        .pipe(insert.prepend(header))
+        .pipe(insert.prepend(headerTxt+ '\n\n\n'))
         .pipe(gulp.dest('./build'));
 });
 
