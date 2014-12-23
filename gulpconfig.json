@@ -29,8 +29,8 @@
     ],
 
     "sources": [
-        "./src/Core.js",
         "./src/PixiChanges.js",
+        "./src/Core.js",
         "./src/Device.js",
         "./src/Debug.js",
         "./src/JsonLoader.js",
