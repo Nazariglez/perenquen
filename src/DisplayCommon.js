@@ -428,7 +428,8 @@
 
     Object.defineProperty(PQ.DisplayCommon, 'scaleX', {
         set: function(value){
-            this.scale.x = (this.scale.x/this._scaleX) * value || value;
+            var scale = (this.scale.x/this._scaleX) * value;
+            this.scale.x = isNaN(scale) ? value : scale;
             this._scaleX = value;
         },
 
@@ -439,7 +440,8 @@
 
     Object.defineProperty(PQ.DisplayCommon, 'scaleY', {
         set: function(value){
-            this.scale.y = (this.scale.y/this._scaleY) * value || value;
+            var scale = (this.scale.y/this._scaleY) * value;
+            this.scale.y = isNaN(scale) ? value : scale;
             this._scaleY = value;
         },
 
