@@ -1,0 +1,70 @@
+{
+    "filename" : {
+        "min" : "perenquen",
+        "dev" : "perenquen.dev"
+    },
+
+    "version": {
+        "perenquen": "0.0.0",
+        "pixi": "2.1.0"
+    },
+
+    "url" : {
+        "perenquen": "http://perenquenjs.com",
+        "pixi": "http://pixijs.com"
+    },
+
+    "header" : [
+        "/**",
+        " * Perenquen.js - ${url.perenquen}",
+        " * Version: ${version.perenquen}",
+        " * Compiled: ${date}",
+        " * Pixi.js v${version.pixi} bundled. [${url.pixi}]",
+        " */",
+        ""
+    ],
+
+    "libs" : [
+        "./libs/pixi.dev.js"
+    ],
+
+    "sources": [
+        "./src/Core.js",
+        "./src/PixiChanges.js",
+        "./src/Device.js",
+        "./src/Debug.js",
+        "./src/JsonLoader.js",
+        "./src/BitmapFontLoader.js",
+        "./src/ImageLoader.js",
+        "./src/DataManager.js",
+        "./src/Game.js",
+        "./src/Keyboard.js",
+        "./src/Pool.js",
+        "./src/Point.js",
+        "./src/Path.js",
+        "./src/Locale.js",
+        "./src/DisplayCommon.js",
+        "./src/Container.js",
+        "./src/Graphics.js",
+        "./src/Sprite.js",
+        "./src/TilingSprite.js",
+        "./src/SceneManager.js",
+        "./src/Scene.js",
+        "./src/SceneTransition.js",
+        "./src/Camera.js",
+        "./src/AssetManager.js",
+        "./src/AssetLoader.js",
+        "./src/TextObject.js",
+        "./src/WebAudioSource.js",
+        "./src/WebAudio.js",
+        "./src/HTMLAudio.js",
+        "./src/AudioLoader.js",
+        "./src/AudioManager.js",
+        "./src/TimerManager.js",
+        "./src/Timer.js",
+        "./src/TweenManager.js",
+        "./src/Tween.js",
+        "./src/ParticleSystem.js",
+        "./src/Utils.js"
+    ]
+}

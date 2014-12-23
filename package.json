@@ -14,8 +14,8 @@
 
   "devDependencies": {
     "gulp": "^3.8.7",
+    "gulp-header": "^1.2.2",
     "gulp-concat": "^2.4.1",
-    "gulp-insert": "^0.4.0",
     "gulp-jshint": "^1.8.4",
     "gulp-sourcemaps": "^1.2.4",
     "gulp-uglifyjs": "^0.4.2"

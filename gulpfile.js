@@ -1,90 +1,54 @@
 var gulp = require('gulp'),
+    header = require('gulp-header'),
     uglify = require('gulp-uglifyjs'),
     jshint = require('gulp-jshint'),
     concat = require('gulp-concat'),
     sourcemaps = require('gulp-sourcemaps'),
-    insert = require('gulp-insert');
 
-var perenquenVersion = "0.0.0",
-    pixiVersion = "2.1.0";
+    config = require('./gulpconfig.json');
 
-var perenquenScripts = [
-    './src/Core.js',
-    './src/PixiChanges.js',
-    './src/Device.js',
-    './src/Debug.js',
-    './src/JsonLoader.js',
-    './src/BitmapFontLoader.js',
-    './src/ImageLoader.js',
-    './src/DataManager.js',
-    './src/Game.js',
-    './src/Keyboard.js',
-    './src/Pool.js',
-    './src/Point.js',
-    './src/Path.js',
-    './src/Locale.js',
-    './src/DisplayCommon.js',
-    './src/Container.js',
-    './src/Graphics.js',
-    './src/Sprite.js',
-    './src/TilingSprite.js',
-    './src/SceneManager.js',
-    './src/Scene.js',
-    './src/SceneTransition.js',
-    './src/Camera.js',
-    './src/AssetManager.js',
-    './src/AssetLoader.js',
-    './src/TextObject.js',
-    './src/WebAudioSource.js',
-    './src/WebAudio.js',
-    './src/HTMLAudio.js',
-    './src/AudioLoader.js',
-    './src/AudioManager.js',
-    './src/TimerManager.js',
-    './src/Timer.js',
-    './src/TweenManager.js',
-    './src/Tween.js',
-    './src/ParticleSystem.js',
-    './src/Utils.js'
-];
-
-var headerTxt = '/**\n' +
-    ' * Perenquen.js - http://perenquenjs.com\n' +
-    ' * Version: ' + perenquenVersion + '\n' +
-    ' * Compiled: ' + (new Date()).toString() + '\n' +
-    ' * Pixi.js v' + pixiVersion + ' included. [http://pixijs.com]\n' +
-    ' */\n';
+var headerPattern = config.header.join('\n');
+config.date = (new Date()).toString();
 
 gulp.task('compile', function(){
-    var scripts = (['./libs/pixi.dev.js']).concat(perenquenScripts);
+    var scripts = (config.libs).concat(config.sources);
 
     return gulp.src(scripts)
-        .pipe(uglify('perenquen.js'))
-        .pipe(insert.prepend(headerTxt))
+        .pipe(uglify(config.filename.min + '.js'))
+        .on("error", function() {
+            this.emit('end');
+        })
+        .pipe(header(headerPattern, config))
         .pipe(gulp.dest('./build'));
 });
 
 //TODO: Los sourcemaps salen fatal si usas insert, no referencian nada.
 gulp.task('compileDev', function(){
-    var scripts = (['./libs/pixi.dev.js']).concat(perenquenScripts);
+    var scripts = (config.libs).concat(config.sources);
 
     return gulp.src(scripts)
         //.pipe(sourcemaps.init())
-        .pipe(concat('perenquen.dev.js'))
+        .pipe(concat(config.filename.dev + '.js'))
+        .on("error", function() {
+            this.emit('end');
+        })
         //.pipe(sourcemaps.write('./'))
-        .pipe(insert.prepend(headerTxt+ '\n\n\n'))
+        .pipe(header(headerPattern, config))
         .pipe(gulp.dest('./build'));
 });
 
 gulp.task('lint', function(){
-     return gulp.src(perenquenScripts)
+     return gulp.src(config.sources)
          .pipe(jshint())
          .pipe(jshint.reporter('default'));
 });
 
 
 gulp.task('watch', function(){
+    gulp.watch('./gulpconfig.json', ['lint','compileDev']);
+
     gulp.watch('./src/**/*.js', ['lint','compileDev']);
+    gulp.watch('./src/**/*.json', ['lint','compileDev']);
 });
 
 gulp.task('dev', ['lint', 'compileDev', 'watch']);
