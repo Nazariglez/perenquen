@@ -118,6 +118,12 @@
             return this;
         },
 
+        setRotation: function(value){
+            value = value || 0;
+            this.rotation = 0;
+            return this;
+        },
+
         addChild: function(child){
             PIXI.DisplayObjectContainer.prototype.addChild.call(this, child);
             this._sortChildrenByDepth();
@@ -422,7 +428,7 @@
 
     Object.defineProperty(PQ.DisplayCommon, 'scaleX', {
         set: function(value){
-            this.scale.x = (this.scale.x/this._scaleX) * value;
+            this.scale.x = (this.scale.x/this._scaleX) * value || value;
             this._scaleX = value;
         },
 
@@ -433,7 +439,7 @@
 
     Object.defineProperty(PQ.DisplayCommon, 'scaleY', {
         set: function(value){
-            this.scale.y = (this.scale.y/this._scaleY) * value;
+            this.scale.y = (this.scale.y/this._scaleY) * value || value;
             this._scaleY = value;
         },
 
@@ -464,13 +470,13 @@
 
     Object.defineProperty(PQ.DisplayCommon, 'realWidth', {
         get: function() {
-            return this.scale.x * this._width;
+            return Math.abs(this.scale.x * this._width);
         }
     });
 
     Object.defineProperty(PQ.DisplayCommon, 'realHeight', {
         get: function() {
-            return  this.scale.y * this._height;
+            return  Math.abs(this.scale.y * this._height);
         }
     });
 
