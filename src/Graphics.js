@@ -12,6 +12,10 @@
         },
 
         drawPath: function(path){
+            if(!this.filling && !this.lineColor && !this.lineWidth){
+                this.lineStyle(path.lineWidth, path.lineColor, path.lineAlpha);
+            }
+
             this.drawShape(path.polygon);
             return this;
         }
