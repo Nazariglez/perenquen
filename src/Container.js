@@ -2,7 +2,7 @@
 
     //TODO: limited y unfixed bounds
     //TODO: generateTexture no calcula bien los bounds, sobrescribir?
-    PQ.Container = PIXI.DisplayObjectContainer.extend(PQ.DisplayCommon, {
+    PQ.Container = PIXI.DisplayObjectContainer.extend(PQ.DisplayMixin, {
         _init: function(){
             PQ.Container._super._init.call(this);
             this.vel = new PQ.Point(0,0);

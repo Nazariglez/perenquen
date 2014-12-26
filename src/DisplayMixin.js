@@ -1,6 +1,6 @@
 (function(){
 
-    PQ.DisplayCommon = {
+    PQ.DisplayMixin = {
         depth: 0,
         _z: 0,
         scaleX: 1,
@@ -412,7 +412,7 @@
         onKeyState: function(evt){}
     };
 
-    Object.defineProperty(PQ.DisplayCommon, 'depth', {
+    Object.defineProperty(PQ.DisplayMixin, 'depth', {
         set: function(value){
             value = value || 0;
             this._z = value;
@@ -426,7 +426,7 @@
         }
     });
 
-    Object.defineProperty(PQ.DisplayCommon, 'scaleX', {
+    Object.defineProperty(PQ.DisplayMixin, 'scaleX', {
         set: function(value){
             var scale = (this.scale.x/this._scaleX) * value;
             this.scale.x = isNaN(scale) ? value : scale;
@@ -438,7 +438,7 @@
         }
     });
 
-    Object.defineProperty(PQ.DisplayCommon, 'scaleY', {
+    Object.defineProperty(PQ.DisplayMixin, 'scaleY', {
         set: function(value){
             var scale = (this.scale.y/this._scaleY) * value;
             this.scale.y = isNaN(scale) ? value : scale;
@@ -450,7 +450,7 @@
         }
     });
 
-    Object.defineProperty(PQ.DisplayCommon, 'width', {
+    Object.defineProperty(PQ.DisplayMixin, 'width', {
         get: function() {
             return this._width;//this.scale.x * this.texture.frame.width;
         },
@@ -460,7 +460,7 @@
         }
     });
 
-    Object.defineProperty(PQ.DisplayCommon, 'height', {
+    Object.defineProperty(PQ.DisplayMixin, 'height', {
         get: function() {
             return this._height; //this.scale.y * this.texture.frame.height;
         },
@@ -470,13 +470,13 @@
         }
     });
 
-    Object.defineProperty(PQ.DisplayCommon, 'realWidth', {
+    Object.defineProperty(PQ.DisplayMixin, 'realWidth', {
         get: function() {
             return Math.abs(this.scale.x * this._width);
         }
     });
 
-    Object.defineProperty(PQ.DisplayCommon, 'realHeight', {
+    Object.defineProperty(PQ.DisplayMixin, 'realHeight', {
         get: function() {
             return  Math.abs(this.scale.y * this._height);
         }

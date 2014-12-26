@@ -2,7 +2,7 @@
 
     //TODO: Funcion de crop
 
-    PQ.Sprite = PIXI.Sprite.extend(PQ.DisplayCommon, {
+    PQ.Sprite = PIXI.Sprite.extend(PQ.DisplayMixin, {
         _init: function(texture){
             if(!texture){
                 texture = PQ.AssetCache.getTexture("_PQDefaultTexture");

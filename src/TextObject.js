@@ -2,7 +2,7 @@
 
     //TODO: Adaptar el realWidth y realHeight
     //TODO: el fill se pasa como string, por hacerla como los demás, en plan 0xffffff
-    PQ.Text = PIXI.Text.extend(PQ.DisplayCommon, {
+    PQ.Text = PIXI.Text.extend(PQ.DisplayMixin, {
         _init: function(text, style){
             text = text || ' ';
             PQ.Text._super._init.call(this, text, style);
@@ -61,7 +61,7 @@
         }
     });
 
-    PQ.BitmapText = PIXI.BitmapText.extend(PQ.DisplayCommon, {
+    PQ.BitmapText = PIXI.BitmapText.extend(PQ.DisplayMixin, {
         _init: function(text, style){
             text = text || ' ';
             PQ.BitmapText._super._init.call(this, text, style);

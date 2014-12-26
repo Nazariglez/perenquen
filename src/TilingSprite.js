@@ -1,6 +1,6 @@
 (function(){
     //TODO: Problemas con renderTexture en webgl no recibe el parametro source y peta, en canvas funciona, hacer testcase para pixi
-    PQ.TilingSprite = PIXI.TilingSprite.extend(PQ.DisplayCommon, {
+    PQ.TilingSprite = PIXI.TilingSprite.extend(PQ.DisplayMixin, {
         _init: function(texture, width, height){
             if(!texture){
                 texture = PQ.AssetCache.getTexture("_PQDefaultTexture");
