@@ -21,11 +21,11 @@
 
             this._addChild(this.camera);
 
-            this.gui = new PQ.Container()
+            this.hud = new PQ.HUD()
                 .setSize(size.width, size.height)
                 .setPosition(size.width/2, size.height/2);
 
-            this._addChild(this.gui);
+            this._addChild(this.hud);
 
             this.scale.set(PQ.Config.resolution, PQ.Config.resolution);
 
@@ -95,8 +95,8 @@
                 this.camera._update(gameTime, frameElapsedTime);
             }
 
-            if(this.gui._update) {
-                this.gui._update(gameTime, frameElapsedTime);
+            if(this.hud._update) {
+                this.hud._update(gameTime, frameElapsedTime);
             }
         },
 
