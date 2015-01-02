@@ -3,7 +3,7 @@ var PQ = PQ || {};
 (function(){
     //TODO: Plugin Socket.io
 
-    PQ.VERSION = 'v0.0.0';
+    PQ.VERSION = 'v0.1.0';
 
     PQ.CANVAS_RENDERER = PIXI.CANVAS_RENDERER;
     PQ.WEBGL_RENDERER = PIXI.WEBGL_RENDERER;

@@ -5,7 +5,7 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     sourcemaps = require('gulp-sourcemaps'),
 
-    config = require('./gulpconfig.json');
+    config = require('./config.json');
 
 var headerPattern = config.header.join('\n');
 config.date = (new Date()).toString();
@@ -45,7 +45,7 @@ gulp.task('lint', function(){
 
 
 gulp.task('watch', function(){
-    gulp.watch('./gulpconfig.json', ['lint','compileDev']);
+    gulp.watch('./config.json', ['lint','compileDev']);
 
     gulp.watch('./src/**/*.js', ['lint','compileDev']);
     gulp.watch('./src/**/*.json', ['lint','compileDev']);

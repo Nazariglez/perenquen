@@ -38,15 +38,15 @@ You can find this files in ./build directory.
     - Data Manager (localStorage)
     - Game Camera
     - Game Scale System
-    - Particle System
     - Parallax Easy (tilingSprite)
     - Basic Debug Info
     - Graphics (Primitives)
     - Basic Device Info
-    - CocoonJS support
 - v0.2.0
     - Gamepad Support
     - Accelerometer Support
-    - ...
+    - Particle System
+    - CocoonJS support
+    - Examples
 - v0.3.0
     - ...

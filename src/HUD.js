@@ -1,7 +1,8 @@
 (function(){
 
     PQ.HUD = PQ.Container.extend({
-        _update: function(){
+        _update: function(gameTime, frameElapsedTime){
+            return PQ.HUD._super._update.call(this, gameTime, frameElapsedTime);
             //TODO: Se adapta al viewport siempre, independientemente del tamaño de escena.
         },
 
