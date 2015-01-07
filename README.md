@@ -14,6 +14,15 @@ Clone this repository and move to main path, type this in your terminal:
 Now use `gulp` to compile all in one file or `gulp dev` for a development build and watch changes.  
 You can find this files in ./build directory.
 
+##Gulp Tasks
+
+...
+
+##Release Notes
+
+- v0.2.0
+    - ...
+
 ##Roadmap
 
 - v0.1.0
@@ -27,13 +36,13 @@ You can find this files in ./build directory.
     - WebAudio && HTMLAudio Fallback
     - Auto detect best audio ext.
     - WebGL && Canvas Fallback
-    - 9Paths Texture
+    - Nine Patchs Texture
     - Scene Transitions
     - Native Text
     - Bitmap Fonts
     - XML && FNT(text) Bitmap Font loader
     - Spritesheet Loader
-    - Pool System
+    - Object Pool Helper
     - Path System && Tween Paths
     - Data Manager (localStorage)
     - Game Camera
@@ -43,10 +52,16 @@ You can find this files in ./build directory.
     - Graphics (Primitives)
     - Basic Device Info
 - v0.2.0
-    - Gamepad Support
-    - Accelerometer Support
     - Particle System
     - CocoonJS support
+    - Upgrade renderer (pixijs) to v2.2.x
     - Examples
 - v0.3.0
+    - Tilemap Support
+    - Spine Support
+- v0.4.0
+    - Gamepad Support
+    - Accelerometer Support
+    - API Documentation
+- v0.5.0
     - ...
