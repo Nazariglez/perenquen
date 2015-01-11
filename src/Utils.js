@@ -157,4 +157,12 @@
 
     };
 
+    Math.randomRange = function(min, max){
+        return Math.random() * (max - min) + min;
+    };
+
+    Math.iRandomRange = function(min, max){
+        return Math.floor(Math.randomRange(min, max));
+    };
+
 })();

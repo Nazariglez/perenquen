@@ -64,4 +64,5 @@ You can find this files in ./build directory.
     - Accelerometer Support
     - API Documentation
 - v0.5.0
+    - Physics Engine
     - ...
