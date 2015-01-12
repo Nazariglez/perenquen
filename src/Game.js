@@ -72,7 +72,11 @@
 
         visibilityChange: function(hidden){
             if(PQ.Config.pauseOnVisibilityChange){
-                this.setPause(hidden);
+                if(hidden){
+                    this.stop();
+                }else{
+                    this.start();
+                }
             }
             return this;
         },
@@ -118,6 +122,7 @@
         start: function(){
             this._updateTime();
             this._animate();
+            this.audioManager.pauseAll(false);
             return this;
         },
 
@@ -166,6 +171,7 @@
 
         stop: function(){
             window.cancelAnimationFrame(this._raf);
+            this.audioManager.pauseAll(true);
             return this;
         },
 

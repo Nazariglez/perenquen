@@ -23,6 +23,9 @@ var PQ = PQ || {};
         ASPECT_FILL: 3
     };
 
+    PQ.RAD_TO_DEG = 180 / Math.PI;
+    PQ.DEG_TO_RAD = Math.PI / 180;
+
     PQ.Config = {
         debug: false,
         mouseDoubleClickWait: 180, //TIempo de espera para lanzar el doble click en milisegundos
