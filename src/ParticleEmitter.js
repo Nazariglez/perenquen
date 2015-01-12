@@ -5,14 +5,14 @@
     var defaultConfig = {
         sprite: null,
         size: {
-            min: 5,
-            max: 5,
-            increase: 0,
+            min: 7,
+            max: 7,
+            increase: -0.1,
             shake: 0
         },
         scale: {
-            x : 1,
-            y : 1
+            x : 6,
+            y : 0.5
         },
         color: [
             0x00ff00
@@ -21,34 +21,36 @@
             1
         ],
         speed: {
-            min: 1,
+            min:1,
             max: 2,
-            increase: 0,
+            increase: 0.1,
             shake: 0
         },
-        gravity: {
-            amount: 0,
-            angle: 180
+        wind: {
+            amount: 9,
+            angle: -90
         },
         rotation: {
             min: 0,
             max: 359,
-            increase: 0,
+            increase: 1,
             shake: 0
         },
         direction: {
             min: 0,
             max: 359,
-            increase: 0,
+            increase: 6,
             shake: 0
         },
         life: {
             min: 1000,
             max: 1500
         },
-        particles: 1
+        blend: PQ.blendModes.NORMAL,
+        particles: 5
     };
 
+    //TODO: Usar algo similar al dirty, no hay porque calcular en las particulas a cada fps todos los valores si se hace el calculo en el emitter y se le pasan mientras no cambien
     PQ.ParticleEmitter = PIXI.DisplayObjectContainer.extend(PQ.DisplayMixin, {
         _init: function(config){
             PQ.ParticleEmitter._super._init.call(this);
@@ -60,8 +62,12 @@
             this.tmpPool = [];
             this._burst = 0;
             this._stream = false;
+
+            //TODO: Revisar blendModes
+            this.blendMode = this.config.blend;
         },
 
+        //TODO: Separar el punto y dimension del emitter del actor, para evitar el movimiento de particulas bajo la matrix del parent
         setSize: function(width, height){
             this.size.set(width || this.size.x, height || this.size.y);
             return this;
@@ -80,20 +86,19 @@
             return this;
         },
 
-        stream: function(value){
-            value = (value !== false);
-            this._stream = value;
+        start: function(burst){
+            if(typeof burst !== "number" || burst === 0){
+                this._stream = true;
+            }else{
+                this._burst = burst;
+            }
+
             return this;
         },
 
         stop: function(){
             this._stream = 0;
             this._burst = 0;
-            return this;
-        },
-
-        burst: function(num){
-            this._burst = (typeof num !== "number") ? 1 : num;
             return this;
         },
 
