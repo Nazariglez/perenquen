@@ -65,6 +65,8 @@
         "./src/TimerManager.js",
         "./src/Timer.js",
         "./src/TweenManager.js",
-        "./src/Tween.js"
+        "./src/Tween.js",
+        "./src/Particle.js",
+        "./src/ParticleEmitter.js"
     ]
 }
