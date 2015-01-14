@@ -114,7 +114,8 @@
 
         _updateTime: function(){
             var now = Date.now();
-            this._frameElapsedTime = now - this._lastTime;
+            var time = now - this._lastTime;
+            this._frameElapsedTime = (time <= PQ.Config.frameLimit) ? time : PQ.Config.frameLimit;
             this._lastTime = now;
             PQ.delta = this._frameElapsedTime/1000;
         },

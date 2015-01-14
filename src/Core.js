@@ -41,6 +41,7 @@ var PQ = PQ || {};
         persistentData: true, //en true los datos quedan almacenados en localStorage, en false se pierden al cerrar el juego
         pauseOnVisibilityChange: true, //Pausa al cambiar de pestaña
         captureKeyboard: false, //Escucha al teclado y genera los eventos
+        frameLimit: 35, //Si se pasa de 35ms (quizás un freeze?) se asigna este maxitmo de frameElaspedTime
         resolution: 1 //Multiplica el tamaño del renderer, en retina se pondría a 2
     };
 
