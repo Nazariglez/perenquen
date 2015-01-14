@@ -7,7 +7,7 @@
         size: {
             min: 7,
             max: 7,
-            increase: -0.1,
+            increase: -0,
             shake: 0
         },
         scale: {
@@ -15,15 +15,15 @@
             y : 0.5
         },
         color: [
-            0x00ff00
+            0xff0000, 0xffff00, 0x00ff00, 0xc0c0c0, 0x0000ff
         ],
         alpha: [
             1
         ],
         speed: {
-            min:1,
-            max: 2,
-            increase: 0.1,
+            min:5,
+            max: 10,
+            increase: -0.1,
             shake: 0
         },
         wind: {
@@ -65,6 +65,12 @@
 
             //TODO: Revisar blendModes
             this.blendMode = this.config.blend;
+            this.easing = PQ.Easing.outSine();
+        },
+
+        setEasing: function(easing){
+            this.easing = easing || PQ.Easing.linear();
+            return this;
         },
 
         //TODO: Separar el punto y dimension del emitter del actor, para evitar el movimiento de particulas bajo la matrix del parent
