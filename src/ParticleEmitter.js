@@ -18,7 +18,7 @@
             0xff0000, 0xffff00, 0x00ff00, 0xc0c0c0, 0x0000ff
         ],
         alpha: [
-            1
+            0.5, 1, 0.1, 1, 0.2
         ],
         speed: {
             min:5,
@@ -33,13 +33,13 @@
         rotation: {
             min: 0,
             max: 359,
-            increase: 1,
+            increase: 5,
             shake: 0
         },
         direction: {
             min: 0,
             max: 359,
-            increase: 6,
+            increase: -20,
             shake: 0
         },
         life: {
@@ -47,7 +47,7 @@
             max: 1500
         },
         blend: PQ.blendModes.NORMAL,
-        particles: 5
+        particles: 1
     };
 
     //TODO: Usar algo similar al dirty, no hay porque calcular en las particulas a cada fps todos los valores si se hace el calculo en el emitter y se le pasan mientras no cambien

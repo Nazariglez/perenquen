@@ -57,6 +57,7 @@
             }
 
             this.tint = 0xffffff;
+            this.alpha = 1;
             this.blendMode = PQ.blendModes.NORMAL;
 
             this.setTexture(defaultParticle);
@@ -83,7 +84,6 @@
                     r += (this.tmpColor[index+1][0] - this.tmpColor[index][0])*this.easing((this.timeColor-leftTime)/this.timeColor);
                     g += (this.tmpColor[index+1][1] - this.tmpColor[index][1])*this.easing((this.timeColor-leftTime)/this.timeColor);
                     b += (this.tmpColor[index+1][2] - this.tmpColor[index][2])*this.easing((this.timeColor-leftTime)/this.timeColor);
-                    //console.log('???', index, t1);
                 }
             }else{
                 r = this.tmpColor[0][0];
@@ -92,7 +92,28 @@
             }
 
             this.tint = getHex(r,g,b);
-            //console.log(this.tint, r,g,b, index, gameTime);
+            return this;
+        },
+
+        setCurrentAlpha: function(gameTime){
+            var a;
+            if(this.config.alpha.length > 1){
+                var len = this.config.alpha.length;
+                var index = Math.floor((gameTime - this.initTime)/this.timeAlpha);
+                if(index > len-1)index=len-1;
+                a = this.config.alpha[index];
+
+                if(index < len-1){
+                    var t = this.timeAlpha*(index+1);
+                    t = this.timeAlpha - (t - (gameTime - this.initTime));
+                    var leftTime = this.timeColor-t;
+                    a += (this.config.alpha[index+1] - this.config.alpha[index])*this.easing((this.timeAlpha-leftTime)/this.timeAlpha);
+                }
+            }else{
+                a = this.config.alpha[0];
+            }
+
+            this.alpha = a;
             return this;
         },
 
@@ -115,6 +136,7 @@
 
             //TODO: CocoonJS Canvas+ peta al usar el setTint, investigar con logcat, problemas de memoria?
             if(!PQ.Device.isCocoonJS)this.setCurrentColor(gameTime);
+            this.setCurrentAlpha(gameTime);
         }
     });
 })();
