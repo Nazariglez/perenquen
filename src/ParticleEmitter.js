@@ -1,45 +1,48 @@
 (function(){
 
+    /*
+     * Inspired in GameMaker Particle System by https://www.yoyogames.com/
+     */
     var particlePool = new PQ.Pool(PQ.Particle, [], 200);
 
     var defaultConfig = {
-        sprite: null,
+        sprite: null, //TODO: Random sprite
         size: {
             min: 7,
             max: 7,
-            increase: -0,
+            increase: 0,
             shake: 0
         },
         scale: {
-            x : 6,
-            y : 0.5
+            x : 1,
+            y : 1
         },
         color: [
             0xff0000, 0xffff00, 0x00ff00, 0xc0c0c0, 0x0000ff
         ],
         alpha: [
-            0.5, 1, 0.1, 1, 0.2
+            0,0, 1, 1
         ],
         speed: {
-            min:5,
-            max: 10,
-            increase: -0.1,
+            min:2,
+            max: 5,
+            increase: 0.01,
             shake: 0
         },
         wind: {
-            amount: 9,
+            amount: 0,
             angle: -90
         },
         rotation: {
             min: 0,
             max: 359,
-            increase: 5,
+            increase: 0,
             shake: 0
         },
         direction: {
             min: 0,
             max: 359,
-            increase: -20,
+            increase: 0,
             shake: 0
         },
         life: {
@@ -65,7 +68,7 @@
 
             //TODO: Revisar blendModes
             this.blendMode = this.config.blend;
-            this.easing = PQ.Easing.outSine();
+            this.easing = PQ.Easing.linear();
         },
 
         setEasing: function(easing){

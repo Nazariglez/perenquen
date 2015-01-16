@@ -12,8 +12,7 @@
 
     PQ.Particle = PQ.Sprite.extend({
         _init: function(){
-            PQ.Particle._super._init.call(this, PQ.AssetCache.getTexture("_PQDefaultTexture"));
-            //this.anchor.set(0.5, 0.5);
+            PQ.Particle._super._init.call(this, defaultParticle);
             console.log('Particle');
             this.tmpColor = [];
         },
@@ -28,6 +27,7 @@
             this.setPosition(0,0);
             this.alpha = 1;
             this.setScale(0,0);
+            this.shakeCount = 0;
         },
 
         initialize: function(config, gameTime, emitter){
@@ -35,12 +35,22 @@
             this.config = config;
             this.initTime = gameTime;
             this.lifeTime = gameTime + Math.randomRange(this.config.life.min, this.config.life.max);
-            this.size = Math.randomRange(this.config.size.min, this.config.size.max);
-            this.speed = Math.randomRange(this.config.speed.min, this.config.speed.max);
-            this.rotation = Math.randomRange(this.config.rotation.min, this.config.rotation.max) * PQ.DEG_TO_RAD;
-            this.rotationIncrease = this.config.rotation.increase*PQ.DEG_TO_RAD;
-            this.direction = Math.randomRange(this.config.direction.min, this.config.direction.max) * PQ.DEG_TO_RAD;
-            this.directionIncrease = this.config.direction.increase*PQ.DEG_TO_RAD;
+
+            this.baseSize = Math.randomRange(this.config.size.min, this.config.size.max);
+            this.baseSpeed = Math.randomRange(this.config.speed.min, this.config.speed.max);
+            this.baseRotation = Math.randomRange(this.config.rotation.min, this.config.rotation.max) * PQ.DEG_TO_RAD;
+            this.baseDirection = Math.randomRange(this.config.direction.min, this.config.direction.max) * PQ.DEG_TO_RAD;
+
+            this.size = this.baseSize;
+            this.sizeIncrease = 0;
+            this.speed = this.baseSpeed;
+            this.speedIncrease = 0;
+            this.rotation = this.baseRotation;
+            this.rotationIncrease = 0;
+            this.vRotationIncrease = this.config.rotation.increase*PQ.DEG_TO_RAD;
+            this.direction = this.baseDirection;
+            this.directionIncrease = 0;
+            this.vDirectionIncrease = this.config.direction.increase*PQ.DEG_TO_RAD;
             this.timeColor = this.config.life.max / this.config.color.length;
             this.timeAlpha = this.config.life.max / this.config.alpha.length;
             this.emitter = emitter;
@@ -91,7 +101,8 @@
                 b = this.tmpColor[0][2];
             }
 
-            this.tint = getHex(r,g,b);
+            var hex = getHex(r,g,b);
+            if(this.tint!==hex)this.tint = hex;
             return this;
         },
 
@@ -117,6 +128,18 @@
             return this;
         },
 
+        setCurrentShake: function(){
+            this.shakeCount++;
+            //TODO: Volver a calcular los parametros base entre los minimos y maximos.
+            if(this.config.size.shake && this.config.size.shake%this.shakeCount === 0)this.baseSize = Math.randomRange(this.config.size.min, this.config.size.max);
+            if(this.config.speed.shake && this.config.speed.shake%this.shakeCount === 0)this.baseSpeed = Math.randomRange(this.config.speed.min, this.config.speed.max);
+            if(this.config.rotation.shake && this.config.rotation.shake%this.shakeCount === 0)this.baseRotation = Math.randomRange(this.config.rotation.min, this.config.rotation.max) * PQ.DEG_TO_RAD;
+            if(this.config.direction.shake && this.config.direction.shake%this.shakeCount === 0)this.baseDirection = Math.randomRange(this.config.direction.min, this.config.direction.max) * PQ.DEG_TO_RAD;
+
+            if(this.shakeCount >= 20)this.shakeCount = 0;
+            return this;
+        },
+
         _update: function(gameTime, frameElapsedTime){
             if(PQ.Debug.enabled)PQ.Debug.particles++;
             if(gameTime >= this.lifeTime){
@@ -124,11 +147,17 @@
                 return;
             }
 
-            this.size += this.config.size.increase;
-            this.speed += this.config.speed.increase;
-            this.rotation += this.rotationIncrease;
-            this.direction += this.directionIncrease;
+            this.setCurrentShake();
 
+            this.sizeIncrease += this.config.size.increase;
+            this.speedIncrease += this.config.speed.increase;
+            this.rotationIncrease += this.vRotationIncrease;
+            this.directionIncrease += this.vDirectionIncrease;
+
+            this.size = this.baseSize + this.sizeIncrease;
+            this.speed = this.baseSpeed + this.speedIncrease;
+            this.rotation = this.baseRotation + this.rotationIncrease;
+            this.direction = this.baseDirection + this.directionIncrease;
 
             this.setSize(this.size, this.size);
             this.x += this.speed*Math.cos(this.direction) + this.windX;

@@ -1,5 +1,6 @@
-Perenquen.js HTML5 Game Framework
+perenquen.js
 ===========
+##WebGL and Canvas HTML5 Game Framework
 
 PerenquenJS is a HTML5 Game Framework designed for mobile, web and desktop development. API inspired in [CAAT](https://github.com/hyperandroid/caat).
 
@@ -17,11 +18,6 @@ You can find this files in ./build directory.
 ##Gulp Tasks
 
 ...
-
-##Release Notes
-
-- v0.2.0
-    - ...
 
 ##Roadmap
 
