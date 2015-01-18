@@ -117,7 +117,7 @@
                 if(index < len-1){
                     var t = this.timeAlpha*(index+1);
                     t = this.timeAlpha - (t - (gameTime - this.initTime));
-                    var leftTime = this.timeColor-t;
+                    var leftTime = this.timeAlpha-t;
                     a += (this.config.alpha[index+1] - this.config.alpha[index])*this.easing((this.timeAlpha-leftTime)/this.timeAlpha);
                 }
             }else{
