@@ -2,7 +2,8 @@
 
     var defaultParticle = new PQ.Graphics()
         .beginFill(0xffffff)
-        .drawRect(0, 0, 5, 5)
+        .drawCircle(0,0,10)
+        //.drawRect(0,0,10,10)
         .endFill()
         .generateTexture();
 
@@ -23,9 +24,7 @@
         },
 
         reset: function(){
-            this.tmpColor.length = 0;
             this.setPosition(0,0);
-            this.alpha = 1;
             this.setScale(0,0);
             this.shakeCount = 0;
         },
@@ -47,30 +46,24 @@
             this.speedIncrease = 0;
             this.rotation = this.baseRotation;
             this.rotationIncrease = 0;
-            this.vRotationIncrease = this.config.rotation.increase*PQ.DEG_TO_RAD;
+            this.vRotationIncrease = this.config.vRotationIncrease;
             this.direction = this.baseDirection;
             this.directionIncrease = 0;
-            this.vDirectionIncrease = this.config.direction.increase*PQ.DEG_TO_RAD;
-            this.timeColor = this.config.life.max / this.config.color.length;
-            this.timeAlpha = this.config.life.max / this.config.alpha.length;
+            this.vDirectionIncrease = this.config.vDirectionIncrease;
+            this.timeColor = this.config.timeColor;
+            this.timeAlpha = this.config.timeAlpha;
+            this.tmpColor = this.config.tmpColor;
+            this.windX = this.config.windX;
+            this.windY = this.config.windY;
             this.emitter = emitter;
             this.easing = emitter.easing;
-
-            this.windX = this.config.wind.amount * Math.cos(this.config.wind.angle*PQ.DEG_TO_RAD);
-            this.windY = this.config.wind.amount * Math.sin(this.config.wind.angle*PQ.DEG_TO_RAD);
 
             this.setSize(this.size, this.size);
             this.setScale(this.config.scale.x, this.config.scale.y);
 
-            for(var i = 0; i < this.config.color.length; i++){
-                this.tmpColor.push(PIXI.hex2rgb(this.config.color[i]));
-            }
-
-            this.tint = 0xffffff;
-            this.alpha = 1;
-            this.blendMode = PQ.blendModes.NORMAL;
-
-            this.setTexture(defaultParticle);
+            //this.tint = this.config.color[0];
+            this.alpha = this.config.alpha[0];
+            //this.blendMode = PQ.blendModes.NORMAL;
 
             if(this.emitter.size.x > 1){
                 //TODO: Cambiar x e y entre todo el bounding del emitter
@@ -130,7 +123,6 @@
 
         setCurrentShake: function(){
             this.shakeCount++;
-            //TODO: Volver a calcular los parametros base entre los minimos y maximos.
             if(this.config.size.shake && this.config.size.shake%this.shakeCount === 0)this.baseSize = Math.randomRange(this.config.size.min, this.config.size.max);
             if(this.config.speed.shake && this.config.speed.shake%this.shakeCount === 0)this.baseSpeed = Math.randomRange(this.config.speed.min, this.config.speed.max);
             if(this.config.rotation.shake && this.config.rotation.shake%this.shakeCount === 0)this.baseRotation = Math.randomRange(this.config.rotation.min, this.config.rotation.max) * PQ.DEG_TO_RAD;
@@ -163,7 +155,7 @@
             this.x += this.speed*Math.cos(this.direction) + this.windX;
             this.y += this.speed*Math.sin(this.direction) + this.windY;
 
-            //TODO: CocoonJS Canvas+ peta al usar el setTint, investigar con logcat, problemas de memoria?
+            //TODO: CocoonJS Canvas+ peta al usar el setTint a cada frame, investigar con logcat, problemas de memoria?
             if(!PQ.Device.isCocoonJS)this.setCurrentColor(gameTime);
             this.setCurrentAlpha(gameTime);
         }
