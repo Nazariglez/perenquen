@@ -6,54 +6,54 @@
     var particlePool = new PQ.Pool(PQ.Particle, [], 200);
 
     var defaultConfig = {
-        sprite: null, //TODO: Random sprite
+        sprite: [],
         size: {
             min: 10,
             max: 25,
-            increase: 0,
-            shake: 1
+            increase: -0.01,
+            shake: 0
         },
         scale: {
-            x : 1.5,
-            y : 1.5
+            x : 1,
+            y : 1
         },
         color: [
-            0xff0000, 0xffff00, 0x00ff00, 0x0000ff, 0xc0c0c0
+            0xffffff //change this can affect the performance
         ],
         alpha: [
-           1, 0.8, 0.1
+            1
         ],
         speed: {
-            min:1,
-            max: 3,
-            increase: -0.009,
+            min:8,
+            max: 9,
+            increase: -0.1,
             shake: 0
         },
         wind: {
-            amount: 2,
+            amount: 0,
             angle: -90
         },
         rotation: {
             min: 0,
             max: 359,
-            increase: 0,
+            increase: 1,
             shake: 0
         },
         direction: {
             min: 0,
             max: 359,
-            increase: 3.5,
+            increase: 1.5,
             shake: 0
         },
         life: {
             min: 3000,
             max: 3500
         },
-        blend: PQ.blendModes.NORMAL,
-        particles: 8
+        blend: PQ.blendModes.NORMAL, //change this can affect the performance
+        particles: 1
     };
 
-    //TODO: Usar algo similar al dirty, no hay porque calcular en las particulas a cada fps todos los valores si se hace el calculo en el emitter y se le pasan mientras no cambien
+    //TODO: Magnets, batchContainer
     PQ.ParticleEmitter = PIXI.DisplayObjectContainer.extend(PQ.DisplayMixin, {
         _init: function(config){
             PQ.ParticleEmitter._super._init.call(this);
@@ -66,7 +66,6 @@
             this._burst = 0;
             this._stream = false;
 
-            //TODO: Revisar blendModes
             this.easing = PQ.Easing.linear();
 
             this.config = {};
@@ -77,10 +76,8 @@
             for(var key in this.particleConfig){
                 this.config[key] = this.particleConfig[key];
             }
-            if(!this.config.tmpColor){
-                this.config.tmpColor = [];
-            }
 
+            this.particleSprite();
             this.particleColor();
             this.particleWind();
             this.particleAlpha();
@@ -88,7 +85,34 @@
             this.particleRotation(this.config.rotation.min, this.config.rotation.max, this.config.rotation.increase, this.config.rotation.shake);
         },
 
+        particleBlend: function(mode){
+            this.config.blend = mode || PQ.blendModes.NORMAl;
+            return this;
+        },
+
         particleSprite: function(sprites){
+            this.config.sprite = sprites || this.config.sprite;
+
+            if(this.config.tmpSprite){
+                this.config.tmpSprite.length = 0;
+            }else{
+                this.config.tmpSprite = [];
+            }
+
+            if(this.config.sprite){
+                var len = this.config.sprite.length;
+                for(var i = 0; i < len; i++){
+                    var sp = null;
+                    if(typeof this.config.sprite[i] === "string"){
+                        sp = PQ.AssetCache.getTexture(this.config.sprite[i]);
+                    }else{
+                        sp = this.config.sprite[i];
+                    }
+
+                    this.config.tmpSprite.push(sp);
+                }
+            }
+
             return this;
         },
 
@@ -108,10 +132,21 @@
 
         particleColor: function(colors){
             this.config.color = colors || this.config.color;
-            this.config.tmpColor.length = 0;
 
-            for(var i = 0; i < this.config.color.length; i++){
-                this.config.tmpColor.push(PIXI.hex2rgb(this.config.color[i]));
+            if(!this.config.tmpColor){
+                this.config.tmpColor = [];
+            }else {
+                this.config.tmpColor.length = 0;
+            }
+
+            var len = this.config.color.length;
+            if(len >= 1) {
+
+                for (var i = 0; i < this.config.color.length; i++) {
+                    this.config.tmpColor.push(PIXI.hex2rgb(this.config.color[i]));
+                }
+            }else{
+                this.config.tmpColor.push(PIXI.hex2rgb(0xffffff));
             }
             this.config.timeColor = this.config.life.max / this.config.color.length;
             return this;
@@ -119,6 +154,10 @@
 
         particleAlpha: function(alphas){
             this.config.alpha = alphas || this.config.alpha;
+            var len = this.config.alpha.length;
+            if(len === 0){
+                this.config.alpha.push(1);
+            }
             this.config.timeAlpha = this.config.life.max / this.config.alpha.length;
             return this;
         },

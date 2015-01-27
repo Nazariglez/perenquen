@@ -58,16 +58,29 @@
             this.emitter = emitter;
             this.easing = emitter.easing;
 
+            this.checkSprite();
+
             this.setSize(this.size, this.size);
             this.setScale(this.config.scale.x, this.config.scale.y);
 
             //this.tint = this.config.color[0];
             this.alpha = this.config.alpha[0];
-            //this.blendMode = PQ.blendModes.NORMAL;
+            this.blendMode = this.config.blend;
 
             if(this.emitter.size.x > 1){
                 //TODO: Cambiar x e y entre todo el bounding del emitter
             }
+        },
+
+        checkSprite: function(){
+            var len = this.config.tmpSprite.length;
+            if(len === 1){
+                this.texture = this.config.tmpSprite[0];
+            }else if(len > 0){
+                var index = Math.floor(Math.random() * len);
+                this.texture = this.config.tmpSprite[index];
+            }
+            return this;
         },
 
         setCurrentColor: function(gameTime){
