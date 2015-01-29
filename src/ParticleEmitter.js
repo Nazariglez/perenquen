@@ -10,7 +10,7 @@
         size: {
             min: 10,
             max: 25,
-            increase: -0.01,
+            increase: -0.1,
             shake: 0
         },
         scale: {
@@ -24,9 +24,9 @@
             1
         ],
         speed: {
-            min:8,
-            max: 9,
-            increase: -0.1,
+            min:4,
+            max: 6,
+            increase: 0,
             shake: 0
         },
         wind: {
@@ -42,15 +42,15 @@
         direction: {
             min: 0,
             max: 359,
-            increase: 1.5,
+            increase: 2.5,
             shake: 0
         },
         life: {
-            min: 3000,
-            max: 3500
+            min: 800,
+            max: 1200
         },
         blend: PQ.blendModes.NORMAL, //change this can affect the performance
-        particles: 1
+        particles: 10
     };
 
     //TODO: Magnets, batchContainer
@@ -69,6 +69,7 @@
             this.easing = PQ.Easing.linear();
 
             this.config = {};
+            this.bounds = new PQ.Rectangle(0,0,1,1);
             this.initConfig();
         },
 
@@ -87,6 +88,14 @@
 
         particleBlend: function(mode){
             this.config.blend = mode || PQ.blendModes.NORMAl;
+            return this;
+        },
+
+        setBounds: function(x,y,width, height){
+            this.bounds.x = x;
+            this.bounds.y = y;
+            this.bounds.width = width || this.bounds.width;
+            this.bounds.height = height || this.bounds.height;
             return this;
         },
 

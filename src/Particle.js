@@ -67,8 +67,15 @@
             this.alpha = this.config.alpha[0];
             this.blendMode = this.config.blend;
 
-            if(this.emitter.size.x > 1){
-                //TODO: Cambiar x e y entre todo el bounding del emitter
+            if(this.emitter.bounds.width > 1 || this.emitter.bounds.height > 1){
+                var xx = this.emitter.bounds.width - this.emitter.bounds.x;
+                var yy = this.emitter.bounds.height - this.emitter.bounds.y;
+                this.position.set(
+                    Math.randomRange(this.emitter.bounds.x, this.emitter.bounds.x+this.emitter.bounds.width),
+                    Math.randomRange(this.emitter.bounds.y, this.emitter.bounds.y+this.emitter.bounds.height)
+                );
+            }else{
+                this.position.set(this.emitter.bounds.x,this.emitter.bounds.y);
             }
         },
 
