@@ -11,17 +11,17 @@
             min: 10,
             max: 25,
             increase: -0.1,
-            shake: 0
+            shake: 5
         },
         scale: {
             x : 1,
             y : 1
         },
         color: [
-            0xffffff //change this can affect the performance
+            0xff0000 //change this can affect the performance
         ],
         alpha: [
-            1
+            0.5
         ],
         speed: {
             min:4,
@@ -30,8 +30,8 @@
             shake: 0
         },
         wind: {
-            amount: 0,
-            angle: -90
+            amount: 5,
+            angle: 90
         },
         rotation: {
             min: 0,

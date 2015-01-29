@@ -56,9 +56,11 @@ You can find this files in ./build directory.
     - Tilemap Support
     - Spine Support
 - v0.4.0
+    - Improve Particle System
     - Gamepad Support
     - Accelerometer Support
     - API Documentation
 - v0.5.0
     - Physics Engine
+    - Improve Interaction Manager
     - ...

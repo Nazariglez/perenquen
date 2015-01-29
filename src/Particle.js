@@ -14,7 +14,6 @@
     PQ.Particle = PQ.Sprite.extend({
         _init: function(){
             PQ.Particle._super._init.call(this, defaultParticle);
-            console.log('Particle');
             this.tmpColor = [];
         },
 
