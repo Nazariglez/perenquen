@@ -8,59 +8,62 @@
     var defaultConfig = {
         sprite: [],
         size: {
-            min: 10,
-            max: 25,
+            min: 15,
+            max: 35,
             increase: -0.1,
-            shake: 5
+            shake: 1
         },
         scale: {
             x : 1,
             y : 1
         },
         color: [
-            0xff0000 //change this can affect the performance
+            0xffffff //change this can affect the performance
         ],
         alpha: [
-            0.5
+            0.1,0.5, 0.1
         ],
         speed: {
-            min:4,
-            max: 6,
-            increase: 0,
-            shake: 0
+            min:0,
+            max: 1,
+            increase: -0.01,
+            shake: 5
         },
         wind: {
-            amount: 5,
-            angle: 90
+            amount: 2,
+            angle: -60
         },
         rotation: {
             min: 0,
             max: 359,
-            increase: 1,
+            increase: 0,
             shake: 0
         },
         direction: {
             min: 0,
             max: 359,
-            increase: 2.5,
+            increase: 0,
             shake: 0
         },
         life: {
-            min: 800,
-            max: 1200
+            min: 5200,
+            max: 8200
         },
         blend: PQ.blendModes.NORMAL, //change this can affect the performance
-        particles: 10
+        particles: 1
     };
 
+    //TODO: 60/sec minimo puede ser demasiado, cambiar el sistema de fps por uno que use el delta
+
     //TODO: Magnets, batchContainer
-    PQ.ParticleEmitter = PIXI.DisplayObjectContainer.extend(PQ.DisplayMixin, {
+    PQ.ParticleEmitter = PQ.Container.extend({
         _init: function(config){
             PQ.ParticleEmitter._super._init.call(this);
             //TODO: cargar particulas mediante json externo
             this.particleConfig = config || defaultConfig;
             this.vel = new PQ.Point(0,0);
             this.size = new PQ.Point(1,1);
+            this.anchor = new PQ.Point(0,0);
 
             this.tmpPool = [];
             this._burst = 0;
@@ -69,7 +72,7 @@
             this.easing = PQ.Easing.linear();
 
             this.config = {};
-            this.bounds = new PQ.Rectangle(0,0,1,1);
+            this.shape = new PQ.Rectangle(0,0,1,1);
             this.initConfig();
         },
 
@@ -92,10 +95,10 @@
         },
 
         setBounds: function(x,y,width, height){
-            this.bounds.x = x;
-            this.bounds.y = y;
-            this.bounds.width = width || this.bounds.width;
-            this.bounds.height = height || this.bounds.height;
+            this.shape.x = x;
+            this.shape.y = y;
+            this.shape.width = width || this.shape.width;
+            this.shape.height = height || this.shape.height;
             return this;
         },
 

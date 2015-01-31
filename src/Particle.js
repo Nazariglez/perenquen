@@ -66,15 +66,15 @@
             this.alpha = this.config.alpha[0];
             this.blendMode = this.config.blend;
 
-            if(this.emitter.bounds.width > 1 || this.emitter.bounds.height > 1){
-                var xx = this.emitter.bounds.width - this.emitter.bounds.x;
-                var yy = this.emitter.bounds.height - this.emitter.bounds.y;
+            if(this.emitter.shape.width > 1 || this.emitter.shape.height > 1){
+                var xx = this.emitter.shape.width - this.emitter.shape.x;
+                var yy = this.emitter.shape.height - this.emitter.shape.y;
                 this.position.set(
-                    Math.randomRange(this.emitter.bounds.x, this.emitter.bounds.x+this.emitter.bounds.width),
-                    Math.randomRange(this.emitter.bounds.y, this.emitter.bounds.y+this.emitter.bounds.height)
+                    Math.randomRange(this.emitter.shape.x, this.emitter.shape.x+this.emitter.shape.width),
+                    Math.randomRange(this.emitter.shape.y, this.emitter.shape.y+this.emitter.shape.height)
                 );
             }else{
-                this.position.set(this.emitter.bounds.x,this.emitter.bounds.y);
+                this.position.set(this.emitter.shape.x,this.emitter.shape.y);
             }
         },
 
