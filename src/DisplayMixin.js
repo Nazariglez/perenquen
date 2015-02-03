@@ -120,7 +120,7 @@
 
         setRotation: function(value){
             value = value || 0;
-            this.rotation = 0;
+            this.rotation = value;
             return this;
         },
 

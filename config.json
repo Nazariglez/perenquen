@@ -31,6 +31,7 @@
     "sources": [
         "./src/PixiChanges.js",
         "./src/Core.js",
+        "./src/Utils.js",
         "./src/Device.js",
         "./src/Debug.js",
         "./src/JsonLoader.js",
@@ -65,7 +66,7 @@
         "./src/Timer.js",
         "./src/TweenManager.js",
         "./src/Tween.js",
-        "./src/ParticleSystem.js",
-        "./src/Utils.js"
+        "./src/Particle.js",
+        "./src/ParticleEmitter.js"
     ]
 }

@@ -27,13 +27,13 @@ gulp.task('compileDev', function(){
     var scripts = (config.libs).concat(config.sources);
 
     return gulp.src(scripts)
-        //.pipe(sourcemaps.init())
+        .pipe(sourcemaps.init())
         .pipe(concat(config.filename.dev + '.js'))
         .on("error", function() {
             this.emit('end');
         })
-        //.pipe(sourcemaps.write('./'))
-        .pipe(header(headerPattern, config))
+        .pipe(sourcemaps.write('./'))
+        //.pipe(header(headerPattern, config))
         .pipe(gulp.dest('./build'));
 });
 

@@ -4,6 +4,7 @@
         _textures: [],
         _json: [],
         _audios: [],
+        _particles: [],
 
         _init: function(){
             var _default = new PQ.Graphics()
@@ -25,6 +26,10 @@
 
         getJson: function(id){
             return this._getAsset(id, this._json);
+        },
+
+        getParticle: function(id){
+            return this._getAsset(id, this._particles).particleconf;
         },
 
         getAudio: function(id){
@@ -63,7 +68,11 @@
                     break;
                 case 'json':
                     asset.id = id;
-                    this._json.push(asset);
+                    if(asset.asset.particleconf){
+                        this._particles.push(asset);
+                    }else {
+                        this._json.push(asset);
+                    }
                     break;
                 case 'audio':
                     asset.id = id;

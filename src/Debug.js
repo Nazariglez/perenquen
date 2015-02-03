@@ -10,11 +10,13 @@
         fpsElement: null,
         msElement: null,
         actorsElement: null,
+        particlesElement: null,
 
         frames: 0,
         startTime: 0,
 
         sceneActors: 0,
+        particles: 0,
 
         _init: function(){
             this.panel = document.createElement('div');
@@ -61,6 +63,18 @@
             actors.appendChild(this.actorsElement);
 
             this.panel.appendChild(actors);
+
+            var particles = document.createElement('div');
+            particles.style.cssText = "text-align: left;" +
+            "color: #c0c0c0;" +
+            "margin-left: 5px;" +
+            "float: left;";
+            particles.innerHTML = "|| <b>Particles:</b> ";
+            this.particlesElement = document.createElement('span');
+            this.particlesElement.innerHTML = this.particles;
+            particles.appendChild(this.particlesElement);
+
+            this.panel.appendChild(particles);
             return this;
         },
 
@@ -81,6 +95,7 @@
                 this.frames++;
                 this.ms += PQ.delta;
                 this.actorsElement.innerHTML = this.sceneActors;
+                this.particlesElement.innerHTML = this.particles;
 
                 var time = Date.now();
                 if(time > this.startTime + 1000){
@@ -95,6 +110,7 @@
                 }
 
                 this.sceneActors = 0;
+                this.particles = 0;
             }
         }
     });

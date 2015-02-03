@@ -1,10 +1,4 @@
 /**
- * Perenquen.js - http://perenquenjs.com
- * Version: 0.1.0
- * Compiled: Fri Jan 02 2015 00:49:48 GMT+0000 (WET)
- * Pixi.js v2.1.0 bundled. [http://pixijs.com]
- */
-/**
  * @license
  * pixi.js - v2.1.0
  * Copyright (c) 2012-2014, Mat Groves
@@ -18660,6 +18654,9 @@ var PQ = PQ || {};
         ASPECT_FILL: 3
     };
 
+    PQ.RAD_TO_DEG = 180 / Math.PI;
+    PQ.DEG_TO_RAD = Math.PI / 180;
+
     PQ.Config = {
         debug: false,
         mouseDoubleClickWait: 180, //TIempo de espera para lanzar el doble click en milisegundos
@@ -18675,6 +18672,7 @@ var PQ = PQ || {};
         persistentData: true, //en true los datos quedan almacenados en localStorage, en false se pierden al cerrar el juego
         pauseOnVisibilityChange: true, //Pausa al cambiar de pestaña
         captureKeyboard: false, //Escucha al teclado y genera los eventos
+        frameLimit: 35, //Si se pasa de 35ms (quizás un freeze?) se asigna este maxitmo de frameElaspedTime
         resolution: 1 //Multiplica el tamaño del renderer, en retina se pondría a 2
     };
 
@@ -18904,6 +18902,174 @@ var PQ = PQ || {};
 })();
 (function(){
 
+    PQ.Utils = {
+
+        //TODO: Mejor que esto sería un sprite que se dibujara asi directamente, mejor rendimiento, flexibilidad, etc...
+        ninePatchTexture : function(texture, width, height, name){
+            if(!texture){
+                texture = PQ.AssetCache.getTexture("_PQDefaultTexture");
+            }else if(typeof texture === "string"){
+                texture = PQ.AssetCache.getTexture(texture);
+            }
+
+            var ww = texture.width,
+                hh = texture.height,
+                xx = texture.frame.x,
+                yy = texture.frame.y;
+
+            var left = ww / 3,
+                right = ww / 3,
+                top = hh / 3,
+                bottom = hh / 3;
+
+            var container = new PQ.DisplayObjectContainer();
+
+            for(var i = 0; i < 9; i++){
+                var sprite, x, y, w, h;
+                switch(i){
+                    case 0:
+                        x = xx;
+                        y = yy;
+                        w = left;
+                        h = top;
+                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
+                            .setAnchor(0,0)
+                            .setPosition(0,0)
+                            .setSize(left, top);
+                        break;
+                    case 1:
+                        x = xx+left;
+                        y = yy;
+                        w = Math.floor(ww-left-right);
+                        h = top;
+                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
+                            .setAnchor(0,0)
+                            .setPosition(left,0)
+                            .setSize(width-right-left,top);
+                        break;
+                    case 2:
+                        x = xx+Math.floor(ww-right);
+                        y = yy;
+                        w = right;
+                        h = top;
+                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
+                            .setAnchor(0,0)
+                            .setPosition(width-right,0)
+                            .setSize(right,top);
+                        break;
+                    case 3:
+                        x = xx;
+                        y = yy+top;
+                        w = left;
+                        h = Math.floor(hh-top-bottom);
+                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
+                            .setAnchor(0,0)
+                            .setPosition(0,top)
+                            .setSize(left,height-top-bottom);
+                        break;
+                    case 4:
+                        x = xx+left;
+                        y = yy+top;
+                        w = Math.floor(ww-left-right);
+                        h = Math.floor(hh-top-bottom);
+                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
+                            .setAnchor(0,0)
+                            .setPosition(left,top)
+                            .setSize(width-left-right,height-top-bottom);
+                        break;
+                    case 5:
+                        x = xx+Math.floor(ww-right);
+                        y = yy+top;
+                        w = Math.floor(ww-left-right);
+                        h = Math.floor(hh-top-bottom);
+                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
+                            .setAnchor(0,0)
+                            .setPosition(width-right,top)
+                            .setSize(right,height-top-bottom);
+                        break;
+                    case 6:
+                        x = xx;
+                        y = yy+Math.floor(hh-bottom);
+                        w = left;
+                        h = bottom;
+                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
+                            .setAnchor(0,0)
+                            .setPosition(0,height-bottom)
+                            .setSize(left,bottom);
+                        break;
+                    case 7:
+                        x = xx+left;
+                        y = yy+Math.floor(hh-bottom);
+                        w = Math.floor(ww-left-right);
+                        h = bottom;
+                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
+                            .setAnchor(0,0)
+                            .setPosition(left,height-bottom)
+                            .setSize(width-left-right,bottom);
+                        break;
+                    case 8:
+                        x = xx+Math.floor(ww-right);
+                        y = yy+Math.floor(hh-bottom);
+                        w = right;
+                        h = bottom;
+                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
+                            .setAnchor(0,0)
+                            .setPosition(width-right,height-bottom)
+                            .setSize(right,bottom);
+                        break;
+                }
+
+                container.addChild(sprite);
+            }
+
+            var ninePatch = container.generateTexture();
+
+            if(name && PQ.AssetCache){
+                var asset = {
+                    type : 'texture',
+                    asset: ninePatch
+                };
+
+                PQ.AssetCache.addAsset(name, asset);
+            }
+
+            return ninePatch;
+
+        },
+
+        findSceneParent: function(actor) {
+            if (actor instanceof PQ.Scene) {
+                return actor;
+            } else if (actor.parent) {
+                return PQ.Utils.findSceneParent(actor.parent);
+            }
+
+            return false;
+        },
+
+        parseText: function(text, args){
+            for(var key in args){
+                var regExp = new RegExp('{{'+key+'}}','g');
+                text = text.replace(regExp, args[key]);
+            }
+            return text;
+        }
+
+        //TODO: Añadir un convertidos de hex color string to hex y hex to string
+
+    };
+
+    Math.randomRange = function(min, max){
+        return Math.random() * (max - min) + min;
+    };
+
+    Math.iRandomRange = function(min, max){
+        return Math.floor(Math.randomRange(min, max));
+    };
+
+})();
+(function(){
+
     navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate || null;
 
 
@@ -18948,11 +19114,13 @@ var PQ = PQ || {};
         fpsElement: null,
         msElement: null,
         actorsElement: null,
+        particlesElement: null,
 
         frames: 0,
         startTime: 0,
 
         sceneActors: 0,
+        particles: 0,
 
         _init: function(){
             this.panel = document.createElement('div');
@@ -18999,6 +19167,18 @@ var PQ = PQ || {};
             actors.appendChild(this.actorsElement);
 
             this.panel.appendChild(actors);
+
+            var particles = document.createElement('div');
+            particles.style.cssText = "text-align: left;" +
+            "color: #c0c0c0;" +
+            "margin-left: 5px;" +
+            "float: left;";
+            particles.innerHTML = "|| <b>Particles:</b> ";
+            this.particlesElement = document.createElement('span');
+            this.particlesElement.innerHTML = this.particles;
+            particles.appendChild(this.particlesElement);
+
+            this.panel.appendChild(particles);
             return this;
         },
 
@@ -19019,6 +19199,7 @@ var PQ = PQ || {};
                 this.frames++;
                 this.ms += PQ.delta;
                 this.actorsElement.innerHTML = this.sceneActors;
+                this.particlesElement.innerHTML = this.particles;
 
                 var time = Date.now();
                 if(time > this.startTime + 1000){
@@ -19033,6 +19214,7 @@ var PQ = PQ || {};
                 }
 
                 this.sceneActors = 0;
+                this.particles = 0;
             }
         }
     });
@@ -19101,6 +19283,11 @@ var PQ = PQ || {};
                 // spine animation
                 var spineJsonParser = new spine.SkeletonJson();
                 PIXI.AnimCache[this.url] = spineJsonParser.readSkeletonData(this.json);
+                this.onLoaded();
+            }else if(this.json.particleconf){
+                if(this.json.particleconf.color){
+                    for(var n = 0; n < this.json.particleconf.color.length; n++)this.json.particleconf.color[n] = parseInt(this.json.particleconf.color[n]);
+                }
                 this.onLoaded();
             }
             else
@@ -19402,7 +19589,11 @@ var PQ = PQ || {};
 
         visibilityChange: function(hidden){
             if(PQ.Config.pauseOnVisibilityChange){
-                this.setPause(hidden);
+                if(hidden){
+                    this.stop();
+                }else{
+                    this.start();
+                }
             }
             return this;
         },
@@ -19440,7 +19631,8 @@ var PQ = PQ || {};
 
         _updateTime: function(){
             var now = Date.now();
-            this._frameElapsedTime = now - this._lastTime;
+            var time = now - this._lastTime;
+            this._frameElapsedTime = (time <= PQ.Config.frameLimit) ? time : PQ.Config.frameLimit;
             this._lastTime = now;
             PQ.delta = this._frameElapsedTime/1000;
         },
@@ -19448,6 +19640,7 @@ var PQ = PQ || {};
         start: function(){
             this._updateTime();
             this._animate();
+            this.audioManager.pauseAll(false);
             return this;
         },
 
@@ -19496,6 +19689,7 @@ var PQ = PQ || {};
 
         stop: function(){
             window.cancelAnimationFrame(this._raf);
+            this.audioManager.pauseAll(true);
             return this;
         },
 
@@ -20522,7 +20716,7 @@ var PQ = PQ || {};
 
         setRotation: function(value){
             value = value || 0;
-            this.rotation = 0;
+            this.rotation = value;
             return this;
         },
 
@@ -23216,6 +23410,7 @@ var PQ = PQ || {};
         _textures: [],
         _json: [],
         _audios: [],
+        _particles: [],
 
         _init: function(){
             var _default = new PQ.Graphics()
@@ -23237,6 +23432,10 @@ var PQ = PQ || {};
 
         getJson: function(id){
             return this._getAsset(id, this._json);
+        },
+
+        getParticle: function(id){
+            return this._getAsset(id, this._particles).particleconf;
         },
 
         getAudio: function(id){
@@ -23275,7 +23474,11 @@ var PQ = PQ || {};
                     break;
                 case 'json':
                     asset.id = id;
-                    this._json.push(asset);
+                    if(asset.asset.particleconf){
+                        this._particles.push(asset);
+                    }else {
+                        this._json.push(asset);
+                    }
                     break;
                 case 'audio':
                     asset.id = id;
@@ -25461,166 +25664,512 @@ var PQ = PQ || {};
 })();
 (function(){
 
-    //TODO: Portar mi sistema de particulas y crear un helper
+    var defaultParticle = new PQ.Graphics()
+        .beginFill(0xffffff)
+        .drawCircle(0,0,10)
+        //.drawRect(0,0,10,10)
+        .endFill()
+        .generateTexture();
 
+    var getHex = function(r,g,b){
+        return ((r*255 << 16) + (g*255 << 8) + b*255);
+    };
+
+    PQ.Particle = PQ.Sprite.extend({
+        _init: function(){
+            PQ.Particle._super._init.call(this, defaultParticle);
+            this.tmpColor = [];
+        },
+
+        kill: function(){
+            if(this.parent)this.parent.tmpPool.push(this);
+            return this;
+        },
+
+        reset: function(){
+            this.setPosition(0,0);
+            this.setScale(0,0);
+            this.shakeCount = 0;
+        },
+
+        initialize: function(config, gameTime, emitter){
+            this.reset();
+            this.config = config;
+            this.initTime = gameTime;
+            this.lifeTime = gameTime + Math.randomRange(this.config.life.min, this.config.life.max);
+
+            this.baseSize = Math.randomRange(this.config.size.min, this.config.size.max);
+            this.baseSpeed = Math.randomRange(this.config.speed.min, this.config.speed.max);
+            this.baseRotation = Math.randomRange(this.config.rotation.min, this.config.rotation.max) * PQ.DEG_TO_RAD;
+            this.baseDirection = Math.randomRange(this.config.direction.min, this.config.direction.max) * PQ.DEG_TO_RAD;
+
+            this.size = this.baseSize;
+            this.sizeIncrease = 0;
+            this.speed = this.baseSpeed;
+            this.speedIncrease = 0;
+            this.rotation = this.baseRotation;
+            this.rotationIncrease = 0;
+            this.vRotationIncrease = this.config.vRotationIncrease;
+            this.direction = this.baseDirection;
+            this.directionIncrease = 0;
+            this.vDirectionIncrease = this.config.vDirectionIncrease;
+            this.timeColor = this.config.timeColor;
+            this.timeAlpha = this.config.timeAlpha;
+            this.tmpColor = this.config.tmpColor;
+            this.windX = this.config.windX;
+            this.windY = this.config.windY;
+            this.emitter = emitter;
+            this.easing = emitter.easing;
+
+            this.checkSprite();
+
+            this.setSize(this.size, this.size);
+            this.setScale(this.config.scale.x, this.config.scale.y);
+
+            //this.tint = this.config.color[0];
+            this.alpha = this.config.alpha[0];
+            this.blendMode = this.config.blend;
+
+            if(this.emitter.shape.width > 1 || this.emitter.shape.height > 1){
+                var xx = this.emitter.shape.width - this.emitter.shape.x;
+                var yy = this.emitter.shape.height - this.emitter.shape.y;
+                this.position.set(
+                    Math.randomRange(this.emitter.shape.x, this.emitter.shape.x+this.emitter.shape.width),
+                    Math.randomRange(this.emitter.shape.y, this.emitter.shape.y+this.emitter.shape.height)
+                );
+            }else{
+                this.position.set(this.emitter.shape.x,this.emitter.shape.y);
+            }
+        },
+
+        checkSprite: function(){
+            var len = this.config.tmpSprite.length;
+            if(len === 1){
+                this.texture = this.config.tmpSprite[0];
+            }else if(len > 0){
+                var index = Math.floor(Math.random() * len);
+                this.texture = this.config.tmpSprite[index];
+            }
+            return this;
+        },
+
+        setCurrentColor: function(gameTime){
+            var r, g, b;
+            if(this.config.color.length > 1){
+                var len = this.config.color.length;
+                var index = Math.floor((gameTime - this.initTime)/this.timeColor);
+                if(index > len-1)index=len-1;
+                r = this.tmpColor[index][0];
+                g = this.tmpColor[index][1];
+                b = this.tmpColor[index][2];
+
+                if(index < len-1){
+                    var t = this.timeColor*(index+1);
+                    t = this.timeColor - (t - (gameTime - this.initTime));
+                    var leftTime = this.timeColor-t;
+                    r += (this.tmpColor[index+1][0] - this.tmpColor[index][0])*this.easing((this.timeColor-leftTime)/this.timeColor);
+                    g += (this.tmpColor[index+1][1] - this.tmpColor[index][1])*this.easing((this.timeColor-leftTime)/this.timeColor);
+                    b += (this.tmpColor[index+1][2] - this.tmpColor[index][2])*this.easing((this.timeColor-leftTime)/this.timeColor);
+                }
+            }else{
+                r = this.tmpColor[0][0];
+                g = this.tmpColor[0][1];
+                b = this.tmpColor[0][2];
+            }
+
+            var hex = getHex(r,g,b);
+            if(this.tint!==hex)this.tint = hex;
+            return this;
+        },
+
+        setCurrentAlpha: function(gameTime){
+            var a;
+            if(this.config.alpha.length > 1){
+                var len = this.config.alpha.length;
+                var index = Math.floor((gameTime - this.initTime)/this.timeAlpha);
+                if(index > len-1)index=len-1;
+                a = this.config.alpha[index];
+
+                if(index < len-1){
+                    var t = this.timeAlpha*(index+1);
+                    t = this.timeAlpha - (t - (gameTime - this.initTime));
+                    var leftTime = this.timeAlpha-t;
+                    a += (this.config.alpha[index+1] - this.config.alpha[index])*this.easing((this.timeAlpha-leftTime)/this.timeAlpha);
+                }
+            }else{
+                a = this.config.alpha[0];
+            }
+
+            this.alpha = a;
+            return this;
+        },
+
+        setCurrentShake: function(){
+            this.shakeCount++;
+            if(this.config.size.shake && this.config.size.shake%this.shakeCount === 0)this.baseSize = Math.randomRange(this.config.size.min, this.config.size.max);
+            if(this.config.speed.shake && this.config.speed.shake%this.shakeCount === 0)this.baseSpeed = Math.randomRange(this.config.speed.min, this.config.speed.max);
+            if(this.config.rotation.shake && this.config.rotation.shake%this.shakeCount === 0)this.baseRotation = Math.randomRange(this.config.rotation.min, this.config.rotation.max) * PQ.DEG_TO_RAD;
+            if(this.config.direction.shake && this.config.direction.shake%this.shakeCount === 0)this.baseDirection = Math.randomRange(this.config.direction.min, this.config.direction.max) * PQ.DEG_TO_RAD;
+
+            if(this.shakeCount >= 20)this.shakeCount = 0;
+            return this;
+        },
+
+        _update: function(gameTime, frameElapsedTime){
+            if(PQ.Debug.enabled)PQ.Debug.particles++;
+            if(gameTime >= this.lifeTime){
+                this.kill();
+                return;
+            }
+
+            this.setCurrentShake();
+
+            this.sizeIncrease += this.config.size.increase;
+            this.speedIncrease += this.config.speed.increase;
+            this.rotationIncrease += this.vRotationIncrease;
+            this.directionIncrease += this.vDirectionIncrease;
+
+            this.size = this.baseSize + this.sizeIncrease;
+            this.speed = this.baseSpeed + this.speedIncrease;
+            this.rotation = this.baseRotation + this.rotationIncrease;
+            this.direction = this.baseDirection + this.directionIncrease;
+
+            this.setSize(this.size, this.size);
+            this.x += this.speed*Math.cos(this.direction) + this.windX;
+            this.y += this.speed*Math.sin(this.direction) + this.windY;
+
+            //TODO: CocoonJS Canvas+ peta al usar el setTint a cada frame, investigar con logcat, problemas de memoria?
+            if(!PQ.Device.isCocoonJS)this.setCurrentColor(gameTime);
+            this.setCurrentAlpha(gameTime);
+        }
+    });
 })();
 (function(){
 
-    PQ.Utils = {
+    /*
+     * Inspired in GameMaker Particle System by https://www.yoyogames.com/
+     */
+    var particlePool = new PQ.Pool(PQ.Particle, [], 200);
 
-        //TODO: Mejor que esto sería un sprite que se dibujara asi directamente, mejor rendimiento, flexibilidad, etc...
-        ninePatchTexture : function(texture, width, height, name){
-            if(!texture){
-                texture = PQ.AssetCache.getTexture("_PQDefaultTexture");
-            }else if(typeof texture === "string"){
-                texture = PQ.AssetCache.getTexture(texture);
-            }
-
-            var ww = texture.width,
-                hh = texture.height,
-                xx = texture.frame.x,
-                yy = texture.frame.y;
-
-            var left = ww / 3,
-                right = ww / 3,
-                top = hh / 3,
-                bottom = hh / 3;
-
-            var container = new PQ.DisplayObjectContainer();
-
-            for(var i = 0; i < 9; i++){
-                var sprite, x, y, w, h;
-                switch(i){
-                    case 0:
-                        x = xx;
-                        y = yy;
-                        w = left;
-                        h = top;
-                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
-                            .setAnchor(0,0)
-                            .setPosition(0,0)
-                            .setSize(left, top);
-                        break;
-                    case 1:
-                        x = xx+left;
-                        y = yy;
-                        w = Math.floor(ww-left-right);
-                        h = top;
-                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
-                            .setAnchor(0,0)
-                            .setPosition(left,0)
-                            .setSize(width-right-left,top);
-                        break;
-                    case 2:
-                        x = xx+Math.floor(ww-right);
-                        y = yy;
-                        w = right;
-                        h = top;
-                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
-                            .setAnchor(0,0)
-                            .setPosition(width-right,0)
-                            .setSize(right,top);
-                        break;
-                    case 3:
-                        x = xx;
-                        y = yy+top;
-                        w = left;
-                        h = Math.floor(hh-top-bottom);
-                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
-                            .setAnchor(0,0)
-                            .setPosition(0,top)
-                            .setSize(left,height-top-bottom);
-                        break;
-                    case 4:
-                        x = xx+left;
-                        y = yy+top;
-                        w = Math.floor(ww-left-right);
-                        h = Math.floor(hh-top-bottom);
-                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
-                            .setAnchor(0,0)
-                            .setPosition(left,top)
-                            .setSize(width-left-right,height-top-bottom);
-                        break;
-                    case 5:
-                        x = xx+Math.floor(ww-right);
-                        y = yy+top;
-                        w = Math.floor(ww-left-right);
-                        h = Math.floor(hh-top-bottom);
-                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
-                            .setAnchor(0,0)
-                            .setPosition(width-right,top)
-                            .setSize(right,height-top-bottom);
-                        break;
-                    case 6:
-                        x = xx;
-                        y = yy+Math.floor(hh-bottom);
-                        w = left;
-                        h = bottom;
-                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
-                            .setAnchor(0,0)
-                            .setPosition(0,height-bottom)
-                            .setSize(left,bottom);
-                        break;
-                    case 7:
-                        x = xx+left;
-                        y = yy+Math.floor(hh-bottom);
-                        w = Math.floor(ww-left-right);
-                        h = bottom;
-                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
-                            .setAnchor(0,0)
-                            .setPosition(left,height-bottom)
-                            .setSize(width-left-right,bottom);
-                        break;
-                    case 8:
-                        x = xx+Math.floor(ww-right);
-                        y = yy+Math.floor(hh-bottom);
-                        w = right;
-                        h = bottom;
-                        sprite = new PQ.Sprite(new PQ.Texture(texture, new PQ.Rectangle(x,y,w,h)))
-                            .setAnchor(0,0)
-                            .setPosition(width-right,height-bottom)
-                            .setSize(right,bottom);
-                        break;
-                }
-
-                container.addChild(sprite);
-            }
-
-            var ninePatch = container.generateTexture();
-
-            if(name && PQ.AssetCache){
-                var asset = {
-                    type : 'texture',
-                    asset: ninePatch
-                };
-
-                PQ.AssetCache.addAsset(name, asset);
-            }
-
-            return ninePatch;
-
+    var defaultConfig = {
+        sprite: [],
+        size: {
+            min: 15,
+            max: 35,
+            increase: -0.1,
+            shake: 1
         },
-
-        findSceneParent: function(actor) {
-            if (actor instanceof PQ.Scene) {
-                return actor;
-            } else if (actor.parent) {
-                return PQ.Utils.findSceneParent(actor.parent);
-            }
-
-            return false;
+        scale: {
+            x : 1,
+            y : 1
         },
-
-        parseText: function(text, args){
-            for(var key in args){
-                var regExp = new RegExp('{{'+key+'}}','g');
-                text = text.replace(regExp, args[key]);
-            }
-            return text;
-        }
-
-        //TODO: Añadir un convertidos de hex color string to hex y hex to string
-
+        color: [
+            0xffffff //change this can affect the performance
+        ],
+        alpha: [
+            0.1,0.5, 0.1
+        ],
+        speed: {
+            min:0,
+            max: 1,
+            increase: -0.01,
+            shake: 5
+        },
+        wind: {
+            amount: 2,
+            angle: -60
+        },
+        rotation: {
+            min: 0,
+            max: 359,
+            increase: 0,
+            shake: 0
+        },
+        direction: {
+            min: 0,
+            max: 359,
+            increase: 0,
+            shake: 0
+        },
+        life: {
+            min: 5200,
+            max: 8200
+        },
+        blend: PQ.blendModes.NORMAL, //change this can affect the performance
+        particles: 1
     };
 
+    //TODO: 60/sec minimo puede ser demasiado, cambiar el sistema de fps por uno que use el delta
+
+    //TODO: Magnets, batchContainer
+    PQ.ParticleEmitter = PQ.Container.extend({
+        _init: function(config){
+            PQ.ParticleEmitter._super._init.call(this);
+            //TODO: cargar particulas mediante json externo
+            this.particleConfig = config || defaultConfig;
+            this.vel = new PQ.Point(0,0);
+            this.size = new PQ.Point(1,1);
+            this.anchor = new PQ.Point(0,0);
+
+            this.tmpPool = [];
+            this._burst = 0;
+            this._stream = false;
+
+            this.easing = PQ.Easing.linear();
+
+            this.config = {};
+            this.shape = new PQ.Rectangle(0,0,1,1);
+            this.initConfig();
+        },
+
+        initConfig: function(){
+            for(var key in this.particleConfig){
+                this.config[key] = this.particleConfig[key];
+            }
+
+            this.particleSprite();
+            this.particleColor();
+            this.particleWind();
+            this.particleAlpha();
+            this.particleDirection(this.config.direction.min, this.config.direction.max, this.config.direction.increase, this.config.direction.shake);
+            this.particleRotation(this.config.rotation.min, this.config.rotation.max, this.config.rotation.increase, this.config.rotation.shake);
+        },
+
+        particleBlend: function(mode){
+            this.config.blend = mode || PQ.blendModes.NORMAl;
+            return this;
+        },
+
+        setBounds: function(x,y,width, height){
+            this.shape.x = x;
+            this.shape.y = y;
+            this.shape.width = width || this.shape.width;
+            this.shape.height = height || this.shape.height;
+            return this;
+        },
+
+        particleSprite: function(sprites){
+            this.config.sprite = sprites || this.config.sprite;
+
+            if(this.config.tmpSprite){
+                this.config.tmpSprite.length = 0;
+            }else{
+                this.config.tmpSprite = [];
+            }
+
+            if(this.config.sprite){
+                var len = this.config.sprite.length;
+                for(var i = 0; i < len; i++){
+                    var sp = null;
+                    if(typeof this.config.sprite[i] === "string"){
+                        sp = PQ.AssetCache.getTexture(this.config.sprite[i]);
+                    }else{
+                        sp = this.config.sprite[i];
+                    }
+
+                    this.config.tmpSprite.push(sp);
+                }
+            }
+
+            return this;
+        },
+
+        particleSize: function(min, max, increase, shake){
+            this.config.size.min = min;
+            this.config.size.max = max;
+            this.config.size.increase = increase || 0;
+            this.config.size.shake = shake || 0;
+            return this;
+        },
+
+        particleScale: function(x, y){
+            this.config.scale.x = x || 1;
+            this.config.scale.y = y || 1;
+            return this;
+        },
+
+        particleColor: function(colors){
+            this.config.color = colors || this.config.color;
+
+            if(!this.config.tmpColor){
+                this.config.tmpColor = [];
+            }else {
+                this.config.tmpColor.length = 0;
+            }
+
+            var len = this.config.color.length;
+            if(len >= 1) {
+
+                for (var i = 0; i < this.config.color.length; i++) {
+                    this.config.tmpColor.push(PIXI.hex2rgb(this.config.color[i]));
+                }
+            }else{
+                this.config.tmpColor.push(PIXI.hex2rgb(0xffffff));
+            }
+            this.config.timeColor = this.config.life.max / this.config.color.length;
+            return this;
+        },
+
+        particleAlpha: function(alphas){
+            this.config.alpha = alphas || this.config.alpha;
+            var len = this.config.alpha.length;
+            if(len === 0){
+                this.config.alpha.push(1);
+            }
+            this.config.timeAlpha = this.config.life.max / this.config.alpha.length;
+            return this;
+        },
+
+        particleSpeed: function(min, max, increase, shake){
+            this.config.speed.min = min;
+            this.config.speed.max = max;
+            this.config.speed.increase = increase || 0;
+            this.config.speed.shake = shake || 0;
+            return this;
+        },
+
+        particleWind: function(amount, angleInDegree){
+            amount = amount || this.config.wind.amount;
+            angleInDegree = angleInDegree || this.config.wind.angle;
+            this.config.windX = amount * Math.cos(angleInDegree*PQ.DEG_TO_RAD);
+            this.config.windY = amount * Math.sin(angleInDegree*PQ.DEG_TO_RAD);
+            return this;
+        },
+
+        particleRotation: function(min, max, increase, shake){
+            this.config.rotation.min = min;
+            this.config.rotation.max = max;
+            this.config.rotation.increase = increase || 0;
+            this.config.rotation.shake = shake || 0;
+
+            this.config.vRotationIncrease = this.config.rotation.increase*PQ.DEG_TO_RAD;
+            return this;
+        },
+
+        particleDirection: function(min, max, increase, shake){
+            this.config.direction.min = min;
+            this.config.direction.max = max;
+            this.config.direction.increase = increase || 0;
+            this.config.direction.shake = shake || 0;
+
+            this.config.vDirectionIncrease = this.config.direction.increase*PQ.DEG_TO_RAD;
+            return this;
+        },
+
+        particleLife: function(min, max){
+            this.config.life.min = min;
+            this.config.life.max = max;
+            this.config.timeColor = this.config.life.max / this.config.color.length;
+            this.config.timeAlpha = this.config.life.max / this.config.alpha.length;
+            return this;
+        },
+
+        particleNum: function(num){
+            this.config.particles = num || 1;
+            return this;
+        },
+
+        setEasing: function(easing){
+            this.easing = easing || PQ.Easing.linear();
+            return this;
+        },
+
+        addParticle: function(particle){
+            return this.addChild(particle);
+        },
+
+        addChild: function(child){
+            if(!child instanceof PQ.Particle){
+                return this;
+            }
+
+            PQ.ParticleEmitter._super.addChild.call(this, child);
+            return this;
+        },
+
+        start: function(burst){
+            if(typeof burst !== "number" || burst === 0){
+                this._stream = true;
+            }else{
+                this._burst = burst;
+            }
+
+            return this;
+        },
+
+        stop: function(){
+            this._stream = 0;
+            this._burst = 0;
+            return this;
+        },
+
+        checkTmpPool: function(){
+            if(this.tmpPool.length >= 1){
+                var len = this.tmpPool.length;
+                for(var i = 0; i < len; i++){
+                    this.tmpPool[i].returnToPool();
+                    this.removeChild(this.tmpPool[i]);
+                    //console.log('pool',particlePool.getLength());
+                }
+
+                this.tmpPool.length = 0;
+            }
+
+            return this;
+        },
+
+        _update: function(gameTime, frameElapsedTime){
+            if(PQ.Debug.enabled)PQ.Debug.sceneActors++;
+            if(this._clickData){
+                if(Date.now() - this._clickData.date >= PQ.Config.mouseDoubleClickWait){
+                    this._onMouseClickCallback(this._clickData.mouseData);
+                    delete this._clickData;
+                }
+            }
+
+            if(this.update(gameTime, frameElapsedTime) === false){
+                return;
+            }
+
+            if(this.vel.x !== 0 || this.vel.y !== 0){
+                if(PQ.Config.deltaAnimation){
+                    this.x += this.vel.x*PQ.delta;
+                    this.y += this.vel.y*PQ.delta;
+                }else {
+                    this.x += this.vel.x;
+                    this.y += this.vel.y;
+                }
+            }
+
+            if(this._burst > 0){
+                this._burst--;
+                this.createParticles(gameTime);
+            }else if(this._stream){
+                this.createParticles(gameTime);
+            }
+
+            for (var i = 0; i < this.children.length; i++) {
+                if (this.children[i]._update) {
+                    this.children[i]._update(gameTime, frameElapsedTime);
+                }
+            }
+
+            this.postUpdate(gameTime, frameElapsedTime);
+            this.checkTmpPool();
+
+            return this;
+        },
+
+        createParticles: function(gameTime){
+            for(var i = 0; i < this.config.particles; i++){
+                var particle = particlePool.getObject();
+                particle.initialize(this.config, gameTime, this);
+                this.addChild(particle);
+            }
+
+            return this;
+        }
+    });
+
 })();
+//# sourceMappingURL=perenquen.dev.js.map

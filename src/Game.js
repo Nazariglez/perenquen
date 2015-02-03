@@ -72,7 +72,11 @@
 
         visibilityChange: function(hidden){
             if(PQ.Config.pauseOnVisibilityChange){
-                this.setPause(hidden);
+                if(hidden){
+                    this.stop();
+                }else{
+                    this.start();
+                }
             }
             return this;
         },
@@ -110,7 +114,8 @@
 
         _updateTime: function(){
             var now = Date.now();
-            this._frameElapsedTime = now - this._lastTime;
+            var time = now - this._lastTime;
+            this._frameElapsedTime = (time <= PQ.Config.frameLimit) ? time : PQ.Config.frameLimit;
             this._lastTime = now;
             PQ.delta = this._frameElapsedTime/1000;
         },
@@ -118,6 +123,7 @@
         start: function(){
             this._updateTime();
             this._animate();
+            this.audioManager.pauseAll(false);
             return this;
         },
 
@@ -166,6 +172,7 @@
 
         stop: function(){
             window.cancelAnimationFrame(this._raf);
+            this.audioManager.pauseAll(true);
             return this;
         },
 

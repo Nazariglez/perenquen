@@ -23,6 +23,9 @@ var PQ = PQ || {};
         ASPECT_FILL: 3
     };
 
+    PQ.RAD_TO_DEG = 180 / Math.PI;
+    PQ.DEG_TO_RAD = Math.PI / 180;
+
     PQ.Config = {
         debug: false,
         mouseDoubleClickWait: 180, //TIempo de espera para lanzar el doble click en milisegundos
@@ -38,6 +41,7 @@ var PQ = PQ || {};
         persistentData: true, //en true los datos quedan almacenados en localStorage, en false se pierden al cerrar el juego
         pauseOnVisibilityChange: true, //Pausa al cambiar de pestaña
         captureKeyboard: false, //Escucha al teclado y genera los eventos
+        frameLimit: 35, //Si se pasa de 35ms (quizás un freeze?) se asigna este maxitmo de frameElaspedTime
         resolution: 1 //Multiplica el tamaño del renderer, en retina se pondría a 2
     };
 
