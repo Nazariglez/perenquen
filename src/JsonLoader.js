@@ -60,6 +60,11 @@
                 var spineJsonParser = new spine.SkeletonJson();
                 PIXI.AnimCache[this.url] = spineJsonParser.readSkeletonData(this.json);
                 this.onLoaded();
+            }else if(this.json.particleconf){
+                if(this.json.particleconf.color){
+                    for(var n = 0; n < this.json.particleconf.color.length; n++)this.json.particleconf.color[n] = parseInt(this.json.particleconf.color[n]);
+                }
+                this.onLoaded();
             }
             else
             {
