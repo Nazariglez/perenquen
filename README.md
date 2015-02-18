@@ -1,5 +1,8 @@
 perenquen.js
 ===========
+
+__Important:__ This version use Pixi v2.x as renderer, I'm just waiting Pixi v3 to refactor and improve all the code. (Also add browserify, etc...)
+
 ##WebGL and Canvas HTML5 Game Framework
 
 PerenquenJS is a HTML5 Game Framework designed for mobile, web and desktop development. API inspired in [CAAT](https://github.com/hyperandroid/caat).
