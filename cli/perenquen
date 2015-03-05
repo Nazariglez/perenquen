@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+var program = require('commander'),
+    colors = require('colors'),
+    requireDir = require('require-dir'),
+    exec = require('child_process').exec;
+
+module.exports = (function(){
+    var isCLI = !(!!module.parent);
+
+    program.version('1.0.0')
+        .usage('<command> --help');
+
+    var cmds = requireDir('./commands', {recurse : true});
+
+    program.parse(process.argv);
+
+    if(isCLI) {
+        if (!program.args.length) {
+            var header = [
+                '',
+                '  ##############################',
+                '  #    Perenquen.js  v1.0.0    #',
+                '  #   http://perenquenjs.com   #',
+                '  ##############################'
+            ];
+
+            for (var i = 0; i < header.length; i++) {
+                console.log(header[i].yellow);
+            }
+
+            program.help();
+        }
+    }else{
+
+        //TODO: callbacks for cmds
+        cmds.help = program.help.bind(program);
+        return cmds;
+    }
+})();
