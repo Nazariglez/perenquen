@@ -1,13 +1,16 @@
 #!/usr/bin/env node
 var program = require('commander'),
     colors = require('colors'),
-    requireDir = require('require-dir'),
-    exec = require('child_process').exec;
+    requireDir = require('require-dir');
+
+var VERSION = require('../package.json').version;
+
+global.perenquenBin = __filename;
 
 module.exports = (function(){
     var isCLI = !(!!module.parent);
 
-    program.version('1.0.0')
+    program.version(VERSION)
         .usage('<command> --help');
 
     var cmds = requireDir('./commands', {recurse : true});
@@ -19,7 +22,7 @@ module.exports = (function(){
             var header = [
                 '',
                 '  ##############################',
-                '  #    Perenquen.js  v1.0.0    #',
+                '  #    Perenquen.js  v' + VERSION + '    #',
                 '  #   http://perenquenjs.com   #',
                 '  ##############################'
             ];

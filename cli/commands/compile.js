@@ -1,9 +1,10 @@
-var fn = module.exports = function(platform){
-    console.log('compile', platform);
-};
-
 var program = require('commander');
 
-program.command('compile <platform>')
-    .description('compile the game')
-    .action(fn);
+program.command('compile')
+    .description('compile bundle')
+    .action(function(){
+        console.log('compile');
+    });
+
+
+module.exports = require('../fn.js')('compile');
