@@ -20,9 +20,6 @@
     "gulp": "^3.8.11",
     "require-dir": "^0.1.0"
   },
-  "scripts": {
-    "cli": " node ./cli/perenquen"
-  },
   "main": "./cli/perenquen",
   "browser": "./build/perenquen.js"
 }
