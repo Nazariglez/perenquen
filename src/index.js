@@ -1,3 +1,3 @@
 (function(){
-    if(module && module.exports)module.exports = {index:1};
+    module.exports = {index:1};
 })();
