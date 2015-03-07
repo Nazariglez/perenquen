@@ -1,0 +1,9 @@
+{
+  "namespace" : "PQ",
+  "entryPoint" : "./src/index.js",
+  "bundleName" : "perenquen",
+  "devSuffix" : ".dev",
+  "bundleDest" : "./build",
+
+  "defaultTask" : "build"
+}
