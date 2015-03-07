@@ -4,4 +4,4 @@ var gulp = require('gulp'),
 
 var tasks = requireDir('./gulp/tasks');
 
-gulp.task('default', [config.defaultTask]);
+gulp.task('default', config.defaultTask);

@@ -1,7 +1,8 @@
 var gulp = require('gulp'),
     watchify = require('watchify'),
     getBundler = require('./build.js').getBundler,
-    createBundle = require('./build.js').createBundle;
+    createBundle = require('./build.js').createBundle,
+    config = require('../config.json');
 
 function watch(){
     var bundler = watchify(getBundler(watchify.args));
@@ -19,5 +20,7 @@ function watch(){
 }
 
 gulp.task('watch', function(){
+    gulp.watch(config.scripts, ['jshint']);
+
     return watch();
 });

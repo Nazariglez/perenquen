@@ -1,3 +1,1 @@
-(function(){
-    module.exports = {index:1};
-})();
+var PQ = module.exports = {index:1};
