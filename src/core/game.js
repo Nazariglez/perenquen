@@ -1,7 +1,14 @@
 var CONST = require('./const'),
     utils = require('./utils'),
     autoDetectRenderer = require('../../lib/pixi/src/core').autoDetectRenderer,
-    WebGLRenderer = require('../../lib/pixi/src/core/renderers/webgl/WebGLRenderer');
+    WebGLRenderer = require('../../lib/pixi/src/core/renderers/webgl/WebGLRenderer'),
+    SceneManager = require('./SceneManager');
+
+var graphics = new (require('../../lib/pixi/src/core/graphics/Graphics'))();
+
+graphics.beginFill(0x000000);
+graphics.drawCircle(0,0,100);
+graphics.endFill();
 
 /**
  * The main object of your game.
@@ -91,6 +98,12 @@ function Game(width, height, gameOptions, rendererOptions){
      * @member {boolean}
      */
     this.isWebGL = (this.renderer instanceof WebGLRenderer);
+
+    /**
+     * The scene manager for this game
+     * @member {SceneManager}
+     */
+    this.sceneManager = new SceneManager(this);
 }
 
 Game.prototype.constructor = Game;
@@ -123,7 +136,9 @@ Game.prototype.stop = function(){
 Game.prototype.animate = function(){
     this.raf = window.requestAnimationFrame(this.animate.bind(this));
     this.updateTime();
-    //TODO: Renderer scene
+    this.renderer.render(this.sceneManager);
+
+    this.sceneManager.animate(this.time, this.delta);
 
     return this;
 };
@@ -138,7 +153,7 @@ Game.prototype.updateTime = function(){
     this.frameElapsedTime = (time <= this.config.frameLimit) ? time : this.config.frameLimit;
     this.frameLastTime = now;
     this.delta = this.frameElapsedTime/1000;
-    this.time += this.frameElapsedTime;
+    this.time += this.delta;
 
     return this;
 };

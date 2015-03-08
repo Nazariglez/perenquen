@@ -1,3 +1,3 @@
 module.exports = {
-    Game : require('./game.js')
+    Game : require('./Game')
 };
