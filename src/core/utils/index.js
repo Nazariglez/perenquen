@@ -3,12 +3,22 @@ var CONST = require('../const'),
 
 //utils._saidHello = true;
 
+/**
+ * logs out renderer type, audio type, and version
+ */
 utils.sayHello = function(){
     //TODO: RendererType, AudioType, Pixi credits
     if(!this._saidHello)console.log('Perenquen.js v'+CONST.VERSION + ' [http://perequenjs.com]');
 };
 
-utils.extendNewObject = function(parent, child){
+/**
+ * Set default parameters in child object with the parent values
+ *
+ * @param parent {object}
+ * @param child {object}
+ * @returns {object}
+ */
+utils.defaultObject = function(parent, child){
     parent = parent || {};
     child = child || {};
     for(var key in parent){

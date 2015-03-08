@@ -5,7 +5,8 @@ var CONST = require('./const'),
 
 /**
  * The main object of your game.
- *
+ * @class
+ * @memberof PQ
  * @param width=800
  * @param height=600
  * @param [gameOptions] {object} Optional game parameters
@@ -23,30 +24,81 @@ var CONST = require('./const'),
  * @param [rendererOptions.preserveDrawingBuffer=false] {boolean} enables drawing buffer preservation, enable this if you
  *      need to call toDataUrl on the webgl context
  * @param [rendererOptions.resolution=1] {number} the resolution of the renderer
- *
- * @constructor
  */
 function Game(width, height, gameOptions, rendererOptions){
-    this.config = utils.extendNewObject(CONST.DEFAULT_GAME_OPTIONS, gameOptions);
+    /**
+     * The config of the game
+     *
+     * @member {object}
+     * @default CONST.DEFAULT_GAME_OPTIONS
+     */
+    this.config = utils.defaultObject(CONST.DEFAULT_GAME_OPTIONS, gameOptions);
     utils._saidHello = !this.config.sayHello;
-    rendererOptions = utils.extendNewObject(CONST.DEFAULT_RENDER_OPTIONS, rendererOptions);
+    rendererOptions = utils.defaultObject(CONST.DEFAULT_RENDER_OPTIONS, rendererOptions);
 
-    this.raf = null;
+    /**
+     * The id of requestAnimationFrame
+     *
+     * @member {number}
+     */
+    this.raf = -1;
+
+    /**
+     * The renderer width
+     * @member {number}
+     */
     this.width = width || 800;
+
+    /**
+     * The renderer height
+     * @member {number}
+     */
     this.height = height || 600;
+
+    /**
+     * Renderer in use
+     * @member {WebGLRenderer|CanvasRenderer}
+     */
     this.renderer = getRenderer(this.width, this.height, rendererOptions, this.config.noWebGL);
     this.resize(this.width, this.height);
 
+    /**
+     * The time between frames
+     * @member {number}
+     */
     this.frameElapsedTime = 0;
+
+    /**
+     * Last frame time
+     * @member {number}
+     */
     this.frameLastTime = 0;
+
+    /**
+     * The total game time
+     * @member {number}
+     */
     this.time = 0;
+
+    /**
+     * The delta time
+     * @member {number}
+     */
     this.delta = 0;
 
+    /**
+     * Whether the renderer is a webgl
+     * @member {boolean}
+     */
     this.isWebGL = (this.renderer instanceof WebGLRenderer);
 }
 
 Game.prototype.constructor = Game;
 
+/**
+ * Start the request animation frame
+ * @returns {Game}
+ */
 Game.prototype.start = function(){
     this.updateTime();
     this.animate();
@@ -54,18 +106,32 @@ Game.prototype.start = function(){
     return this;
 };
 
+/**
+ * Stop the request animation frame
+ * @returns {Game}
+ */
 Game.prototype.stop = function(){
     window.cancelAnimationFrame(this.raf);
     //TODO: pause audioManager
     return this;
 };
 
+/**
+ * Draw and animate all the actors in the scene
+ * @returns {Game}
+ */
 Game.prototype.animate = function(){
     this.raf = window.requestAnimationFrame(this.animate.bind(this));
     this.updateTime();
     //TODO: Renderer scene
+
+    return this;
 };
 
+/**
+ * Calculate all game times
+ * @returns {Game}
+ */
 Game.prototype.updateTime = function(){
     var now = Date.now();
     var time = now - this.frameLastTime;
@@ -73,12 +139,21 @@ Game.prototype.updateTime = function(){
     this.frameLastTime = now;
     this.delta = this.frameElapsedTime/1000;
     this.time += this.frameElapsedTime;
+
+    return this;
 };
 
+/**
+ * Resize the view using DOM Style
+ * @param width {number}
+ * @param height {number}
+ * @returns {Game}
+ */
 Game.prototype.resize = function(width, height){
     var canvas = this.renderer.view;
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
+    //TODO: Update a game.widht and game.height?
     return this;
 };
 
