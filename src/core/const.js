@@ -10,6 +10,13 @@ var constants = require('../../lib/pixi/src/core/const');
 constants.VERSION = require('../../package.json').version;
 
 /**
+ * String of the current PIXI version
+ * @constant
+ * @property {string} PIXI_VERSION
+ */
+constants.PIXI_VERSION = require('../../lib/pixi/package.json').version;
+
+/**
  * Constant to identify the Audio Type.
  *
  * @static
