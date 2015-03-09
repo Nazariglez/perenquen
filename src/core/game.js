@@ -4,12 +4,6 @@ var CONST = require('./const'),
     WebGLRenderer = require('../../lib/pixi/src/core/renderers/webgl/WebGLRenderer'),
     SceneManager = require('./SceneManager');
 
-var graphics = new (require('../../lib/pixi/src/core/graphics/Graphics'))();
-
-graphics.beginFill(0x000000);
-graphics.drawCircle(0,0,100);
-graphics.endFill();
-
 /**
  * The main object of your game.
  * @class
@@ -168,7 +162,6 @@ Game.prototype.resize = function(width, height){
     var canvas = this.renderer.view;
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
-    //TODO: Update a game.widht and game.height?
     return this;
 };
 

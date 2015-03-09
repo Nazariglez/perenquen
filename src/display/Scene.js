@@ -22,17 +22,28 @@ Scene.prototype.setManager = function(manager){
 };
 
 Scene.prototype.animate = function(gameTime, delta){
-    if(this._backgroundColorDirty){
-        this.clear();
-        if(typeof this.backgroundColor === "number"){
-            this.beginFill(this.backgroundColor)
-                .drawRect(0,0,this.manager.game.width,this.manager.game.height)
-                .endFill();
+    if(this.update(gameTime, delta)){
+        if(this._backgroundColorDirty){
+            this.clear();
+            if(typeof this.backgroundColor === "number"){
+                this.beginFill(this.backgroundColor)
+                    .drawRect(0,0,this.manager.game.width,this.manager.game.height)
+                    .endFill();
+            }
+            this._backgroundColorDirty = false;
         }
-        this._backgroundColorDirty = false;
+
+        var len = this.children.length;
+        for(var i = 0; i < len; i++){
+            this.children[i].animate(gameTime, delta);
+        }
     }
 
     return this;
+};
+
+Scene.prototype.update = function(gameTime, delta){
+    return true;
 };
 
 Object.defineProperties(Scene.prototype, {
