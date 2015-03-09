@@ -1,5 +1,6 @@
 var CONST = require('../const'),
-    utils = require('../../../lib/pixi/src/core/utils');
+    utils = require('../../../lib/pixi/src/core/utils'),
+    Pool = require('./Pool');
 
 //utils._saidHello = true;
 
@@ -38,5 +39,7 @@ utils.mixin = function(obj, mixin){
         obj.prototype[key] = mixin[key];
     }
 };
+
+utils.Pool = Pool;
 
 module.exports = utils;

@@ -1,9 +1,13 @@
-var core = require('./core'),
-    CONST = require('./core/const');
+var CONST = require('./core/const');
 
-//TODO: Add here addons
-core.Scene = require('./display/Scene');
-core.Graphics = require('./display/Graphics');
+var core = {
+    utils : require('./core/utils'),
+
+    Game : require('./core/Game'),
+    SceneManager : require('./core/SceneManager'),
+    Scene : require('./display/Scene'),
+    Graphics : require('./display/Graphics')
+};
 
 //Add Constants to the main object
 for(var key in CONST){
