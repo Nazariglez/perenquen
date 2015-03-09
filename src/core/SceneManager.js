@@ -44,6 +44,12 @@ SceneManager.prototype.addScene = function(scene){
     return this;
 };
 
+/**
+ * Animate the currentScene
+ * @param gameTime {number}
+ * @param delta {number}
+ * @returns {SceneManager}
+ */
 SceneManager.prototype.animate = function(gameTime, delta){
     if(this.currentScene&&this.currentScene.animate){
         this.currentScene.animate(gameTime, delta);
@@ -52,6 +58,11 @@ SceneManager.prototype.animate = function(gameTime, delta){
     return this;
 };
 
+/**
+ * Set a scene to render and animate
+ * @param scene {Scene}
+ * @returns {SceneManager}
+ */
 SceneManager.prototype.setCurrentScene = function(scene){
     scene.setManager(this);
     this.currentScene = scene;

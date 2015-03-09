@@ -1,3 +1,4 @@
 module.exports = {
-    Game : require('./Game')
+    Game : require('./Game'),
+    SceneManager : require('./SceneManager')
 };

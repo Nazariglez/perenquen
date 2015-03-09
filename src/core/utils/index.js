@@ -28,4 +28,15 @@ utils.defaultObject = function(parent, child){
     return child;
 };
 
+/**
+ * Extend an object with the properties from other object
+ * @param obj {object}
+ * @param mixin {object}
+ */
+utils.mixin = function(obj, mixin){
+    for(var key in mixin){
+        obj.prototype[key] = mixin[key];
+    }
+};
+
 module.exports = utils;
