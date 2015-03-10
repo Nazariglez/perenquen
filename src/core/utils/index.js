@@ -1,8 +1,7 @@
 var CONST = require('../const'),
     utils = require('../../../lib/pixi/src/core/utils'),
-    Pool = require('./Pool');
-
-//utils._saidHello = true;
+    Pool = require('./Pool'),
+    Class = require('../Class');
 
 /**
  * logs out renderer type, audio type, and version
@@ -38,6 +37,14 @@ utils.mixin = function(obj, mixin){
     for(var key in mixin){
         obj.prototype[key] = mixin[key];
     }
+};
+
+/**
+ * Provide the ability to inherits easily
+ * @param obj
+ */
+utils.addInherits = function(obj){
+    obj.extend = Class.extend;
 };
 
 utils.Pool = Pool;
