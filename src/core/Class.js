@@ -1,5 +1,10 @@
-var ctorName = "_init";
+var ctorName = require('./const').DEFAULT_CONSTRUCTOR_NAME;
 
+/**
+ * Just a basic class, does nothing. It's useful just to inherits from it.
+ * @class
+ * @memberof PQ
+ */
 function Class(){
     return this;
 }
@@ -7,6 +12,12 @@ function Class(){
 Class.prototype = {};
 Class.prototype.constructor = Class;
 
+/**
+ * Extends a parent class with an object as a parameter, and return a new child class
+ * @static
+ * @param childProto {object}
+ * @returns {Class}
+ */
 Class.extend = function(childProto){
     var child = function PQClass(){
         if(typeof this[ctorName] === "function") return this[ctorName].apply(this, arguments);

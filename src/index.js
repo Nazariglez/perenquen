@@ -16,7 +16,5 @@ for(var key in CONST) {
     core[key] = CONST[key];
 }
 
-//TODO: Add class system
-core = require('./core/inherits')(core);
-
-module.exports = core;
+//Add inheritance system, and export the core
+module.exports = require('./core/inherits')(core);

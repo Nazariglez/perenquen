@@ -58,4 +58,13 @@ constants.DEFAULT_GAME_OPTIONS = {
     pauseOnVisibilityChange: true
 };
 
+/**
+ * The default name for all the constructors when we use the custom class system
+ *
+ * @static
+ * @constant
+ * @property {string} DEFAULT_CONSTRUCTOR_NAME
+ */
+constants.DEFAULT_CONSTRUCTOR_NAME = "_init";
+
 module.exports = constants;
