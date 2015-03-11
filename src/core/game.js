@@ -16,6 +16,7 @@ var CONST = require('./const'),
  * @param [gameOptions.sayHello=true] {boolean} logs out the version, renderer, and audio type
  * @param [gameOptions.noWebAudio=false] {boolean} prevents selection of WebAudio type
  * @param [gameOptions.persistantData=true] {boolean} Use localStorage to save all you need
+ * @param [gameOptions.stopAtVisibilityChange] {boolean} Pause the game when lost the focus, default true
  * @param [gameOptions.audioExts] {array} Force load audio files in this order
  * @param [gameOptions.noWebGL=false] {boolean} prevents selection of WebGL renderer, even if such is present
  * @param [rendererOptions] {object} Optional game parameters
@@ -98,6 +99,10 @@ function Game(width, height, gameOptions, rendererOptions){
      * @member {SceneManager}
      */
     this.sceneManager = new SceneManager(this);
+
+    if(this.config.stopAtVisibilityChange){
+        utils.watchVisibilityChanges(this);
+    }
 }
 
 Game.prototype.constructor = Game;
@@ -162,6 +167,23 @@ Game.prototype.resize = function(width, height){
     var canvas = this.renderer.view;
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
+    return this;
+};
+
+
+/**
+ * Stop or start the game when the focus is in or out
+ * @param hidden {boolean}
+ * @returns {Game}
+ */
+Game.prototype.visibilityChange = function(hidden){
+    if(this.config.stopAtVisibilityChange){
+        if(hidden){
+            this.stop();
+        }else{
+            this.start();
+        }
+    }
     return this;
 };
 

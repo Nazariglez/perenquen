@@ -47,6 +47,12 @@ utils.addInherits = function(obj){
     obj.extend = Class.extend;
 };
 
+/**
+ * Watch when the browser lost the focus and notify the game object
+ * @param game {Game}
+ */
+utils.watchVisibilityChanges = require('./visibilityChange');
+
 utils.Pool = Pool;
 
 module.exports = utils;

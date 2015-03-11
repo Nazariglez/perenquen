@@ -43,7 +43,8 @@ constants.AUDIO_TYPE = {
  * @property {boolean} DEFAULT_RENDER_OPTIONS.noWebAudio=false
  * @property {boolean} DEFAULT_RENDER_OPTIONS.noWebGL=false
  * @property {number} DEFAULT_RENDER_OPTIONS.frameLimit=35
- * @property {boolean} DEFAULT_RENDER_OPTIONS.ersistantData=true
+ * @property {boolean} DEFAULT_RENDER_OPTIONS.persistantData=true
+ * @property {boolean} DEFAULT_RENDER_OPTIONS.stopAtVisibilityChange=true
  * @property {array} DEFAULT_RENDER_OPTIONS.audioExts
  * @property {boolean} DEFAULT_RENDER_OPTIONS.pauseOnVisibilityChange=true
  */
@@ -52,8 +53,9 @@ constants.DEFAULT_GAME_OPTIONS = {
     sayHello: true,
     noWebAudio: false,
     noWebGL: false,
-    frameLimit: 35,
+    frameLimit: 35, //TODO: Cambiar esto, puede confundir por fps y no ms, quizás definir numero de frame minimo?
     persistantData: true,
+    stopAtVisibilityChange: true,
     audioExts: ['ogg', 'mp3', 'wav'],
     pauseOnVisibilityChange: true
 };
