@@ -29,7 +29,22 @@ constants.PIXI_VERSION = require('../../lib/pixi/package.json').version;
 constants.AUDIO_TYPE = {
     UNKNOWN : 0,
     WEBAUDIO : 1,
-    HTMLADUDIO : 2
+    HTMLAUDIO : 2
+};
+
+/**
+ * Constant to identify the game scale types
+ * @property {object} GAME_SCALE_TYPE
+ * @property {number} GAME_SCALE_TYPE.NONE
+ * @property {number} GAME_SCALE_TYPE.FILL
+ * @property {number} GAME_SCALE_TYPE.ASPECT_FIT
+ * @property {number} GAME_SCALE_TYPE.ASPECT_FILL
+ */
+constants.GAME_SCALE_TYPE = {
+    NONE: 0,
+    FILL: 1,
+    ASPECT_FIT: 2,
+    ASPECT_FILL: 3
 };
 
 /**
