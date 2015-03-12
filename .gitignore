@@ -1,3 +1,5 @@
 /node_modules
 /examples/test
 /test.js
+/docs
+/jsdoc.conf.json

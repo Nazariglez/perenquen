@@ -1,4 +1,5 @@
-var CONST = require('./const'),
+var gameResizeListener = null,
+    CONST = require('./const'),
     utils = require('./utils'),
     autoDetectRenderer = require('../../lib/pixi/src/core').autoDetectRenderer,
     WebGLRenderer = require('../../lib/pixi/src/core/renderers/webgl/WebGLRenderer'),
@@ -19,6 +20,7 @@ var CONST = require('./const'),
  * @param [gameOptions.stopAtVisibilityChange] {boolean} Pause the game when lost the focus, default true
  * @param [gameOptions.audioExts] {array} Force load audio files in this order
  * @param [gameOptions.noWebGL=false] {boolean} prevents selection of WebGL renderer, even if such is present
+ * @param [gameOptions.scaleType] {boolean} Screen behavior when the canvas size is different to the window size, default GAME_SCALE_TYPE.NONE
  * @param [rendererOptions] {object} Optional game parameters
  * @param [rendererOptions.view] {HTMLCanvasElement} the canvas to use as a view, optional
  * @param [rendererOptions.transparent=false] {boolean} If the render view is transparent, default false
@@ -103,6 +105,10 @@ function Game(width, height, gameOptions, rendererOptions){
     if(this.config.stopAtVisibilityChange){
         utils.watchVisibilityChanges(this);
     }
+
+    if(this.config.scaleType !== CONST.GAME_SCALE_TYPE.NONE){
+        this.enableAutoResize(true);
+    }
 }
 
 Game.prototype.constructor = Game;
@@ -184,6 +190,79 @@ Game.prototype.visibilityChange = function(hidden){
             this.start();
         }
     }
+    return this;
+};
+
+/**
+ * Rules to define how to resize the game screen
+ * @param [value] {boolean}
+ * @param [mode] {GAME_SCALE_TYPE}
+ * @returns {Game}
+ */
+Game.prototype.enableAutoResize = function(value, mode){
+    mode = mode || this.config.scaleType;
+    value = (value !== false);
+    var scope = this,
+        canvas = this.renderer.view;
+
+    //Remove previous listeners
+    if(gameResizeListener){
+        window.removeEventListener('resize', gameResizeListener);
+        gameResizeListener = null;
+    }
+
+    //Nothing to do here
+    if(mode === CONST.GAME_SCALE_TYPE.NONE||!value){
+        return this;
+    }
+
+    switch(mode){
+        case CONST.GAME_SCALE_TYPE.ASPECT_FIT:
+            gameResizeListener = function(e){
+                var ww = parseInt(canvas.style.width,10) || canvas.width;
+                var hh = parseInt(canvas.style.height,10) || canvas.height;
+
+                if (window.innerWidth < ww || window.innerHeight < hh || window.innerWidth > ww || window.innerHeight > hh) {
+                    var scale = Math.min(window.innerWidth/scope.width, window.innerHeight/scope.height);
+                    scope.resize(scope.width*scale, scope.height*scale);
+                }
+            };
+            break;
+        case CONST.GAME_SCALE_TYPE.ASPECT_FILL:
+            gameResizeListener = function(e){
+                //TODO: Revisar en moviles
+                var ww = parseInt(canvas.style.width,10) || canvas.width;
+                var hh = parseInt(canvas.style.height,10) || canvas.height;
+
+                if (window.innerWidth < ww || window.innerHeight < hh || window.innerWidth > ww || window.innerHeight > hh) {
+                    var scale = Math.max(window.innerWidth/scope.width, window.innerHeight/scope.height);
+                    var width = scope.width*scale,
+                        height = scope.height*scale;
+                    scope.resize(width, height);
+
+                    var topMargin = (window.innerHeight-height)/2;
+                    var leftMargin = (window.innerWidth-width)/2;
+
+                    canvas.style['margin-top'] = topMargin + 'px';
+                    canvas.style['margin-left'] = leftMargin + 'px';
+                }
+            };
+            break;
+        case CONST.GAME_SCALE_TYPE.FILL:
+            gameResizeListener = function(e){
+                var ww = parseInt(canvas.style.width,10) || canvas.width;
+                var hh = parseInt(canvas.style.height,10) || canvas.height;
+
+                if (window.innerWidth !== ww || window.innerHeight !== hh) {
+                    scope.resize(window.innerWidth, window.innerHeight);
+                }
+            };
+            break;
+    }
+
+    window.addEventListener('resize', gameResizeListener);
+    gameResizeListener();
+
     return this;
 };
 

@@ -34,6 +34,9 @@ constants.AUDIO_TYPE = {
 
 /**
  * Constant to identify the game scale types
+ *
+ * @static
+ * @constant
  * @property {object} GAME_SCALE_TYPE
  * @property {number} GAME_SCALE_TYPE.NONE
  * @property {number} GAME_SCALE_TYPE.FILL
@@ -72,8 +75,8 @@ constants.DEFAULT_GAME_OPTIONS = {
     persistantData: true,
     stopAtVisibilityChange: true,
     audioExts: ['ogg', 'mp3', 'wav'],
-    pauseOnVisibilityChange: true
-};
+    scaleType: constants.GAME_SCALE_TYPE.NONE
+}; //TODO: fustrum culling?
 
 /**
  * The default name for all the constructors when we use the custom class system
