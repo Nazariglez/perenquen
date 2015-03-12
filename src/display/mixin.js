@@ -19,5 +19,23 @@ module.exports = {
         }
 
         return this;
+    },
+
+    setSize: function(width, height){
+        this.width = width;
+        this.height = height;
+        return this;
+    },
+
+    setAnchor: function(x,y,pivot){
+        pivot = (pivot !== false);
+        if(this.anchor)this.anchor.set(x,y);
+        if(pivot)this.setPivot(x,y);
+        return this;
+    },
+
+    setPivot: function(x,y){
+        if(this.pivot)this.pivot.set(x,y);
+        return this;
     }
 };
