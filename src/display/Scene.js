@@ -22,7 +22,7 @@ Scene.prototype.setManager = function(manager){
 };
 
 Scene.prototype.animate = function(gameTime, delta){
-    if(this.update(gameTime, delta)){
+    if(this.update(gameTime, delta) !== false){
         if(this._backgroundColorDirty){
             this.clear();
             if(typeof this.backgroundColor === "number"){

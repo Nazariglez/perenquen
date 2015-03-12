@@ -9,7 +9,9 @@ var core = {
     Container : require('./display/Container'),
     SceneManager : require('./core/SceneManager'),
     Scene : require('./display/Scene'),
-    Graphics : require('./display/Graphics')
+    Graphics : require('./display/Graphics'),
+    Sprite : require('./display/Sprite'),
+    Texture : require('../lib/pixi/src/core/textures/Texture')
 };
 
 //Add Constants to the main object

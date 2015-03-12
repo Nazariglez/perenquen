@@ -8,8 +8,13 @@ module.exports = {
         return true;
     },
 
+    setPosition: function(x,y){
+        this.position.set(x,y);
+        return this;
+    },
+
     animate: function(gameTime, delta){
-        if(this.update(gameTime, delta)){
+        if(this.update(gameTime, delta) !== false){
             //TODO: Animate
 
             var len = this.children.length;
