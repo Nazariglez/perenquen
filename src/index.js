@@ -6,6 +6,7 @@ var core = {
     utils : require('./core/utils'),
 
     Game : require('./core/Game'),
+    Container : require('./display/Container'),
     SceneManager : require('./core/SceneManager'),
     Scene : require('./display/Scene'),
     Graphics : require('./display/Graphics')
