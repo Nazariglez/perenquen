@@ -1,4 +1,5 @@
-var CONST = require('./core/const');
+var CONST = require('./core/const'),
+    interactionMouse = require('./input/mouse');
 
 var core = {
     Class : require('./core/Class'),
