@@ -170,7 +170,7 @@ Container.prototype.displayObjectUpdateTransform = function(){
         d  = this.scale.y;
 
         tx = this.position.x - anchorWidth * a;
-        ty = this.position.y - anchorHeight * a;
+        ty = this.position.y - anchorHeight * d;
 
         wt.a  = a  * pt.a;
         wt.b  = a  * pt.b;
