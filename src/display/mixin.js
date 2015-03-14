@@ -42,5 +42,10 @@ module.exports = {
     setPivot: function(x,y){
         if(this.pivot)this.pivot.set(x,y);
         return this;
+    },
+
+    setScale: function(x,y){
+        this.scale.set(x,y);
+        return this;
     }
 };
