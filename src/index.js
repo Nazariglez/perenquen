@@ -12,6 +12,7 @@ var core = {
     Scene : require('./display/Scene'),
     Graphics : require('./display/Graphics'),
     Sprite : require('./display/Sprite'),
+    TilingSprite : require('./display/TilingSprite'),
     Texture : require('../lib/pixi/src/core/textures/Texture')
 };
 
