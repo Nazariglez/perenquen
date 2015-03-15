@@ -17,6 +17,7 @@
     "browserify": "^9.0.3",
     "colors": "^1.0.3",
     "commander": "^2.6.0",
+    "eventemitter3": "^0.1.6",
     "gulp": "^3.8.11",
     "gulp-cached": "^1.0.2",
     "gulp-jshint": "^1.9.2",
