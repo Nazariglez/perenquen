@@ -36,17 +36,17 @@ Sprite.prototype.displayObjectUpdateTransform = function(){
         b  =  this._sr * this.scale.x;
         c  = -this._sr * this.scale.y;
         d  =  this._cr * this.scale.y;
-        tx =  this.position.x - pivotWidth * this.scale.x + anchorWidth*this.scale.x;
-        ty =  this.position.y - pivotHeight * this.scale.y + anchorHeight*this.scale.y;
+        tx =  this.position.x;// - pivotWidth * this.scale.x + anchorWidth*this.scale.x;
+        ty =  this.position.y;// - pivotHeight * this.scale.y + anchorHeight*this.scale.y;
 
         //TODO: EL Pivot no se comporta como debe, REVISAR
         // check for pivot.. not often used so geared towards that fact!
         if (pivotWidth !== anchorWidth) {
-            tx -= pivotWidth * a;
+            tx -= pivotWidth * a + pivotHeight * c;
         }
 
         if (pivotHeight !== anchorHeight) {
-            ty -= pivotWidth * d;
+            ty -= pivotWidth * b + pivotHeight * d;
         }
 
         // concat the parent matrix with the objects transform.
