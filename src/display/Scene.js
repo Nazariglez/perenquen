@@ -1,7 +1,18 @@
-var Graphics = require('../../lib/pixi/src/core/graphics/Graphics');
+var Container = require('./Container'),
+    utils = require('../core/utils'),
+    math = require('../../lib/pixi/src/core/math'),
+    Graphics = require('./Graphics');
 
-function Scene(){
+function Scene(game){
     Graphics.call(this);
+
+    this.game = game;
+    this.anchor = new math.Point();
+    this.pivot = new math.Point();
+    this.size = new math.Point(game.width,game.height);
+
+    //TODO: Camera&HUD
+
     this._backgroundColor = null;
     this._backgroundColorDirty = false;
 
@@ -10,6 +21,10 @@ function Scene(){
 
 Scene.prototype = Object.create(Graphics.prototype);
 Scene.prototype.constructor = Scene;
+
+Scene.prototype.displayObjectUpdateTransform = function(){
+    Container.prototype.displayObjectUpdateTransform.call(this);
+};
 
 Scene.prototype.setBackgroundColor = function(color){
     this.backgroundColor = color;
@@ -42,10 +57,6 @@ Scene.prototype.animate = function(gameTime, delta){
     return this;
 };
 
-Scene.prototype.update = function(gameTime, delta){
-    return true;
-};
-
 Object.defineProperties(Scene.prototype, {
     backgroundColor : {
         get: function(){
@@ -54,6 +65,17 @@ Object.defineProperties(Scene.prototype, {
         set: function(color){
             this._backgroundColorDirty = true;
             this._backgroundColor = color;
+        }
+    },
+
+    width : {
+        get: function(){
+            return this.size.x;
+        }
+    },
+    height: {
+        get: function(){
+            return this.size.y;
         }
     }
 });
