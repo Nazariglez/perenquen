@@ -4,23 +4,27 @@ var Container = require('./Container'),
     Graphics = require('./Graphics');
 
 function Scene(game){
-    Graphics.call(this);
+    Container.call(this);
 
     this.game = game;
-    this.anchor = new math.Point();
-    this.pivot = new math.Point();
-    this.size = new math.Point(game.width,game.height);
+    this.size.set(game.width,game.height);
+    this.setAnchor(0,0);
 
     //TODO: Camera&HUD
-    //TODO: Coger solos los metodos que necesito de Graphics para eliminar carga en el objeto? de esta forma se puede heredar de Container para el calculo de bounds
 
     this._backgroundColor = null;
     this._backgroundColorDirty = false;
 
+    this.bgGraphic = new PQ.Graphics()
+        .setAnchor(0,0)
+        .addTo(this);
+
     this.manager = null;
+
+    this.paused = false;
 }
 
-Scene.prototype = Object.create(Graphics.prototype);
+Scene.prototype = Object.create(Container.prototype);
 Scene.prototype.constructor = Scene;
 
 Scene.prototype.displayObjectUpdateTransform = function(){
@@ -29,6 +33,7 @@ Scene.prototype.displayObjectUpdateTransform = function(){
 
 Scene.prototype.setBackgroundColor = function(color){
     this.backgroundColor = color;
+    //this.bgGraphic.cacheAsBitmap = true;
     return this;
 };
 
@@ -38,23 +43,31 @@ Scene.prototype.setManager = function(manager){
 };
 
 Scene.prototype.animate = function(gameTime, delta){
-    if(this.update(gameTime, delta) !== false){
-        if(this._backgroundColorDirty){
-            this.clear();
-            if(typeof this.backgroundColor === "number"){
-                this.beginFill(this.backgroundColor)
-                    .drawRect(0,0,this.manager.game.width,this.manager.game.height)
-                    .endFill();
-            }
-            this._backgroundColorDirty = false;
-        }
-
-        var len = this.children.length;
-        for(var i = 0; i < len; i++){
-            this.children[i].animate(gameTime, delta);
-        }
+    if(this.paused || this.update(gameTime, delta) === false){
+        return this;
     }
 
+    if(this._backgroundColorDirty){
+        this.bgGraphic.clear();
+        if(typeof this.backgroundColor === "number"){
+            this.bgGraphic.beginFill(this.backgroundColor)
+                .drawRect(0,0,this.width,this.height)
+                .endFill();
+        }
+        this._backgroundColorDirty = false;
+    }
+
+    var len = this.children.length;
+    for(var i = 0; i < len; i++){
+        this.children[i].animate(gameTime, delta);
+    }
+
+    return this;
+};
+
+Scene.prototype.setPause = function(value){
+    value = (value !== false);
+    this.paused = value;
     return this;
 };
 
@@ -64,8 +77,11 @@ Object.defineProperties(Scene.prototype, {
             return this._backgroundColor;
         },
         set: function(color){
-            this._backgroundColorDirty = true;
-            this._backgroundColor = color;
+            if(color !== this._backgroundColor) {
+                //if (this.bgGraphic.cacheAsBitmap)this.bgGraphic.cacheAsBitmap = false;
+                this._backgroundColorDirty = true;
+                this._backgroundColor = color;
+            }
         }
     },
 
