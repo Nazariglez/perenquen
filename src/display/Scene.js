@@ -12,6 +12,7 @@ function Scene(game){
     this.size = new math.Point(game.width,game.height);
 
     //TODO: Camera&HUD
+    //TODO: Coger solos los metodos que necesito de Graphics para eliminar carga en el objeto? de esta forma se puede heredar de Container para el calculo de bounds
 
     this._backgroundColor = null;
     this._backgroundColorDirty = false;
