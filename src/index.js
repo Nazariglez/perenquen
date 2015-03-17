@@ -1,11 +1,11 @@
 var CONST = require('./core/const'),
+    addInherits = require('./core/utils').addInherits,
     interactionMouse = require('./input/mouse');
 
 var core = {
-    Class : require('./core/Class'),
-
     utils : require('./core/utils'),
 
+    Class : require('./core/Class'),
     Game : require('./core/Game'),
     Container : require('./display/Container'),
     SceneManager : require('./core/SceneManager'),
@@ -17,10 +17,17 @@ var core = {
     Pool : require('./extra/Pool')
 };
 
-//Add Constants to the main object
-for(var key in CONST) {
-    core[key] = CONST[key];
+//Add inheritance system
+for(var key in core){
+    if(typeof core[key] === "function"){
+        addInherits(core[key]);
+    }
 }
 
-//Add inheritance system, and export the core
-module.exports = require('./core/inherits')(core);
+//Add Constants to the main object
+for(var c in CONST) {
+    core[c] = CONST[c];
+}
+
+
+module.exports = core;
