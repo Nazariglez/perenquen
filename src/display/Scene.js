@@ -1,10 +1,13 @@
 var Container = require('./Container'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
-    Graphics = require('./Graphics');
+    Graphics = require('./Graphics'),
+    Camera = require('./Camera');
 
 function Scene(game){
     Container.call(this);
+
+    this.initiated = false; //TODO: Comprobar si esto es necesario
 
     this.game = game;
     this.size.set(game.width,game.height);
@@ -15,11 +18,20 @@ function Scene(game){
     this._backgroundColor = null;
     this._backgroundColorDirty = false;
 
-    this.bgGraphic = new PQ.Graphics()
-        .setAnchor(0,0)
-        .addTo(this);
+    //bg
+    this.bgGraphic = new Graphics();
+    addChild(this, this.bgGraphic);
+
+    //Camera
+    this.camera = new Camera(this);
+    addChild(this, this.camera);
+    
+    //HUD
+
 
     this.manager = null;
+    this.timerManager = null; //todo
+    this.tweenManager = null; //todo
 
     this.paused = false;
 }
@@ -34,6 +46,11 @@ Scene.prototype.displayObjectUpdateTransform = function(){
 Scene.prototype.setBackgroundColor = function(color){
     this.backgroundColor = color;
     //this.bgGraphic.cacheAsBitmap = true;
+    return this;
+};
+
+Scene.prototype.setID = function(id){
+    this.id = id;
     return this;
 };
 
@@ -71,6 +88,28 @@ Scene.prototype.setPause = function(value){
     return this;
 };
 
+Scene.prototype.togglePause = function(){
+    this.paused = !this.paused;
+    return this;
+};
+
+Scene.prototype.createTimer = function(time){
+    //todo
+};
+
+Scene.prototype.createTween = function(time){
+    //todo
+};
+
+Scene.prototype.transitionTo = function(scene, effect){
+    //todo
+};
+
+Scene.prototype.addChild = function(child){
+    this.camera.addChild(child);
+    return this;
+};
+
 Object.defineProperties(Scene.prototype, {
     backgroundColor : {
         get: function(){
@@ -98,3 +137,7 @@ Object.defineProperties(Scene.prototype, {
 });
 
 module.exports = Scene;
+
+function addChild(scene, child){
+    return Container.prototype.addChild.call(scene, child);
+}
