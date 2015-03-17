@@ -1,7 +1,7 @@
 /**
  * Create a pool of objects to improve the performance and avoid the garbage collector
  * @class
- * @memberof PQ.utils
+ * @memberof PQ
  * @param objectConstructor {*}
  * @param args {array}
  * @param [num] {number}

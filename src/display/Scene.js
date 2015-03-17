@@ -25,7 +25,7 @@ function Scene(game){
     //Camera
     this.camera = new Camera(this);
     addChild(this, this.camera);
-    
+
     //HUD
 
 

@@ -1,6 +1,6 @@
 var CONST = require('../const'),
     utils = require('../../../lib/pixi/src/core/utils'),
-    Pool = require('./Pool'),
+    Pool = require('./../../extra/Pool'),
     Class = require('../Class');
 
 /**
@@ -52,7 +52,5 @@ utils.addInherits = function(obj){
  * @param game {Game}
  */
 utils.watchVisibilityChanges = require('./visibilityChange');
-
-utils.Pool = Pool;
 
 module.exports = utils;

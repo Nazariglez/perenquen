@@ -13,7 +13,8 @@ var core = {
     Graphics : require('./display/Graphics'),
     Sprite : require('./display/Sprite'),
     TilingSprite : require('./display/TilingSprite'),
-    Texture : require('../lib/pixi/src/core/textures/Texture')
+    Texture : require('../lib/pixi/src/core/textures/Texture'),
+    Pool : require('./extra/Pool')
 };
 
 //Add Constants to the main object
