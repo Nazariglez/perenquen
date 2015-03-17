@@ -14,7 +14,8 @@ var core = {
     Sprite : require('./display/Sprite'),
     TilingSprite : require('./display/TilingSprite'),
     Texture : require('../lib/pixi/src/core/textures/Texture'),
-    Pool : require('./extra/Pool')
+    Pool : require('./extra/Pool'),
+    Point : require('../lib/pixi/src/core/math/Point')
 };
 
 //Add inheritance system

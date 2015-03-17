@@ -23,6 +23,7 @@ var gameResizeListener = null,
  * @param [gameOptions.scaleType] {boolean} Screen behavior when the canvas size is different to the window size, default GAME_SCALE_TYPE.NONE
  * @param [rendererOptions] {object} Optional game parameters
  * @param [rendererOptions.view] {HTMLCanvasElement} the canvas to use as a view, optional
+ * @param [rendererOptions.backgroundColor] {number} color used like a background, optional
  * @param [rendererOptions.transparent=false] {boolean} If the render view is transparent, default false
  * @param [rendererOptions.antialias=false] {boolean} sets antialias (only applicable in chrome at the moment)
  * @param [rendererOptions.preserveDrawingBuffer=false] {boolean} enables drawing buffer preservation, enable this if you

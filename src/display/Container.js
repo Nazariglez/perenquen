@@ -3,10 +3,31 @@ var PixiContainer = require('../../lib/pixi/src/core/display/Container'),
     math = require('../../lib/pixi/src/core/math'),
     mixin = require('./mixin');
 
+/**
+ * A container represents a collection of display objects.
+ * @class
+ * @memberof PQ
+ */
 function Container(){
     PixiContainer.call(this);
+
+    /**
+     * Internal point where the container are placed
+     * @member {Point}
+     */
     this.anchor = new math.Point(0.5, 0.5);
+
+    /**
+     * Internal point where the container rotate
+     * @member {Point}
+     */
     this.pivot = new math.Point(0.5, 0.5);
+
+    /**
+     *
+     * @member {Point}
+     * @private
+     */
     this.size = new math.Point(1,1);
 }
 
@@ -14,12 +35,23 @@ Container.prototype = Object.create(PixiContainer.prototype);
 Container.prototype.constructor = Container;
 utils.mixin(Container, mixin);
 
+/**
+ * Set the container width and height
+ * @param width {number}
+ * @param height {number}
+ * @returns {Container}
+ */
 Container.prototype.setSize = function(width, height){
     this.width = width;
     this.height = height;
     return this;
 };
 
+/**
+ * Retrieves the bounds of the Container as a rectangle. The bounds calculation takes all visible children into consideration.
+ *
+ * @return {Rectangle} The rectangular bounding area
+ */
 Container.prototype.getBounds = function (matrix){
     if(!this._currentBounds){
 
@@ -116,6 +148,11 @@ Container.prototype.getBounds = function (matrix){
     return this._currentBounds;
 };
 
+/*
+ * Updates the transform on all children of this container for rendering
+ *
+ * @private
+ */
 Container.prototype.displayObjectUpdateTransform = function(){
     // create some matrix refs for easy access
     var pt = this.parent.worldTransform;
@@ -187,6 +224,12 @@ Container.prototype.displayObjectUpdateTransform = function(){
     this._currentBounds = null;
 };
 
+/**
+ * Retrieves the non-global local bounds of the Container as a rectangle.
+ * The calculation takes all visible children into consideration.
+ *
+ * @return {Rectangle} The rectangular bounding area
+ */
 Container.prototype.getLocalBounds = function (){
     this._bounds.x = -this.size.x * this.anchor.x;
     this._bounds.y = -this.size.y * this.anchor.y;
@@ -196,6 +239,11 @@ Container.prototype.getLocalBounds = function (){
 };
 
 Object.defineProperties(Container.prototype, {
+    /**
+     * The width of the container
+     * @member {number}
+     * @memberof Container#
+     */
     width : {
         get : function(){
             return this.size.x;
@@ -206,6 +254,11 @@ Object.defineProperties(Container.prototype, {
         }
     },
 
+    /**
+     * The height of the container
+     * @member {number}
+     * @memberof Container#
+     */
     height : {
         get : function(){
             return this.size.y;
