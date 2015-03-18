@@ -24,9 +24,8 @@ function Container(){
     this.pivot = new math.Point(0.5, 0.5);
 
     /**
-     *
+     * Container's size
      * @member {Point}
-     * @private
      */
     this.size = new math.Point(1,1);
 }
