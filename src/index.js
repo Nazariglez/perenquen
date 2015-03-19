@@ -1,4 +1,4 @@
-require('../lib/pixi/src/polyfill/Object.assign');
+require('./polyfill');
 var CONST = require('./core/const'),
     addInherits = require('./core/utils').addInherits;
     //interactionMouse = require('./input/mouse');
