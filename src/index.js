@@ -15,6 +15,7 @@ var core = {
     Sprite : require('./display/Sprite'),
     TilingSprite : require('./display/TilingSprite'),
     Camera : require('./display/Camera'),
+    AssetLoader : require('./loader/AssetLoader'),
     Texture : require('../lib/pixi/src/core/textures/Texture'),
     Pool : require('./extra/Pool'),
     Point : require('../lib/pixi/src/core/math/Point')
