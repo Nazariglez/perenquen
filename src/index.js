@@ -1,7 +1,7 @@
 require('./polyfill');
 var CONST = require('./core/const'),
     addInherits = require('./core/utils').addInherits;
-    //interactionMouse = require('./input/mouse');
+    interactionMouse = require('./input');
 
 var core = {
     utils : require('./core/utils'),
