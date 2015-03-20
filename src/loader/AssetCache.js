@@ -17,7 +17,18 @@ AssetCache.prototype.addTexture = function(name, url, texture){
 };
 
 AssetCache.prototype.getTexture = function(name){
-    return this.textures[name];
+    var texture = this.textures[name];
+
+    if(!texture){
+        for(var key in this.textures){
+            if(this.textures[key].url === name){
+                texture = this.textures[key];
+                break;
+            }
+        }
+    }
+
+    return (texture) ? texture.asset : null;
 };
 
 module.exports = new AssetCache();

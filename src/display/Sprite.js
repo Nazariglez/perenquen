@@ -1,10 +1,16 @@
 var SpriteRenderer = require('./SpriteRenderer'),
-    Sprite = require('../../lib/pixi/src/core/sprites/Sprite'),
+    PixiSprite = require('../../lib/pixi/src/core/sprites/Sprite'),
     Container = require('./Container'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
     mixin = require('./mixin');
 
+function Sprite(texture){
+    PixiSprite.call(this, texture);
+}
+
+Sprite.prototype = Object.create(PixiSprite.prototype);
+Sprite.prototype.constructor = Sprite;
 utils.mixin(Sprite, mixin);
 
 Sprite.prototype.displayObjectUpdateTransform = function(){
@@ -96,6 +102,40 @@ Sprite.prototype.displayObjectUpdateTransform = function(){
     // reset the bounds each time this is called!
     this._currentBounds = null;
 };
+
+Object.defineProperties(Sprite.prototype, {
+    texture : {
+        get : function(){
+            return this._texture;
+        },
+        set : function(value){
+            if(typeof value === "string"){
+                value = utils.assetCache.getTexture(value);
+            }
+
+            if (this._texture === value)
+            {
+                return;
+            }
+
+            this._texture = value;
+            this.cachedTint = 0xFFFFFF;
+
+            if (value)
+            {
+                // wait for the texture to load
+                if (value.baseTexture.hasLoaded)
+                {
+                    this._onTextureUpdate();
+                }
+                else
+                {
+                    value.once('update', this._onTextureUpdate, this);
+                }
+            }
+        }
+    }
+});
 
 
 
