@@ -1,5 +1,4 @@
-var gameResizeListener = null,
-    CONST = require('./const'),
+var CONST = require('./const'),
     utils = require('./utils'),
     autoDetectRenderer = require('../../lib/pixi/src/core').autoDetectRenderer,
     WebGLRenderer = require('../../lib/pixi/src/core/renderers/webgl/WebGLRenderer'),
@@ -103,10 +102,23 @@ function Game(width, height, gameOptions, rendererOptions){
      */
     this.sceneManager = new SceneManager(this);
 
+    /**
+     * Store the resize method
+     * @member {null|function}
+     * @private
+     */
+    this._gameResizeListener = null;
+
+    /**
+     * Stop the game when it lost the focus
+     */
     if(this.config.stopAtVisibilityChange){
         utils.watchVisibilityChanges(this);
     }
 
+    /**
+     * Autoescale the gamescreen
+     */
     if(this.config.scaleType !== CONST.GAME_SCALE_TYPE.NONE){
         this.enableAutoResize(true);
     }
@@ -207,9 +219,9 @@ Game.prototype.enableAutoResize = function(value, mode){
         canvas = this.renderer.view;
 
     //Remove previous listeners
-    if(gameResizeListener){
-        window.removeEventListener('resize', gameResizeListener);
-        gameResizeListener = null;
+    if(this._gameResizeListener){
+        window.removeEventListener('resize', this._gameResizeListener);
+        this._gameResizeListener = null;
     }
 
     //Nothing to do here
@@ -219,7 +231,7 @@ Game.prototype.enableAutoResize = function(value, mode){
 
     switch(mode){
         case CONST.GAME_SCALE_TYPE.ASPECT_FIT:
-            gameResizeListener = function(e){
+            this._gameResizeListener = function(e){
                 var ww = parseInt(canvas.style.width,10) || canvas.width;
                 var hh = parseInt(canvas.style.height,10) || canvas.height;
 
@@ -230,7 +242,7 @@ Game.prototype.enableAutoResize = function(value, mode){
             };
             break;
         case CONST.GAME_SCALE_TYPE.ASPECT_FILL:
-            gameResizeListener = function(e){
+            this._gameResizeListener = function(e){
                 //TODO: Revisar en moviles
                 var ww = parseInt(canvas.style.width,10) || canvas.width;
                 var hh = parseInt(canvas.style.height,10) || canvas.height;
@@ -250,7 +262,7 @@ Game.prototype.enableAutoResize = function(value, mode){
             };
             break;
         case CONST.GAME_SCALE_TYPE.FILL:
-            gameResizeListener = function(e){
+            this._gameResizeListener = function(e){
                 var ww = parseInt(canvas.style.width,10) || canvas.width;
                 var hh = parseInt(canvas.style.height,10) || canvas.height;
 
@@ -261,8 +273,8 @@ Game.prototype.enableAutoResize = function(value, mode){
             break;
     }
 
-    window.addEventListener('resize', gameResizeListener);
-    gameResizeListener();
+    window.addEventListener('resize', this._gameResizeListener);
+    this._gameResizeListener();
 
     return this;
 };
