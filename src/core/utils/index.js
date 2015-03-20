@@ -34,9 +34,7 @@ utils.defaultObject = function(parent, child){
  * @param mixin {object}
  */
 utils.mixin = function(obj, mixin){
-    for(var key in mixin){
-        obj.prototype[key] = mixin[key];
-    }
+    Object.assign(obj.prototype, mixin);
 };
 
 /**

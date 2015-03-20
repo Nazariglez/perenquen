@@ -13,6 +13,6 @@ TilingSprite.prototype = Object.create(PixiTilingSprite.prototype);
 TilingSprite.prototype.constructor = TilingSprite;
 utils.mixin(TilingSprite, mixin);
 
-//TODO: Funciona fatal, recortado la textura, situandola mal, no respetando la escala, quizás sea cosa de la v3 de pixi?
+//TODO: en webgl no funciona correctamente, actua cortando los sprites.
 
 module.exports = TilingSprite;
