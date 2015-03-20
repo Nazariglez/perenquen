@@ -53,4 +53,9 @@ utils.addInherits = function(obj){
  */
 utils.watchVisibilityChanges = require('./visibilityChange');
 
+/**
+ * Store all assets loaded
+ */
+utils.assetCache = require('../../loader/AssetCache');
+
 module.exports = utils;
