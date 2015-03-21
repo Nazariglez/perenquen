@@ -1,3 +1,7 @@
-/**
- * Created by Nazariglez on 21/3/15.
- */
+module.exports = function(){
+    return function(resource, next){
+        console.log(resource);
+
+        next();
+    };
+};
