@@ -13,4 +13,14 @@ TilingSprite.prototype = Object.create(PixiTilingSprite.prototype);
 TilingSprite.prototype.constructor = TilingSprite;
 utils.mixin(TilingSprite, mixin);
 
+TilingSprite.prototype.setTileScale = function(x,y){
+    this.tileScale.set(x,y);
+    return this;
+};
+
+TilingSprite.prototype.setTilePosition = function(x,y){
+    this.tilePosition.set(x,y);
+    return this;
+};
+
 module.exports = TilingSprite;
