@@ -13,6 +13,4 @@ TilingSprite.prototype = Object.create(PixiTilingSprite.prototype);
 TilingSprite.prototype.constructor = TilingSprite;
 utils.mixin(TilingSprite, mixin);
 
-//TODO: en webgl no funciona correctamente, actua cortando los sprites.
-
 module.exports = TilingSprite;
