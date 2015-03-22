@@ -3,8 +3,8 @@ var ResourceLoader = require('resource-loader'),
     spritesheetParser = require('./spritesheetParser'),
     test = require('./test');
 
-function AssetLoader(){
-    ResourceLoader.call(this);
+function AssetLoader(baseUrl, concurrency){
+    ResourceLoader.call(this, baseUrl, concurrency);
 
     this.use(ResourceLoader.middleware.parsing.json())
         .use(ResourceLoader.middleware.parsing.blob())
