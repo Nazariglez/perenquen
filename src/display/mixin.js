@@ -8,6 +8,16 @@ module.exports = {
         return true;
     },
 
+    setTint: function(value){
+        this.tint = value;
+        return this;
+    },
+
+    setRotation: function(angle){
+        this.rotation = angle;
+        return this;
+    },
+
     setPosition: function(x,y){
         this.position.set(x,y);
         return this;

@@ -1,6 +1,7 @@
 var PixiTilingSprite = require('../../lib/pixi/src/extras/TilingSprite'),
     utils = require('../core/utils'),
-    mixin = require('./mixin');
+    mixin = require('./mixin'),
+    Sprite = require('./Sprite');
 
 function TilingSprite(texture, width, height){
     if(typeof texture === "string"){
@@ -22,5 +23,7 @@ TilingSprite.prototype.setTilePosition = function(x,y){
     this.tilePosition.set(x,y);
     return this;
 };
+
+TilingSprite.prototype.displayObjectUpdateTransform = Sprite.prototype.displayObjectUpdateTransform;
 
 module.exports = TilingSprite;
