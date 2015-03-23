@@ -23,9 +23,32 @@ module.exports = {
         return this;
     },
 
+    setSpeed: function(x,y){
+        this.speed.set(x,y);
+        return this;
+    },
+
+    setRotationSpeed: function(value){
+        this.rotationSpeed = value;
+        return this;
+    },
+
+    setAngleSpeed: function(){
+        //todo
+        return this;
+    },
+
     animate: function(gameTime, delta){
         if(this.update(gameTime, delta) !== false){
-            //TODO: Animate
+            //TODO: desactivar delta?
+            if(this.speed && (this.speed.x !== 0 || this.speed.y !== 0)){
+                this.position.x += this.speed.x * delta;
+                this.position.y += this.speed.y * delta;
+            }
+
+            if(this.rotationSpeed && this.rotationSpeed !== 0){
+                this.rotation += this.rotationSpeed * delta;
+            }
 
             var len = this.children.length;
             for(var i = 0; i < len; i++){

@@ -8,6 +8,9 @@ var SpriteRenderer = require('./SpriteRenderer'),
 
 function Sprite(texture){
     PixiSprite.call(this, texture);
+    this.setAnchor(0.5,0.5);
+    this.speed = new math.Point(0,0);
+    this.rotationSpeed = 0;
 }
 
 Sprite.prototype = Object.create(PixiSprite.prototype);

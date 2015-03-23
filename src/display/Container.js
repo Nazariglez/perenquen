@@ -29,6 +29,9 @@ function Container(){
      * @member {Point}
      */
     this.size = new math.Point(1,1);
+
+    this.speed = new math.Point(0,0);
+    this.rotationSpeed = 0;
 }
 
 Container.prototype = Object.create(PixiContainer.prototype);
