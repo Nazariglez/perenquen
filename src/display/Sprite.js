@@ -3,6 +3,7 @@ var SpriteRenderer = require('./SpriteRenderer'),
     Container = require('./Container'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
+    CONST = require('../core/const'),
     mixin = require('./mixin');
 
 function Sprite(texture){
@@ -27,7 +28,7 @@ Sprite.prototype.displayObjectUpdateTransform = function(){
         pivotHeight = this.pivot.y * this.height;
 
     // so if rotation is between 0 then we can simplify the multiplication process...
-    if (this.rotation % math.PI_2)
+    if (this.rotation % CONST.PI_2)
     {
         // check to see if the rotation is the same as the previous render. This means we only need to use sin and cos when rotation actually changes
         if (this.rotation !== this.rotationCache)
