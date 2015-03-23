@@ -6,8 +6,7 @@ var ResourceLoader = require('resource-loader'),
 function AssetLoader(baseUrl, concurrency){
     ResourceLoader.call(this, baseUrl, concurrency);
 
-    this.use(ResourceLoader.middleware.parsing.json())
-        .use(ResourceLoader.middleware.parsing.blob())
+    this.use(ResourceLoader.middleware.parsing.blob())
         .use(spritesheetParser())
         .use(textureParser())
         .use(test());
