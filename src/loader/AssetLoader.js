@@ -1,6 +1,7 @@
 var ResourceLoader = require('resource-loader'),
     textureParser = require('./textureParser'),
     spritesheetParser = require('./spritesheetParser'),
+    particleParser = require('./particleParser'),
     test = require('./test');
 
 function AssetLoader(baseUrl, concurrency){
@@ -9,6 +10,7 @@ function AssetLoader(baseUrl, concurrency){
     this.use(ResourceLoader.middleware.parsing.blob())
         .use(spritesheetParser())
         .use(textureParser())
+        .use(particleParser())
         .use(test());
 }
 
