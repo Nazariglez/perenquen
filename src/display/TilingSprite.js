@@ -61,4 +61,20 @@ TilingSprite.prototype.setTileSpeed = function(x,y){
     return this;
 };
 
+Object.defineProperties(TilingSprite.prototype, {
+    depth : {
+        get: function(){
+            return this._depth || 0;
+        },
+        set: function(depth){
+            if(this._depth === depth)return;
+
+            this._depth = depth;
+            if(this.parent){
+                this.parent.sortChildrenByDepth();
+            }
+        }
+    }
+});
+
 module.exports = TilingSprite;

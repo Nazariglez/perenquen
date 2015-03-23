@@ -67,14 +67,14 @@ constants.GAME_SCALE_TYPE = {
  * @property {boolean} DEFAULT_RENDER_OPTIONS.pauseOnVisibilityChange=true
  */
 constants.DEFAULT_GAME_OPTIONS = {
-    debug: false,
+    debug: false, //todo
     sayHello: true,
-    noWebAudio: false,
+    noWebAudio: false, //todo
     noWebGL: false,
     frameLimit: 35, //TODO: Cambiar esto, puede confundir por fps y no ms, quizás definir numero de frame minimo?
-    persistantData: true,
+    persistantData: true, //todo
     stopAtVisibilityChange: true,
-    audioExts: ['ogg', 'mp3', 'wav'],
+    audioExts: ['ogg', 'mp3', 'wav'], //todo
     scaleType: constants.GAME_SCALE_TYPE.NONE
 }; //TODO: fustrum culling?
 

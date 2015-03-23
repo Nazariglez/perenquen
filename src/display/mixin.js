@@ -1,4 +1,6 @@
-module.exports = {
+var PixiContainer = require('../../lib/pixi/src/core/display/Container');
+
+var mixin = module.exports = {
     addTo: function(parent){
         if(parent)parent.addChild(this);
         return this;
@@ -79,6 +81,28 @@ module.exports = {
 
     setScale: function(x,y){
         this.scale.set(x,y);
+        return this;
+    },
+
+    setDepth: function(depth){
+        this.depth = depth;
+        return this;
+    },
+
+    sortChildrenByDepth: function(){
+        this.children.sort(function(a, b){
+            var aZ = a.depth,
+                bZ = b.depth;
+
+            return bZ - aZ;
+        });
+
+        return this;
+    },
+
+    addChild: function(child){
+        PixiContainer.prototype.addChild.call(this, child);
+        this.sortChildrenByDepth();
         return this;
     }
 };
