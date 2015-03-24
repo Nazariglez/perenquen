@@ -1,6 +1,7 @@
 var CONST = require('./const'),
     utils = require('./utils'),
     AssetLoader = require('../loader/AssetLoader'),
+    DataManager = require('../extra/DataManager'),
     autoDetectRenderer = require('../../lib/pixi/src/core').autoDetectRenderer,
     WebGLRenderer = require('../../lib/pixi/src/core/renderers/webgl/WebGLRenderer'),
     SceneManager = require('./SceneManager');
@@ -108,6 +109,8 @@ function Game(width, height, gameOptions, rendererOptions){
      * @member {AssetLoader}
      */
     this.assetLoader = new AssetLoader();
+
+    this.dataManager = new DataManager(this);
 
     /**
      * Store the resize method
