@@ -168,17 +168,27 @@ Game.prototype.stop = function(){
     return this;
 };
 
+Game.prototype.update = function(gameTime, delta){
+
+};
+
+Game.prototype.postUpdate = function(gameTime, delta){
+
+};
+
 /**
  * Draw and animate all the actors in the scene
  * @returns {Game}
  */
 Game.prototype.animate = function(){
+    this.update(this.time, this.delta);
+
     this.raf = window.requestAnimationFrame(this.animate.bind(this));
     this.updateTime();
     this.renderer.render(this.sceneManager);
-
     this.sceneManager.animate(this.time, this.delta);
 
+    this.postUpdate(this.time, this.delta);
     return this;
 };
 
