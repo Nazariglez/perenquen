@@ -10,19 +10,19 @@ function DataManager(game){
 DataManager.prototype.constructor = DataManager;
 
 DataManager.prototype.load = function(){
-    this.data = JSON.parse(localStorage.getItem(this.id)) || getDefaultData(this.game.config.version);
+    this.data = JSON.parse(localStorage.getItem(this.id)) || getDefaultData(this.game.version);
     return this;
 };
 
 DataManager.prototype._setMetaData = function(){
-    this.data.version = this.game.config.version || "0.0.0";
+    this.data.version = this.game.version;
     this.data.lastUpdate = Date.now();
 };
 
 DataManager.prototype.save = function(){
     this._setMetaData();
 
-    if(this.game.config.presitantData){
+    if(this.game.config.game.usePresitantData){
         localStorage.setItem(this.id, JSON.stringify(this.data));
     }
 

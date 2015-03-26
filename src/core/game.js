@@ -10,37 +10,26 @@ var CONST = require('./const'),
  * The main object of your game.
  * @class
  * @memberof PQ
- * @param width=800
- * @param height=600
- * @param [gameOptions] {object} Optional game parameters
- * @param [gameOptions.debug=false] {boolean} Show development info, default false
- * @param [gameOptions.frameLimit] {number} limit the elapsed time
- * @param [gameOptions.sayHello=true] {boolean} logs out the version, renderer, and audio type
- * @param [gameOptions.noWebAudio=false] {boolean} prevents selection of WebAudio type
- * @param [gameOptions.persistantData=true] {boolean} Use localStorage to save all you need
- * @param [gameOptions.stopAtVisibilityChange] {boolean} Pause the game when lost the focus, default true
- * @param [gameOptions.audioExts] {array} Force load audio files in this order
- * @param [gameOptions.noWebGL=false] {boolean} prevents selection of WebGL renderer, even if such is present
- * @param [gameOptions.scaleType] {boolean} Screen behavior when the canvas size is different to the window size, default GAME_SCALE_TYPE.NONE
- * @param [rendererOptions] {object} Optional game parameters
- * @param [rendererOptions.view] {HTMLCanvasElement} the canvas to use as a view, optional
- * @param [rendererOptions.backgroundColor] {number} color used like a background, optional
- * @param [rendererOptions.transparent=false] {boolean} If the render view is transparent, default false
- * @param [rendererOptions.antialias=false] {boolean} sets antialias (only applicable in chrome at the moment)
- * @param [rendererOptions.preserveDrawingBuffer=false] {boolean} enables drawing buffer preservation, enable this if you
- *      need to call toDataUrl on the webgl context
- * @param [rendererOptions.resolution=1] {number} the resolution of the renderer
+ * @param [width=800]
+ * @param [height=600]
+ * @param [options] {DEFAULT_GAME_OPTIONS}
  */
-function Game(width, height, gameOptions, rendererOptions){
+function Game(width, height, options){
+    if(typeof width === "object"){
+        options = width;
+        width = null;
+        height = null;
+    }
     /**
      * The config of the game
      *
      * @member {object}
      * @default CONST.DEFAULT_GAME_OPTIONS
      */
-    this.config = utils.defaultObject(CONST.DEFAULT_GAME_OPTIONS, gameOptions);
+    this.config = utils.defaultObject(CONST.DEFAULT_GAME_OPTIONS, options);
     utils._saidHello = !this.config.sayHello;
-    rendererOptions = utils.defaultObject(CONST.DEFAULT_RENDER_OPTIONS, rendererOptions);
+
+    var rendererOptions = parseRendererConfig(CONST.DEFAULT_RENDER_OPTIONS, this.config);
 
     /**
      * The id of requestAnimationFrame
@@ -53,20 +42,38 @@ function Game(width, height, gameOptions, rendererOptions){
      * The renderer width
      * @member {number}
      */
-    this.width = width || 800;
+    this.width = width || this.config.game.width;
 
     /**
      * The renderer height
      * @member {number}
      */
-    this.height = height || 600;
+    this.height = height || this.config.game.height;
+
+    /**
+     * Bundle id for this game
+     * @member {string}
+     */
+    this.id = this.config.id;
+
+    /**
+     * Version of this game
+     * @member {string}
+     */
+    this.version = this.config.version;
 
     /**
      * Renderer in use
      * @member {WebGLRenderer|CanvasRenderer}
      */
-    this.renderer = getRenderer(this.width, this.height, rendererOptions, this.config.noWebGL);
+    this.renderer = getRenderer(this.width, this.height, rendererOptions, !this.config.game.useWebGL);
     this.resize(this.width, this.height);
+
+    /**
+     * Canvas element
+     * @member {HTMLCanvasElement}
+     */
+    this.canvas = this.renderer.view;
 
     /**
      * The time between frames
@@ -110,6 +117,10 @@ function Game(width, height, gameOptions, rendererOptions){
      */
     this.assetLoader = new AssetLoader();
 
+    /**
+     * Manage all data, using localstorage or not
+     * @type {DataManager}
+     */
     this.dataManager = new DataManager(this);
 
     /**
@@ -122,14 +133,14 @@ function Game(width, height, gameOptions, rendererOptions){
     /**
      * Stop the game when it lost the focus
      */
-    if(this.config.stopAtVisibilityChange){
+    if(this.config.game.stopAtVisibilityChange){
         utils.watchVisibilityChanges(this);
     }
 
     /**
      * Autoescale the gamescreen
      */
-    if(this.config.scaleType !== CONST.GAME_SCALE_TYPE.NONE){
+    if(this.config.game.scaleType !== CONST.GAME_SCALE_TYPE.NONE){
         this.enableAutoResize(true);
     }
 }
@@ -178,7 +189,7 @@ Game.prototype.animate = function(){
 Game.prototype.updateTime = function(){
     var now = Date.now();
     var time = now - this.frameLastTime;
-    this.frameElapsedTime = (time <= this.config.frameLimit) ? time : this.config.frameLimit;
+    this.frameElapsedTime = (time <= this.config.game.minFrameLimit) ? time : this.config.game.minFrameLimit;
     this.frameLastTime = now;
     this.delta = this.frameElapsedTime/1000;
     this.time += this.delta;
@@ -206,7 +217,7 @@ Game.prototype.resize = function(width, height){
  * @returns {Game}
  */
 Game.prototype.visibilityChange = function(hidden){
-    if(this.config.stopAtVisibilityChange){
+    if(this.config.game.stopAtVisibilityChange){
         if(hidden){
             this.stop();
         }else{
@@ -223,7 +234,7 @@ Game.prototype.visibilityChange = function(hidden){
  * @returns {Game}
  */
 Game.prototype.enableAutoResize = function(value, mode){
-    mode = mode || this.config.scaleType;
+    mode = mode || this.config.game.scaleType;
     value = (value !== false);
     var scope = this,
         canvas = this.renderer.view;
@@ -292,10 +303,39 @@ Game.prototype.enableAutoResize = function(value, mode){
 module.exports = Game;
 
 function getRenderer(width, height, options, noWebGL){
+    console.log(noWebGL);
     if(navigator.isCocoonJS&&!options.view)options.view = window.document.createElement("screencanvas");
 
     var renderer = new autoDetectRenderer(width, height, options, noWebGL);
     window.document.body.appendChild(renderer.view);
 
     return renderer;
+}
+
+function parseRendererConfig(defaultConfig, config){
+    var cfg = JSON.parse(JSON.stringify(defaultConfig));
+
+    for(var key in config.game){
+        switch(key){
+            case "autoResize":
+            case "clearBeforeRenderer":
+            case "forceFXAA":
+            case "preserveDrawingBuffer":
+            case "backgroundColor":
+            case "resolution":
+                cfg[key] = config.game[key];
+                break;
+            case "canvas":
+                cfg.view = config.game[key];
+                break;
+            case "transparentBackground":
+                cfg.transparent = config.game[key];
+                break;
+            case "useAntialias":
+                cfg.antialias = config.game[key];
+                break;
+        }
+    }
+
+    return cfg;
 }

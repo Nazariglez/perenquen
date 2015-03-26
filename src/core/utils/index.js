@@ -19,13 +19,25 @@ utils.sayHello = function(){
  * @returns {object}
  */
 utils.defaultObject = function(parent, child){
-    parent = parent || {};
+    /*parent = parent || {};
     child = child || {};
     for(var key in parent){
         child[key] = (child[key] !== undefined && child[key] !== null) ? child[key] : parent[key];
     }
 
-    return child;
+    return child;*/
+
+    var parentCopy = JSON.parse(JSON.stringify(parent));
+    for(var key in child){
+        if(Object.prototype.toString.call(child[key]) === "[object Object]"){
+            console.log(key);
+            parentCopy[key] = utils.defaultObject(parentCopy[key], child[key]);
+        }else{
+            parentCopy[key] = child[key];
+        }
+    }
+
+    return parentCopy;
 };
 
 /**

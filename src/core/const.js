@@ -56,27 +56,44 @@ constants.GAME_SCALE_TYPE = {
  * @static
  * @constant
  * @property {object} DEFAULT_GAME_OPTIONS
- * @property {boolean} DEFAULT_RENDER_OPTIONS.debug=false
- * @property {boolean} DEFAULT_RENDER_OPTIONS.sayHello=true
- * @property {boolean} DEFAULT_RENDER_OPTIONS.noWebAudio=false
- * @property {boolean} DEFAULT_RENDER_OPTIONS.noWebGL=false
- * @property {number} DEFAULT_RENDER_OPTIONS.frameLimit=35
- * @property {boolean} DEFAULT_RENDER_OPTIONS.persistantData=true
- * @property {boolean} DEFAULT_RENDER_OPTIONS.stopAtVisibilityChange=true
- * @property {array} DEFAULT_RENDER_OPTIONS.audioExts
- * @property {boolean} DEFAULT_RENDER_OPTIONS.pauseOnVisibilityChange=true
+ * //TODO: document
  */
 constants.DEFAULT_GAME_OPTIONS = {
-    debug: false, //todo
+    id: 'pq.defaultbundle.id',
+    version: "0.0.0",
+    debug: false,
     sayHello: true,
-    noWebAudio: false, //todo
-    noWebGL: false,
-    frameLimit: 35, //TODO: Cambiar esto, puede confundir por fps y no ms, quizás definir numero de frame minimo?
-    persistantData: true, //todo
-    stopAtVisibilityChange: true,
-    audioExts: ['ogg', 'mp3', 'wav'], //todo
-    scaleType: constants.GAME_SCALE_TYPE.NONE
-}; //TODO: fustrum culling?
+
+    game : {
+        width: 800,
+        height: 600,
+        resolution: 1,
+        canvas: null,
+        backgroundColor: 0x000000,
+        transparentBackground: false,
+        useAntialias: false,
+        useWebGL: true,
+        preserveDrawingBuffer: false,
+        usePersitantData: false,
+        scaleType: constants.GAME_SCALE_TYPE.NONE,
+        minFrameLimit: 30,
+        stopAtVisibiltyChange: true
+        //TODO: fustrum culling?
+    },
+
+    audio : {
+        useWebAudio: true,
+        allowedExtensions: ["mp3", "ogg", "wav"]
+    },
+
+    input : {
+        activeMouse: true,
+        activeKeyboard: false,
+        activeGamepad: false,
+        activeAccelerometer: false
+    }
+
+};
 
 /**
  * The default name for all the constructors when we use the custom class system
