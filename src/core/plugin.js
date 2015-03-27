@@ -8,7 +8,7 @@ function plugin(name, fn){
     return this;
 }
 
-function activate(plugins){
+function enable(plugins){
     if(typeof plugins === "string")plugins = [plugins];
 
     var len = plugins.length;
@@ -26,6 +26,6 @@ function getList(){
 
 module.exports = plugin;
 //module.exports._plugins = _plugins;
-module.exports.activate = activate;
+module.exports.enable = enable;
 module.exports.getList = getList;
 module.exports.getActive = function(){return active};
