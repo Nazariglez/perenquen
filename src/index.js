@@ -5,6 +5,7 @@ var CONST = require('./core/const'),
 
 var core = {
     utils : require('./core/utils'),
+    plugin : require('./core/plugin'),
 
     Class : require('./core/Class'),
     Game : require('./core/Game'),
@@ -18,7 +19,8 @@ var core = {
     AssetLoader : require('./loader/AssetLoader'),
     Texture : require('../lib/pixi/src/core/textures/Texture'),
     Pool : require('./extra/Pool'),
-    Point : require('../lib/pixi/src/core/math/Point')
+    Point : require('../lib/pixi/src/core/math/Point'),
+    ParticleContainer : require('./display/ParticleContainer')
 };
 
 //Add inheritance system
