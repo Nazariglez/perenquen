@@ -6,6 +6,7 @@ var CONST = require('./core/const'),
 var core = {
     utils : require('./core/utils'),
     plugin : require('./core/plugin'),
+    inject : require('./core/inject'),
 
     Class : require('./core/Class'),
     Game : require('./core/Game'),

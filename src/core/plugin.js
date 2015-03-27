@@ -1,7 +1,9 @@
 var _plugins = {},
-    active = [];
+    active = [],
+    namespace = null;
 
 function plugin(name, fn){
+    namespace = this;
     _plugins[name] = fn;
     return this;
 }
@@ -12,7 +14,7 @@ function activate(plugins){
     var len = plugins.length;
     for(var i = 0; i < len; i++){
         if(_plugins[plugins[i]] && active.indexOf(plugins[i]) === -1){
-            _plugins[plugins[i]]();
+            _plugins[plugins[i]].call(namespace);
             active.push(plugins[i]);
         }
     }

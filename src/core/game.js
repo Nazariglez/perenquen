@@ -138,7 +138,7 @@ function Game(width, height, options){
     }
 
     /**
-     * Autoescale the gamescreen
+     * Autoscale the gamescreen
      */
     if(this.config.game.scaleType !== CONST.GAME_SCALE_TYPE.NONE){
         this.enableAutoResize(true);

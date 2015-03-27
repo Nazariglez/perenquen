@@ -12,6 +12,7 @@ function Class(){
 Class.prototype = {};
 Class.prototype.constructor = Class;
 
+
 /**
  * Extends a parent class with an object as a parameter, and return a new child class
  * @static
@@ -27,7 +28,6 @@ Class.extend = function(childProto){
     child.prototype = Object.create(this.prototype);
 
     var inheritanceFn = function (name, fn) {
-        console.log(name);
         return function () {
             var tmp = this._super;
             this._super = child._super[name];
