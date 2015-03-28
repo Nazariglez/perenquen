@@ -6,6 +6,11 @@ var mixin = module.exports = {
         return this;
     },
 
+    remove: function(){
+        if(this.parent)this.parent.removeChild(this);
+        return this;
+    },
+
     update: function(gameTime, delta){
         return true;
     },

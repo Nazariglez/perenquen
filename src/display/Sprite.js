@@ -107,6 +107,11 @@ Sprite.prototype.displayObjectUpdateTransform = function(){
     this._currentBounds = null;
 };
 
+Sprite.prototype.setTexture = function(texture){
+    this.texture = texture;
+    return this;
+};
+
 Object.defineProperties(Sprite.prototype, {
     texture : {
         get : function(){
