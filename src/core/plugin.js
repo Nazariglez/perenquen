@@ -28,4 +28,4 @@ module.exports = plugin;
 //module.exports._plugins = _plugins;
 module.exports.enable = enable;
 module.exports.getList = getList;
-module.exports.getActive = function(){return active};
+module.exports.getActive = function(){return active;};

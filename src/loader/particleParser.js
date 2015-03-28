@@ -8,6 +8,6 @@ module.exports = function() {
         console.log('Es una particula');
 
         next();
-    }
+    };
 
 };
