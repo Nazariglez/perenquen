@@ -142,6 +142,17 @@ Text.prototype.updateText = function (){
     this.updateTexture();
 };
 
+Text.prototype.setStyle = function(style){
+    this.style = style;
+    return this;
+};
+
+Text.prototype.setText = function(text, style){
+    this.text = text;
+    if(style)this.setStyle(style);
+    return this;
+};
+
 //TODO: Pivot...
 //TODO: Check a bug in webGL renderer when te .text is changed
 module.exports = Text;
