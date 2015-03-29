@@ -22,7 +22,8 @@ var core = {
     Pool : require('./extra/Pool'),
     Point : require('../lib/pixi/src/core/math/Point'),
     ParticleContainer : require('./display/ParticleContainer'),
-    Text : require('./display/Text')
+    Text : require('./display/Text'),
+    BitmapText : require('./display/BitmapText')
 };
 
 //Add inheritance system

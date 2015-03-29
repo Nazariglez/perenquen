@@ -5,7 +5,7 @@ var PixiText = require('../../lib/pixi/src/core/text/Text'),
     mixin = require('./mixin');
 
 function Text(text, style, resolution){
-    text = text || '';
+    text = text || ' ';
     PixiText.call(this, text, style, resolution);
 
     this.speed = new math.Point();
