@@ -153,6 +153,18 @@ Text.prototype.setText = function(text, style){
     return this;
 };
 
+Text.prototype.setWordWrap = function(value){
+    if(value === false){
+        this.style.wordWrap = value;
+    }else{
+        this.style.wordWrap = true;
+        this.style.wordWrapWidth = value;
+    }
+
+    this.dirty = true;
+    return this;
+};
+
 //TODO: Pivot...
 //TODO: Check a bug in webGL renderer when te .text is changed
 module.exports = Text;
