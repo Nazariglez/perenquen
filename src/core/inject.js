@@ -26,7 +26,9 @@ function inject(className, fn){
     }
 
     if(ctor){
-        baseClass = ctor;
+        baseClass = function PQClass(){
+            ctor.apply(this, arguments);
+        };
     }
 
     baseClass.prototype = newProto;
