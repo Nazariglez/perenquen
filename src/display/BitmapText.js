@@ -9,6 +9,7 @@ function BitmapText(text, style){
     text = text || ' ';
     PixiBitmapText.call(this, text, style);
     this.anchor = math.Point(0.5, 0.5);
+    this.speed = new math.Point();
 }
 
 BitmapText.prototype = Object.create(PixiBitmapText.prototype);

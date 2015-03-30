@@ -147,9 +147,9 @@ Text.prototype.setStyle = function(style){
     return this;
 };
 
-Text.prototype.setText = function(text, style){
+Text.prototype.setText = function(text, keys){
+    if(keys)text = utils.parseTextKeys(text, keys);
     this.text = text;
-    if(style)this.setStyle(style);
     return this;
 };
 
