@@ -69,4 +69,10 @@ utils.watchVisibilityChanges = require('./visibilityChange');
  */
 utils.assetCache = require('../../loader/AssetCache');
 
+/**
+ * Replace keys in the text
+ * @type {function(): text|exports}
+ */
+utils.parseTextKeys = require('./parseTextKeys');
+
 module.exports = utils;
