@@ -3,7 +3,7 @@ var ResourceLoader = require('resource-loader'),
     spritesheetParser = require('./spritesheetParser'),
     particleParser = require('./particleParser'),
     bitmapFontXMLParser = require('./bitmapFontXMLParser'),
-    test = require('./test');
+    bitmapFontTXTParser = require('./bitmapFontTXTParser');
 
 function AssetLoader(baseUrl, concurrency){
     ResourceLoader.call(this, baseUrl, concurrency);
@@ -13,7 +13,7 @@ function AssetLoader(baseUrl, concurrency){
         .use(textureParser())
         .use(bitmapFontXMLParser())
         .use(particleParser())
-        .use(test());
+        .use(bitmapFontTXTParser());
 }
 
 AssetLoader.prototype = Object.create(ResourceLoader.prototype);
