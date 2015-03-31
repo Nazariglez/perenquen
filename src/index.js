@@ -4,6 +4,7 @@ var CONST = require('./core/const'),
     interactionMouse = require('./input');
 
 var core = {
+    config : require('./core/config'),
     utils : require('./core/utils'),
     plugin : require('./core/plugin'),
     inject : require('./core/inject'),
