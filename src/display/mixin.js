@@ -1,4 +1,5 @@
-var PixiContainer = require('../../lib/pixi/src/core/display/Container');
+var PixiContainer = require('../../lib/pixi/src/core/display/Container'),
+    config = require('../core/config');
 
 var mixin = module.exports = {
     addTo: function(parent){
@@ -47,14 +48,16 @@ var mixin = module.exports = {
 
     animate: function(gameTime, delta){
         if(this.update(gameTime, delta) !== false){
-            //TODO: desactivar delta?
+
+            var tick = (config.useDeltaAnimation) ? delta : 1;
+
             if(this.speed && (this.speed.x !== 0 || this.speed.y !== 0)){
-                this.position.x += this.speed.x * delta;
-                this.position.y += this.speed.y * delta;
+                this.position.x += this.speed.x * tick;
+                this.position.y += this.speed.y * tick;
             }
 
             if(this.rotationSpeed && this.rotationSpeed !== 0){
-                this.rotation += this.rotationSpeed * delta;
+                this.rotation += this.rotationSpeed * tick;
             }
 
             var len = this.children.length;
@@ -107,7 +110,7 @@ var mixin = module.exports = {
 
     addChild: function(child){
         PixiContainer.prototype.addChild.call(this, child);
-        this.sortChildrenByDepth();
+        if(config.useDeltaAnimation)this.sortChildrenByDepth();
         return this;
     }
 };
