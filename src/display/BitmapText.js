@@ -1,4 +1,5 @@
 var PixiBitmapText = require('../../lib/pixi/src/extras/BitmapText'),
+    Container = require('./Container'),
     Sprite = require('./Sprite'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
@@ -7,23 +8,51 @@ var PixiBitmapText = require('../../lib/pixi/src/extras/BitmapText'),
 
 function BitmapText(text, style){
     text = text || ' ';
-    PixiBitmapText.call(this, text, style);
-    this.anchor = math.Point(0.5, 0.5);
+    this.wordWrap = style.wordWrap || false;
+    this.wordWrapWidth = style.wordWrapWidth || 100;
+
+    this.anchor = new math.Point(0.5, 0.5);
+    this.pivot = new math.Point(0.5,0.5);
     this.speed = new math.Point();
+
+    console.log(this.anchor);
+
+    PixiBitmapText.call(this, text, style);
 }
 
 BitmapText.prototype = Object.create(PixiBitmapText.prototype);
 BitmapText.prototype.constructor = BitmapText;
 utils.mixin(BitmapText, mixin);
 
-/*BitmapText.prototype.setStyle = function(style){
-    this.style = style;
-    return this;
-};*/
+BitmapText.prototype.containerUpdateTransform = Container.prototype.updateTransform;
+BitmapText.prototype.displayObjectUpdateTransform = Container.prototype.displayObjectUpdateTransform;
 
-BitmapText.prototype.setText = function(text, style){
+BitmapText.prototype.setStyle = function(style){
+    if(style.font)this.font = style.font;
+    if(style.align)this.align = style.align;
+    if(style.tint)this.tint = style.tint;
+    this.wordWrap = style.wordWrap || false;
+    this.wordWrapWidth = style.wordWrapWidth || 100;
+
+    this.dirty = true;
+    return this;
+};
+
+BitmapText.prototype.setText = function(text, keys){
+    if(keys)text = utils.parseTextKeys(text, keys);
     this.text = text;
-    if(style)this.setStyle(style);
+    return this;
+};
+
+BitmapText.prototype.setWordWrap = function(value){
+    if(value === false){
+        this.wordWrap = value;
+    }else{
+        this.wordWrap = true;
+        this.wordWrapWidth = value;
+    }
+
+    this.dirty = true;
     return this;
 };
 
@@ -39,12 +68,15 @@ BitmapText.prototype.updateText = function (){
     var scale = this._font.size / data.size;
     var lastSpace = -1;
 
-    for (var i = 0; i < this.text.length; i++)
-    {
-        var charCode = this.text.charCodeAt(i);
-        lastSpace = /(\s)/.test(this.text.charAt(i)) ? i : lastSpace;
+    var outputText = this.wordWrap ? wordWrap(this.text, this.wordWrapWidth, this._font) : this.text;
+    console.log(outputText);
 
-        if (/(?:\r\n|\r|\n)/.test(this.text.charAt(i)))
+    for (var i = 0; i < outputText.length; i++)
+    {
+        var charCode = outputText.charCodeAt(i);
+        lastSpace = /(\s)/.test(outputText.charAt(i)) ? i : lastSpace;
+
+        if (/(?:\r\n|\r|\n)/.test(outputText.charAt(i)))
         {
             lineWidths.push(lastLineWidth);
             maxLineWidth = Math.max(maxLineWidth, lastLineWidth);
@@ -179,3 +211,78 @@ Object.defineProperties(BitmapText.prototype, {
 
 BitmapText.fonts = {};
 module.exports = BitmapText;
+
+function wordWrap(text, width, font){
+    var result = '';
+    var lines = text.split('\n');
+    for (var i = 0; i < lines.length; i++)
+    {
+        var spaceLeft = width;
+        var words = lines[i].split(' ');
+        for (var j = 0; j < words.length; j++)
+        {
+
+            var wordData = getWordWidth(words[j], font);
+            var wordWidth = wordData.wordWidth;
+            var wordWidthWithSpace = wordWidth + wordData.spaceWidth;
+
+            if(j === 0 || wordWidthWithSpace > spaceLeft)
+            {
+                // Skip printing the newline if it's the first word of the line that is
+                // greater than the word wrap width.
+                if(j > 0)
+                {
+                    result += '\n';
+                }
+                result += words[j];
+                spaceLeft = width - wordWidth;
+            }
+            else
+            {
+                spaceLeft -= wordWidthWithSpace;
+                result += ' ' + words[j];
+            }
+        }
+
+        if (i < lines.length-1)
+        {
+            result += '\n';
+        }
+    }
+    return result;
+}
+
+function getWordWidth(word, font){
+    var data = BitmapText.fonts[font.name];
+    var scale = font.size / data.size;
+    var prevCharCode = null;
+    var ww = 0;
+    var charCode, charData;
+
+    for(var i = 0; i < word.length; i++){
+        charCode = word.charCodeAt(i);
+        charData = data.chars[charCode];
+        if(!charData) continue;
+
+        if(prevCharCode && charData.kerning[prevCharCode])
+        {
+            ww += charData.kerning[prevCharCode];
+        }
+
+        ww += charData.xAdvance;
+
+        prevCharCode = charCode;
+    }
+
+    var spaceWidth = 0;
+    charData = data.chars[(' ').charCodeAt(0)];
+    if(prevCharCode && charData.kerning[prevCharCode])
+    {
+        spaceWidth += charData.kerning[prevCharCode];
+    }
+    spaceWidth += charData.xAdvance;
+    return {
+        wordWidth : ww*scale,
+        spaceWidth: spaceWidth*scale
+    };
+}
