@@ -15,8 +15,6 @@ function BitmapText(text, style){
     this.pivot = new math.Point(0.5,0.5);
     this.speed = new math.Point();
 
-    console.log(this.anchor);
-
     PixiBitmapText.call(this, text, style);
 }
 
@@ -69,7 +67,6 @@ BitmapText.prototype.updateText = function (){
     var lastSpace = -1;
 
     var outputText = this.wordWrap ? wordWrap(this.text, this.wordWrapWidth, this._font) : this.text;
-    console.log(outputText);
 
     for (var i = 0; i < outputText.length; i++)
     {
