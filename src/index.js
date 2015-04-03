@@ -21,6 +21,7 @@ var core = {
     AssetLoader : require('./loader/AssetLoader'),
     Texture : require('../lib/pixi/src/core/textures/Texture'),
     Pool : require('./extra/Pool'),
+    NinePatch: require('./extra/NinePatch'),
     Point : require('../lib/pixi/src/core/math/Point'),
     ParticleContainer : require('./display/ParticleContainer'),
     Text : require('./display/Text'),
