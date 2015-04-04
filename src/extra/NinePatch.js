@@ -7,7 +7,12 @@ var Sprite = require('../display/Sprite'),
 
 var tmpContainer = new Container();
 var tmpSprites = [];
-for(var i = 0; i < 9; i++)tmpSprites.push(new Sprite());
+for(var i = 0; i < 9; i++){
+    var s = new Sprite()
+        .addTo(tmpContainer);
+
+    tmpSprites.push(s);
+}
 
 function NinePatch(texture, width, height){
     this._nineTexture = null;
@@ -15,6 +20,8 @@ function NinePatch(texture, width, height){
 
     this._nWidth = width || 100;
     this._nHeight = height || 100;
+
+    this._nRenderTexture = null;
 
     Sprite.call(this, texture);
 }
@@ -45,7 +52,6 @@ NinePatch.prototype._generateNineTexture = function(renderer){
 
     tmpContainer.setSize(width, height);
 
-    //TODO: Use temp sprite always
     for(var i = 0; i < 9; i++){
         var sprite, x, y, w, h;
         switch(i){
@@ -54,7 +60,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 y = yy;
                 w = left;
                 h = top;
-                sprite = new Sprite(new Texture(texture, new math.Rectangle(x,y,w,h)))
+                tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(0,0)
                     .setSize(left, top);
@@ -64,7 +70,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 y = yy;
                 w = Math.floor(ww-left-right);
                 h = top;
-                sprite = new Sprite(new Texture(texture, new math.Rectangle(x,y,w,h)))
+                tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(left,0)
                     .setSize(width-right-left,top);
@@ -74,7 +80,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 y = yy;
                 w = right;
                 h = top;
-                sprite = new Sprite(new Texture(texture, new math.Rectangle(x,y,w,h)))
+                tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(width-right,0)
                     .setSize(right,top);
@@ -84,7 +90,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 y = yy+top;
                 w = left;
                 h = Math.floor(hh-top-bottom);
-                sprite = new Sprite(new Texture(texture, new math.Rectangle(x,y,w,h)))
+                tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(0,top)
                     .setSize(left,height-top-bottom);
@@ -94,7 +100,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 y = yy+top;
                 w = Math.floor(ww-left-right);
                 h = Math.floor(hh-top-bottom);
-                sprite = new Sprite(new Texture(texture, new math.Rectangle(x,y,w,h)))
+                tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(left,top)
                     .setSize(width-left-right,height-top-bottom);
@@ -104,7 +110,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 y = yy+top;
                 w = Math.floor(ww-left-right);
                 h = Math.floor(hh-top-bottom);
-                sprite = new Sprite(new Texture(texture, new math.Rectangle(x,y,w,h)))
+                tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(width-right,top)
                     .setSize(right,height-top-bottom);
@@ -114,7 +120,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 y = yy+Math.floor(hh-bottom);
                 w = left;
                 h = bottom;
-                sprite = new Sprite(new Texture(texture, new math.Rectangle(x,y,w,h)))
+                tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(0,height-bottom)
                     .setSize(left,bottom);
@@ -124,7 +130,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 y = yy+Math.floor(hh-bottom);
                 w = Math.floor(ww-left-right);
                 h = bottom;
-                sprite = new Sprite(new Texture(texture, new math.Rectangle(x,y,w,h)))
+                tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(left,height-bottom)
                     .setSize(width-left-right,bottom);
@@ -134,32 +140,34 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 y = yy+Math.floor(hh-bottom);
                 w = right;
                 h = bottom;
-                sprite = new Sprite(new Texture(texture, new math.Rectangle(x,y,w,h)))
+                tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(width-right,height-bottom)
                     .setSize(right,bottom);
                 break;
         }
-
-        tmpContainer.addChild(sprite);
     }
 
     this._refreshNine = false;
     var bounds = tmpContainer.getLocalBounds();
 
-    //TODO: Don't create a new renderTexture in every update
-    var renderTexture = new RenderTexture(renderer, bounds.width | 0, bounds.height | 0);
+    if(!this._nRenderTexture){
+        this._nRenderTexture = new RenderTexture(renderer, bounds.width | 0, bounds.height | 0);
+    }else{
+        this._nRenderTexture.clear();
+    }
+
+    this._nRenderTexture.resize(width, height);
 
     if(renderer.type === 1){
         var cachedRenderTarget = renderer.currentRenderTarget;
-        renderTexture.render(tmpContainer);
+        this._nRenderTexture.render(tmpContainer);
         renderer.setRenderTarget(cachedRenderTarget);
     }else{
-        renderTexture.render(tmpContainer);
+        this._nRenderTexture.render(tmpContainer);
     }
 
-    tmpContainer.children.length = 0;
-    this._texture = renderTexture;
+    this._texture = this._nRenderTexture;
 };
 
 NinePatch.prototype.resize = function(width, height){
