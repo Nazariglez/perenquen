@@ -1,0 +1,56 @@
+var Timer = require('./Timer');
+
+function TimerManager(){
+    this.timers = [];
+    this._toDelete = [];
+}
+
+TimerManager.prototype.constructor = TimerManager;
+
+TimerManager.prototype.tick = function(delta){
+    var len = this.timers.length;
+    for(var i = 0; i < len; i++){
+        if(this.timers[i].active){
+            this.timers[i].tick(delta);
+            if(this.timers[i].isEnded && this.timers[i].expire){
+                this.timers[i].remove();
+            }
+        }
+    }
+
+    var rLen = this._toDelete.length;
+    if(rLen >= 1) {
+        for (i = 0; i < rLen; i++) {
+            this._remove(this._toDelete[i]);
+        }
+
+        this._toDelete.length = 0;
+    }
+
+    return this;
+};
+
+TimerManager.prototype.createTimer = function(time){
+    return new Timer(time || 1, this);
+};
+
+TimerManager.prototype.addTimer = function(timer){
+    this.timers.push(timer);
+    return this;
+};
+
+TimerManager.prototype.removeTimer = function(timer){
+     this._toDelete.push(timer);
+    return this;
+};
+
+TimerManager.prototype._remove = function(timer){
+    var index = this.timers.indexOf(timer);
+    console.log(index);
+    if(index >= 0){
+        this.timers.splice(index, 1);
+        console.log('deleted');
+    }
+};
+
+module.exports = TimerManager;

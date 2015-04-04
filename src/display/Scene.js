@@ -2,6 +2,7 @@ var Container = require('./Container'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
     Graphics = require('./Graphics'),
+    TimerManager = require('../timer/TimerManager'),
     Camera = require('./Camera');
 
 function Scene(game){
@@ -30,7 +31,7 @@ function Scene(game){
 
 
     this.manager = null;
-    this.timerManager = null; //todo
+    this.timerManager = new TimerManager(); //todo
     this.tweenManager = null; //todo
 
     this.paused = false;
@@ -64,6 +65,8 @@ Scene.prototype.animate = function(gameTime, delta){
         return this;
     }
 
+    this.timerManager.tick(delta);
+
     if(this._backgroundColorDirty){
         this.bgGraphic.clear();
         if(typeof this.backgroundColor === "number"){
@@ -94,7 +97,7 @@ Scene.prototype.togglePause = function(){
 };
 
 Scene.prototype.createTimer = function(time){
-    //todo
+    return this.timerManager.createTimer(time);
 };
 
 Scene.prototype.createTween = function(time){

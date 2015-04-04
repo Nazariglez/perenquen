@@ -25,7 +25,10 @@ var core = {
     Point : require('../lib/pixi/src/core/math/Point'),
     ParticleContainer : require('./display/ParticleContainer'),
     Text : require('./display/Text'),
-    BitmapText : require('./display/BitmapText')
+    BitmapText : require('./display/BitmapText'),
+    TimerManager : require('./timer/TimerManager'),
+    Timer : require('./timer/Timer'),
+    TimeLine : require('./extra/TimeLine')
 };
 
 //Add inheritance system
