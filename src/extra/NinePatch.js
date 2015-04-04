@@ -3,7 +3,8 @@ var Sprite = require('../display/Sprite'),
     math = require('../../lib/pixi/src/core/math'),
     Container = require('../display/Container'),
     RenderTexture = require('../../lib/pixi/src/core/textures/RenderTexture'),
-    utils = require('../core/utils');
+    utils = require('../core/utils'),
+    CONST = require('../core/const');
 
 var tmpContainer = new Container();
 var tmpSprites = [];
@@ -13,6 +14,8 @@ for(var i = 0; i < 9; i++){
 
     tmpSprites.push(s);
 }
+
+//TODO: Posibles residuos en la renderTexture al crear varios botones?
 
 function NinePatch(texture, width, height){
     this._nineTexture = null;
@@ -43,7 +46,10 @@ NinePatch.prototype._generateNineTexture = function(renderer){
         xx = texture.frame.x,
         yy = texture.frame.y;
 
-    console.log(ww,hh,xx,yy);
+    //var scale = 1;
+    //if(width < ww || height < hh){
+    //    scale = Math.min(width/ww, height/hh);
+    //}
 
     var left = ww / 3,
         right = ww / 3,
@@ -53,7 +59,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
     tmpContainer.setSize(width, height);
 
     for(var i = 0; i < 9; i++){
-        var sprite, x, y, w, h;
+        var x, y, w, h;
         switch(i){
             case 0:
                 x = xx;
@@ -68,7 +74,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
             case 1:
                 x = xx+left;
                 y = yy;
-                w = Math.floor(ww-left-right);
+                w = ww-left-right;
                 h = top;
                 tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
@@ -76,7 +82,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                     .setSize(width-right-left,top);
                 break;
             case 2:
-                x = xx+Math.floor(ww-right);
+                x = xx+ww-right;
                 y = yy;
                 w = right;
                 h = top;
@@ -89,7 +95,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 x = xx;
                 y = yy+top;
                 w = left;
-                h = Math.floor(hh-top-bottom);
+                h = hh-top-bottom;
                 tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(0,top)
@@ -98,18 +104,18 @@ NinePatch.prototype._generateNineTexture = function(renderer){
             case 4:
                 x = xx+left;
                 y = yy+top;
-                w = Math.floor(ww-left-right);
-                h = Math.floor(hh-top-bottom);
+                w = ww-left-right;
+                h = hh-top-bottom;
                 tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(left,top)
                     .setSize(width-left-right,height-top-bottom);
                 break;
             case 5:
-                x = xx+Math.floor(ww-right);
+                x = xx+ww-right;
                 y = yy+top;
-                w = Math.floor(ww-left-right);
-                h = Math.floor(hh-top-bottom);
+                w = ww-left-right;
+                h = hh-top-bottom;
                 tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
                     .setPosition(width-right,top)
@@ -117,7 +123,7 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 break;
             case 6:
                 x = xx;
-                y = yy+Math.floor(hh-bottom);
+                y = yy+hh-bottom;
                 w = left;
                 h = bottom;
                 tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
@@ -127,8 +133,8 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                 break;
             case 7:
                 x = xx+left;
-                y = yy+Math.floor(hh-bottom);
-                w = Math.floor(ww-left-right);
+                y = yy+hh-bottom;
+                w = ww-left-right;
                 h = bottom;
                 tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
                     .setAnchor(0,0)
@@ -136,8 +142,8 @@ NinePatch.prototype._generateNineTexture = function(renderer){
                     .setSize(width-left-right,bottom);
                 break;
             case 8:
-                x = xx+Math.floor(ww-right);
-                y = yy+Math.floor(hh-bottom);
+                x = xx+ww-right;
+                y = yy+hh-bottom;
                 w = right;
                 h = bottom;
                 tmpSprites[i].setTexture(new Texture(texture, new math.Rectangle(x,y,w,h)))
@@ -149,17 +155,15 @@ NinePatch.prototype._generateNineTexture = function(renderer){
     }
 
     this._refreshNine = false;
-    var bounds = tmpContainer.getLocalBounds();
 
     if(!this._nRenderTexture){
-        this._nRenderTexture = new RenderTexture(renderer, bounds.width | 0, bounds.height | 0);
+        this._nRenderTexture = new RenderTexture(renderer, width, height);
     }else{
         this._nRenderTexture.clear();
+        this._nRenderTexture.resize(width, height);
     }
 
-    this._nRenderTexture.resize(width, height);
-
-    if(renderer.type === 1){
+    if(renderer.type === CONST.RENDERER_TYPE.WEBGL){
         var cachedRenderTarget = renderer.currentRenderTarget;
         this._nRenderTexture.render(tmpContainer);
         renderer.setRenderTarget(cachedRenderTarget);
