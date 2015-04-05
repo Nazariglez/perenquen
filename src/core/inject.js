@@ -30,7 +30,7 @@ function inject(className, fn){
             if(typeof proto[pr] === "function") {
                 if(isSuper && baseClass._super[pr] && typeof baseClass._super[pr] === "function"){
                     proto[pr] = inheritanceFn(pr, proto[pr]);
-                    if (pr === ctorName && baseClass._super["constructor"]) {
+                    if (pr === ctorName && baseClass._super.constructor) {
                         proto[pr] = inheritanceFn("constructor", proto[pr]);
                     }else{
                         proto[pr] = inheritanceFn(pr, proto[pr]);
