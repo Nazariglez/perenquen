@@ -51,10 +51,8 @@ TimerManager.prototype.removeTimer = function(timer){
 
 TimerManager.prototype._remove = function(timer){
     var index = this.timers.indexOf(timer);
-    console.log(index);
     if(index >= 0){
         this.timers.splice(index, 1);
-        console.log('deleted');
     }
 };
 

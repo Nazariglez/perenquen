@@ -1,6 +1,6 @@
 var Timer = require('../timer/Timer');
 
-//TODO: pause, backward, delay
+//TODO: pause, backward, delay, reset
 function Timeline(manager){
     this._listeners = [];
     this.index = 0;
