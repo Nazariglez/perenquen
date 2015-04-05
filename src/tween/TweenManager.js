@@ -51,7 +51,7 @@ TweenManager.prototype.addTween = function(tween){
     return this;
 };
 
-TweenManager.prototype.removeTimer = function(tween){
+TweenManager.prototype.removeTween = function(tween){
     this._toDelete.push(tween);
     return this;
 };
