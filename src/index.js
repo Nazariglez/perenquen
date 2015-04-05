@@ -28,7 +28,10 @@ var core = {
     BitmapText : require('./display/BitmapText'),
     TimerManager : require('./timer/TimerManager'),
     Timer : require('./timer/Timer'),
-    Timeline : require('./extra/Timeline')
+    Timeline : require('./extra/Timeline'),
+    Easing : require('./tween/Easing'),
+    Tween : require('./tween/Tween'),
+    TweenManager : require('./tween/TweenManager')
 };
 
 //Add inheritance system
