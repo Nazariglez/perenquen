@@ -1,5 +1,5 @@
 function Timer(time, manager){
-    this.time = time;
+    this.time = time || 0;
     if(manager){
         this.manager = manager;
         this.addTo(manager);

@@ -1,4 +1,5 @@
-var Timer = require('./Timer');
+var Timer = require('./Timer'),
+    Timeline = require('../extra/Timeline');
 
 function TimerManager(){
     this.timers = [];
@@ -28,6 +29,10 @@ TimerManager.prototype.tick = function(delta){
     }
 
     return this;
+};
+
+TimerManager.prototype.createTimeline = function(){
+    return new Timeline(this);
 };
 
 TimerManager.prototype.createTimer = function(time){

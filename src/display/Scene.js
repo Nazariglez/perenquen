@@ -100,6 +100,10 @@ Scene.prototype.createTimer = function(time){
     return this.timerManager.createTimer(time);
 };
 
+Scene.prototype.createTimeline = function(){
+    return this.timerManager.createTimeline();
+};
+
 Scene.prototype.createTween = function(time){
     //todo
 };
