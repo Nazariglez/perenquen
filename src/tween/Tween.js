@@ -23,6 +23,7 @@ function Tween(target, manager){
     this._delayTime = 0;
     this._elapsedTime = 0;
     this._repeat = 0;
+    this._pingPong = false;
 
     this.onTweenStart = function(){};
     this.onTweenStop = function(){};
@@ -75,30 +76,50 @@ Tween.prototype.tick = function(delta){
     if(!this.isStarted) {
         this._parseData();
         this.isStarted = true;
-        this.onTimerStart(this._elapsedTime, delta);
+        this.onTweenStart(this._elapsedTime, delta);
     }
 
-    if(this.time > this._elapsedTime){
+    var time = (this.pingPong) ? this.time/2 : this.time;
+
+    if(time > this._elapsedTime){
         var t = this._elapsedTime+tick,
-            ended = (t>=this.time);
+            ended = (t>=time);
 
-        this._elapsedTime = (ended) ? this.time : t;
-        this.onTimerUpdate(this._elapsedTime, delta);
+        this._elapsedTime = (ended) ? time : t;
 
-        //TODO: Apply easing
+        this._apply(time);
+
+        var realElapsed = (this._pingPong) ? time+this._elapsedTime : this._elapsedTime;
+        this.onTweenUpdate(realElapsed, delta);
 
         if(ended){
-            //TODO: Check pingPong
+            if(this.pingPong){
+                if(!this._pingPong){
+                    this._pingPong = true;
+                    var _to = this._to,
+                        _from = this._from;
+
+                    this._from = _to;
+                    this._to = _from;
+
+                    this._parseData();
+                    this.onTweenPingPong(this._elapsedTime, delta);
+
+                    this._elapsedTime = 0;
+                    return this;
+                }
+            }
+
             if(this.loop || this.repeat > this._repeat){
                 this._repeat++;
-                this.onTimerRepeat(this._elapsedTime, delta, this._repeat);
+                this.onTweenRepeat(this._elapsedTime, delta, this._repeat);
                 this._elapsedTime = 0;
                 return this;
             }
 
             this.isEnded = true;
             this.active = false;
-            this.onTimerEnd(this._elapsedTime, delta);
+            this.onTweenEnd(this._elapsedTime, delta);
         }
 
         return this;
@@ -106,13 +127,13 @@ Tween.prototype.tick = function(delta){
 
 };
 
+Tween.prototype._apply = function(time){
+    recursiveApply(this._to, this._from, this.target, time, this._elapsedTime, this.easing);
+
+};
+
 Tween.prototype._canUpdate = function(){
-    return (
-        this.time
-        ||this.active
-        ||this.target
-        ||this._to
-    );
+    return (this.time || this.active || this.target || this._to);
 };
 
 Tween.prototype.path = function(path, reverse){
@@ -212,6 +233,20 @@ Tween.prototype.onPingPong = function(callback){
 };
 
 module.exports = Tween;
+
+function recursiveApply(to, from, target, time, elapsed, easing){
+    for(var k in to){
+        if(!isObject(to[k])) {
+            var b = from[k],
+                c = to[k] - from[k],
+                d = time,
+                t = elapsed/d;
+            target[k] = b + (c*easing(t));
+        }else{
+            recursiveApply(to[k], from[k], target[k], time);
+        }
+    }
+}
 
 function parseRecursiveData(to, from, target){
     for(var k in to){
