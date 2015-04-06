@@ -31,7 +31,8 @@ var core = {
     Timeline : require('./extra/Timeline'),
     Easing : require('./tween/Easing'),
     Tween : require('./tween/Tween'),
-    TweenManager : require('./tween/TweenManager')
+    TweenManager : require('./tween/TweenManager'),
+    Path : require('./extra/Path')
 };
 
 //Add inheritance system
