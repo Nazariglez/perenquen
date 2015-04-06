@@ -1,4 +1,5 @@
 var PixiContainer = require('../../lib/pixi/src/core/display/Container'),
+    Tween = require('../tween/Tween'),
     config = require('../core/config');
 
 var mixin = module.exports = {
@@ -112,5 +113,14 @@ var mixin = module.exports = {
         PixiContainer.prototype.addChild.call(this, child);
         if(config.useDeltaAnimation)this.sortChildrenByDepth();
         return this;
+    },
+
+    tween: function(manager){
+        var tween = new Tween(this);
+        if(manager){
+            tween.addTo(manager);
+        }
+
+        return tween;
     }
 };

@@ -1,4 +1,5 @@
-var Easing = require('./Easing');
+var Easing = require('./Easing'),
+    TweenManager = require('./TweenManager');
 
 function Tween(target, manager){
     this.target = target;
@@ -38,6 +39,14 @@ Tween.prototype.constructor = Tween;
 
 Tween.prototype.start = function(){
     this.active = true;
+    if(!this.manager){
+        if(this.target && this.target.parent){
+            var manager = findManager(this.target);
+            if(manager){
+                this.addTo(manager);
+            }
+        }
+    }
     return this;
 };
 
@@ -151,7 +160,10 @@ Tween.prototype.path = function(path, reverse){
 };
 
 Tween.prototype.addTo = function(manager){
-    //TODO: allow add to scene too
+    if(!(manager instanceof TweenManager)) {
+        manager = findManager(manager);
+    }
+
     this.manager = manager;
     this.manager.addTween(this);
     return this;
@@ -288,4 +300,14 @@ function parseRecursiveData(to, from, target){
 
 function isObject(obj){
     return Object.prototype.toString.call(obj) === "[object Object]";
+}
+
+function findManager(parent){
+    if(parent.tweenManager){
+        return parent.tweenManager;
+    }else if(parent.parent){
+        return findManager(parent.parent);
+    }else{
+        return null;
+    }
 }
