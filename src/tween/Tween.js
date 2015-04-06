@@ -25,6 +25,7 @@ function Tween(target, manager){
     this._repeat = 0;
     this._pingPong = false;
 
+    //TODO: Maybe this callbacks could put in the prototype instead the object?
     this.onTweenStart = function(){};
     this.onTweenStop = function(){};
     this.onTweenRepeat = function(){};
@@ -66,6 +67,7 @@ Tween.prototype._parseData = function(){
 
 Tween.prototype.tick = function(delta){
     if(!this._canUpdate())return this;
+    var _to, _from;
     var tick = delta*1000;
 
     if(this.delay > this._delayTime){
@@ -93,33 +95,40 @@ Tween.prototype.tick = function(delta){
         this.onTweenUpdate(realElapsed, delta);
 
         if(ended){
-            if(this.pingPong){
-                if(!this._pingPong){
-                    this._pingPong = true;
-                    var _to = this._to,
-                        _from = this._from;
+            if(this.pingPong && !this._pingPong){
+                this._pingPong = true;
+                _to = this._to;
+                _from = this._from;
 
-                    this._from = _to;
-                    this._to = _from;
+                this._from = _to;
+                this._to = _from;
 
-                    this._parseData();
-                    this.onTweenPingPong(this._elapsedTime, delta);
+                //this._parseData();
+                this.onTweenPingPong(realElapsed, delta);
 
-                    this._elapsedTime = 0;
-                    return this;
-                }
+                this._elapsedTime = 0;
+                return this;
             }
 
             if(this.loop || this.repeat > this._repeat){
                 this._repeat++;
-                this.onTweenRepeat(this._elapsedTime, delta, this._repeat);
+                this.onTweenRepeat(realElapsed, delta, this._repeat);
                 this._elapsedTime = 0;
+                if(this.pingPong&&this._pingPong){
+                    _to = this._to;
+                    _from = this._from;
+
+                    this._to = _from;
+                    this._from = _to;
+
+                    this._pingPong = false;
+                }
                 return this;
             }
 
             this.isEnded = true;
             this.active = false;
-            this.onTweenEnd(this._elapsedTime, delta);
+            this.onTweenEnd(realElapsed, delta);
         }
 
         return this;
@@ -189,7 +198,23 @@ Tween.prototype.remove = function(){
 };
 
 Tween.prototype.reset = function(){
-    //TODO: reset...
+    this._elapsedTime = 0;
+    this._repeat = 0;
+    this._delayTime = 0;
+    this.isStarted = false;
+    this.isEnded = false;
+
+    if(this.pingPong&&this._pingPong){
+        var _to = this._to,
+            _from = this._from;
+
+        this._to = _from;
+        this._from = _to;
+
+        this._pingPong = false;
+    }
+
+    return this;
 };
 
 Tween.prototype.setRepeat = function(repeat){
