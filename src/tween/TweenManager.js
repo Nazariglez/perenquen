@@ -1,4 +1,4 @@
-var Twee = require('./Tween');
+var Tween = require('./Tween');
 
 function TweenManager(){
     this.tweens = [];
