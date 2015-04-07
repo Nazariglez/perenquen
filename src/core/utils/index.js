@@ -30,7 +30,6 @@ utils.defaultObject = function(parent, child){
     var parentCopy = JSON.parse(JSON.stringify(parent));
     for(var key in child){
         if(Object.prototype.toString.call(child[key]) === "[object Object]"){
-            console.log(key);
             parentCopy[key] = utils.defaultObject(parentCopy[key], child[key]);
         }else{
             parentCopy[key] = child[key];
