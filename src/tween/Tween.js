@@ -26,6 +26,11 @@ function Tween(target, manager){
     this._repeat = 0;
     this._pingPong = false;
 
+    this.path = null;
+    this.pathReverse = false;
+    this.pathFrom = 0;
+    this.pathTo = 0;
+
     //TODO: Maybe this callbacks could put in the prototype instead the object?
     this.onTweenStart = function(){};
     this.onTweenStop = function(){};
@@ -72,10 +77,23 @@ Tween.prototype._parseData = function(){
     if(!this._from)this._from = {};
 
     parseRecursiveData(this._to, this._from, this.target);
+
+    if(this.path){
+        var distance = this.path.totalDistance();
+        if(this.pathReverse){
+            this.pathFrom = distance;
+            this.pathTo = 0;
+        }else{
+            this.pathFrom = 0;
+            this.pathTo = distance;
+        }
+    }
 };
 
 Tween.prototype.tick = function(delta){
-    if(!this._canUpdate())return this;
+    if(!(this._canUpdate()&&(this._to||this.path))){
+        return this;
+    }
     var _to, _from;
     var tick = delta*1000;
 
@@ -112,6 +130,14 @@ Tween.prototype.tick = function(delta){
                 this._from = _to;
                 this._to = _from;
 
+                if(this.path){
+                    _to = this.pathTo;
+                    _from = this.pathFrom;
+
+                    this.pathTo = _from;
+                    this.pathFrom = _to;
+                }
+
                 //this._parseData();
                 this.onTweenPingPong(realElapsed, delta);
 
@@ -123,12 +149,21 @@ Tween.prototype.tick = function(delta){
                 this._repeat++;
                 this.onTweenRepeat(realElapsed, delta, this._repeat);
                 this._elapsedTime = 0;
+
                 if(this.pingPong&&this._pingPong){
                     _to = this._to;
                     _from = this._from;
 
                     this._to = _from;
                     this._from = _to;
+
+                    if(this.path){
+                        _to = this.pathTo;
+                        _from = this.pathFrom;
+
+                        this.pathTo = _from;
+                        this.pathFrom = _to;
+                    }
 
                     this._pingPong = false;
                 }
@@ -148,14 +183,27 @@ Tween.prototype.tick = function(delta){
 Tween.prototype._apply = function(time){
     recursiveApply(this._to, this._from, this.target, time, this._elapsedTime, this.easing);
 
+    if(this.path){
+        var b = this.pathFrom,
+            c = this.pathTo - this.pathFrom,
+            d = this.time,
+            t = this._elapsedTime/d;
+
+        var distance = b + (c*this.easing(t));
+        var pos = this.path.getPointAtDistance(distance);
+        this.target.x = pos.x;
+        this.target.y = pos.y;
+    }
+
 };
 
 Tween.prototype._canUpdate = function(){
-    return (this.time || this.active || this.target || this._to);
+    return (this.time && this.active && this.target);
 };
 
-Tween.prototype.path = function(path, reverse){
-    //TODO: tween path...
+Tween.prototype.setPath = function(path, reverse){
+    this.path = path;
+    this.pathReverse = !!reverse;
     return this;
 };
 
