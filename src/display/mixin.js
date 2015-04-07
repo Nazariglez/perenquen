@@ -22,6 +22,11 @@ var mixin = module.exports = {
         return this;
     },
 
+    setAlpha: function(value){
+        this.alpha = value;
+        return this;
+    },
+
     setRotation: function(angle){
         this.rotation = angle;
         return this;
