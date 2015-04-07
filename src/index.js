@@ -32,7 +32,7 @@ var core = {
     Easing : require('./tween/Easing'),
     Tween : require('./tween/Tween'),
     TweenManager : require('./tween/TweenManager'),
-    Path : require('./extra/Path')
+    Path : require('./tween/Path')
 };
 
 //Add inheritance system

@@ -1,8 +1,6 @@
 var Graphics = require('../display/Graphics'),
     Pool = require('../extra/Pool'),
-    math = require('../../lib/pixi/src/core/math');
-
-var tmp = new Pool(math.Point, [], 20);
+    math = require('../../lib/pixi/src/core/math/index');
 
 function Path(){
     this.curveAccuracy = 30;
