@@ -28,6 +28,8 @@ function SceneManager(game){
      * @member {Scene}
      */
     this.currentScene = null;
+
+    this.setCurrentScene(this.createScene('initial'));
 }
 
 SceneManager.prototype = Object.create(Container.prototype);
@@ -80,7 +82,7 @@ SceneManager.prototype.setCurrentScene = function(scene){
  * @returns {Scene}
  */
 SceneManager.prototype.createScene = function(id){
-    var scene = new Scene();
+    var scene = new Scene(this.game);
     scene.id = (id) ? id : 'id'+this.scenes.length;
     this.addScene(scene);
 

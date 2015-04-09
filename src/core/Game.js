@@ -312,6 +312,14 @@ Game.prototype.enableAutoResize = function(value, mode){
 
 module.exports = Game;
 
+Object.defineProperties(Game.prototype, {
+    scene : {
+        get: function(){
+            return this.sceneManager.currentScene;
+        }
+    }
+});
+
 function getRenderer(width, height, options, noWebGL){
     if(navigator.isCocoonJS&&!options.view)options.view = window.document.createElement("screencanvas");
 
