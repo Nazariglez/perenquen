@@ -2,7 +2,8 @@ var PixiContainer = require('../../lib/pixi/src/core/display/Container'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
     CONST = require('../core/const'),
-    mixin = require('./mixin');
+    mixin = require('./mixin'),
+    tempPoint = new math.Point();
 
 /**
  * A container represents a collection of display objects.
@@ -240,6 +241,29 @@ Container.prototype.getLocalBounds = function (){
     this._bounds.height = this.size.y;
     return this._bounds;
 };
+
+Container.prototype.containsPoint = function( point )
+{
+    this.worldTransform.applyInverse(point,  tempPoint);
+
+    var width = this.width;
+    var height = this.height;
+    var x1 = -width * this.anchor.x;
+    var y1;
+
+    if ( tempPoint.x > x1 && tempPoint.x < x1 + width )
+    {
+        y1 = -height * this.anchor.y;
+
+        if ( tempPoint.y > y1 && tempPoint.y < y1 + height )
+        {
+            return true;
+        }
+    }
+
+    return false;
+};
+
 
 Object.defineProperties(Container.prototype, {
     /**
