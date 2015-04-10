@@ -1,6 +1,8 @@
 var PixiContainer = require('../../lib/pixi/src/core/display/Container'),
+    math = require('../../lib/pixi/src/core/math'),
     Tween = require('../tween/Tween'),
-    config = require('../core/config');
+    config = require('../core/config'),
+    tempPoint = new math.Point();
 
 var mixin = module.exports = {
     addTo: function(parent){
@@ -19,6 +21,11 @@ var mixin = module.exports = {
 
     setTint: function(value){
         this.tint = value;
+        return this;
+    },
+
+    setInteractive: function(value){
+        this.interactive = (value !== false);
         return this;
     },
 
@@ -127,5 +134,16 @@ var mixin = module.exports = {
         }
 
         return tween;
+    },
+
+    mousedown: function(e){
+        var data = e.data;
+
+        if(this.onMouseDown) {
+            data.getLocalPosition(this, tempPoint, data.global);
+            this.onMouseDown(tempPoint.x, tempPoint.y, data);
+        }
     }
+
+
 };
