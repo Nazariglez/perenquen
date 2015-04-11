@@ -1,5 +1,5 @@
 var SpriteRenderer = require('../../lib/pixi/src/core/sprites/webgl/SpriteRenderer');
-/*
+
 SpriteRenderer.prototype.render = function(sprite){
     var texture = sprite._texture;
 
@@ -31,10 +31,10 @@ SpriteRenderer.prototype.render = function(sprite){
         // if the sprite is trimmed then we need to add the extra space before transforming the sprite coords..
         var trim = texture.trim;
 
-        w1 = trim.x - aX * trim.width;
+        w1 = trim.x;
         w0 = w1 + texture.crop.width;
 
-        h1 = trim.y - aY * trim.height;
+        h1 = trim.y;
         h0 = h1 + texture.crop.height;
 
     }
@@ -121,6 +121,5 @@ SpriteRenderer.prototype.render = function(sprite){
     // increment the batchsize
     this.sprites[this.currentBatchSize++] = sprite;
 };
-*/
 
 module.exports = SpriteRenderer;

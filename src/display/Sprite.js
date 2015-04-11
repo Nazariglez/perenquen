@@ -4,6 +4,7 @@ var SpriteRenderer = require('./SpriteRenderer'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
     CONST = require('../core/const'),
+    tempPoint = new math.Point(),
     mixin = require('./mixin');
 
 function Sprite(texture){
@@ -46,33 +47,13 @@ Sprite.prototype.displayObjectUpdateTransform = function(){
         b  =  this._sr * this.scale.x;
         c  = -this._sr * this.scale.y;
         d  =  this._cr * this.scale.y;
-        tx =  this.position.x;// - pivotWidth * this.scale.x + anchorWidth*this.scale.x;
-        ty =  this.position.y;// - pivotHeight * this.scale.y + anchorHeight*this.scale.y;
+        tx =  this.position.x - anchorWidth*this.scale.x + pivotWidth*this.scale.x;
+        ty =  this.position.y - anchorHeight*this.scale.y + pivotHeight*this.scale.y;
 
-        var apx = -anchorWidth + pivotWidth;
-        var apy = -anchorHeight + pivotHeight;
-        var pax = -pivotWidth + anchorWidth;
-        var pay = -pivotHeight + anchorHeight;
-        //TODO: EL Pivot no se comporta como debe, REVISAR
-        // check for pivot.. not often used so geared towards that fact!
-        if (pivotWidth !== anchorWidth) {
-            tx += apx;
-            //tx += pivotWidth;
-            //tx += pivotWidth * this.scale.x;
-            tx -= pax * a + pay * c;
-            //tx -= apx * a + apy * c;
-
-            //tx += -pivotWidth + anchorWidth;
-        }
-
-        if (pivotHeight !== anchorHeight) {
-            ty += apy;
-            //ty += pivotHeight;
-            //ty -= pivotHeight * this.scale.y;
-            ty -= pax * b + pay * d;
-            //ty -= apx * b + apy * d;
-
-            //ty += -pivotHeight + anchorHeight;
+        if (pivotWidth || pivotHeight)
+        {
+            tx -= pivotWidth * a + pivotHeight * c;
+            ty -= pivotWidth * b + pivotHeight * d;
         }
 
         // concat the parent matrix with the objects transform.
@@ -89,8 +70,8 @@ Sprite.prototype.displayObjectUpdateTransform = function(){
         a  = this.scale.x;
         d  = this.scale.y;
 
-        tx = this.position.x;// + anchorWidth * a;
-        ty = this.position.y;// + anchorHeight * a;
+        tx = this.position.x - anchorWidth * a;
+        ty = this.position.y - anchorHeight * a;
 
         wt.a  = a  * pt.a;
         wt.b  = a  * pt.b;
@@ -110,6 +91,35 @@ Sprite.prototype.displayObjectUpdateTransform = function(){
 Sprite.prototype.setTexture = function(texture){
     this.texture = texture;
     return this;
+};
+
+Sprite.prototype.getLocalBounds = function () {
+    this._bounds.x = 0;//-this._texture._frame.width * this.anchor.x;
+    this._bounds.y = 0;//-this._texture._frame.height * this.anchor.y;
+    this._bounds.width = this._texture._frame.width;
+    this._bounds.height = this._texture._frame.height;
+    return this._bounds;
+};
+
+Sprite.prototype.containsPoint = function( point ) {
+    this.worldTransform.applyInverse(point,  tempPoint);
+
+    var width = this._texture._frame.width;
+    var height = this._texture._frame.height;
+    var x1 = 0;//-width * this.anchor.x;
+    var y1;
+
+    if ( tempPoint.x > x1 && tempPoint.x < x1 + width )
+    {
+        y1 = 0;// -height * this.anchor.y;
+
+        if ( tempPoint.y > y1 && tempPoint.y < y1 + height )
+        {
+            return true;
+        }
+    }
+
+    return false;
 };
 
 Object.defineProperties(Sprite.prototype, {

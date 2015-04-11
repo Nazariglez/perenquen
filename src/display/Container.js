@@ -230,13 +230,11 @@ Container.prototype.displayObjectUpdateTransform = function(){
 
 /**
  * Retrieves the non-global local bounds of the Container as a rectangle.
- * The calculation takes all visible children into consideration.
- *
  * @return {Rectangle} The rectangular bounding area
  */
 Container.prototype.getLocalBounds = function (){
-    this._bounds.x = -this.size.x * this.anchor.x;
-    this._bounds.y = -this.size.y * this.anchor.y;
+    this._bounds.x = 0; //-this.size.x * this.anchor.x;
+    this._bounds.y = 0; //-this.size.y * this.anchor.y;
     this._bounds.width = this.size.x;
     this._bounds.height = this.size.y;
     return this._bounds;
@@ -248,14 +246,11 @@ Container.prototype.containsPoint = function( point )
 
     var width = this.width;
     var height = this.height;
-    var x1 = -width * this.anchor.x;
-    var y1;
 
-    if ( tempPoint.x > x1 && tempPoint.x < x1 + width )
+    if ( tempPoint.x > 0 && tempPoint.x < width )
     {
-        y1 = -height * this.anchor.y;
 
-        if ( tempPoint.y > y1 && tempPoint.y < y1 + height )
+        if ( tempPoint.y > 0 && tempPoint.y < height )
         {
             return true;
         }
@@ -263,7 +258,6 @@ Container.prototype.containsPoint = function( point )
 
     return false;
 };
-
 
 Object.defineProperties(Container.prototype, {
     /**
