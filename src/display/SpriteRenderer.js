@@ -23,6 +23,8 @@ SpriteRenderer.prototype.render = function(sprite){
     // TODO trim??
     var aX = sprite.anchor.x;
     var aY = sprite.anchor.y;
+    var sX = sprite.scale.x;
+    var sY = sprite.scale.y;
 
     var w0, w1, h0, h1;
 
@@ -40,11 +42,14 @@ SpriteRenderer.prototype.render = function(sprite){
     }
     else
     {
-        w0 = (texture._frame.width ) * (1-aX);
-        w1 = (texture._frame.width ) * -aX;
+        var anchorWidth = texture._frame.width*aX,
+            anchorHeight = texture._frame.height*aY;
 
-        h0 = texture._frame.height * (1-aY);
-        h1 = texture._frame.height * -aY;
+        w0 = (texture._frame.width ) * (1-aX) + anchorWidth;
+        w1 = (texture._frame.width ) * -aX + anchorWidth;
+
+        h0 = texture._frame.height * (1-aY) + anchorHeight;
+        h1 = texture._frame.height * -aY + anchorHeight;
     }
 
     var index = this.currentBatchSize * this.vertByteSize;

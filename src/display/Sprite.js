@@ -47,13 +47,13 @@ Sprite.prototype.displayObjectUpdateTransform = function(){
         b  =  this._sr * this.scale.x;
         c  = -this._sr * this.scale.y;
         d  =  this._cr * this.scale.y;
-        tx =  this.position.x - anchorWidth*this.scale.x + pivotWidth*this.scale.x;
-        ty =  this.position.y - anchorHeight*this.scale.y + pivotHeight*this.scale.y;
+        tx =  this.position.x + pivotWidth - anchorWidth;
+        ty =  this.position.y + pivotHeight - anchorHeight;
 
         if (pivotWidth || pivotHeight)
         {
-            tx -= pivotWidth * a + pivotHeight * c;
-            ty -= pivotWidth * b + pivotHeight * d;
+            tx -= pivotWidth * this._cr + pivotHeight * -this._sr;
+            ty -= pivotWidth * this._sr + pivotHeight * this._cr;
         }
 
         // concat the parent matrix with the objects transform.
@@ -70,8 +70,8 @@ Sprite.prototype.displayObjectUpdateTransform = function(){
         a  = this.scale.x;
         d  = this.scale.y;
 
-        tx = this.position.x - anchorWidth * a;
-        ty = this.position.y - anchorHeight * a;
+        tx = this.position.x - anchorWidth;
+        ty = this.position.y - anchorHeight;
 
         wt.a  = a  * pt.a;
         wt.b  = a  * pt.b;
