@@ -143,6 +143,11 @@ function Game(width, height, options){
     if(this.config.game.scaleType !== CONST.GAME_SCALE_TYPE.NONE){
         this.enableAutoResize(true);
     }
+
+    //Disable context menu
+    this.renderer.view.addEventListener('contextmenu', function(e){
+        e.preventDefault();
+    });
 }
 
 Game.prototype.constructor = Game;
