@@ -26,10 +26,10 @@ Sprite.prototype.displayObjectUpdateTransform = function(){
     // temporary matrix variables
     var a, b, c, d, tx, ty;
 
-    var anchorWidth = this.anchor.x * this._width * this.scale.x,
-        anchorHeight = this.anchor.y * this._height * this.scale.y,
-        pivotWidth = this.pivot.x * this._width * this.scale.x,
-        pivotHeight = this.pivot.y * this._height * this.scale.y;
+    var anchorWidth = this.anchor.x * this.texture.width * this.scale.x,
+        anchorHeight = this.anchor.y * this.texture.height * this.scale.y,
+        pivotWidth = this.pivot.x * this.texture.width * this.scale.x,
+        pivotHeight = this.pivot.y * this.texture.height * this.scale.y;
 
     // so if rotation is between 0 then we can simplify the multiplication process...
     if (this.rotation % CONST.PI_2)
@@ -222,8 +222,8 @@ Sprite.prototype._renderCanvas = function (renderer) {
 
         }
 
-        var anchorWidth = this.anchor.x * this._width,
-            anchorHeight = this.anchor.y * this._height;
+        var anchorWidth = this.anchor.x * this.texture.width,
+            anchorHeight = this.anchor.y * this.texture.height;
 
         if (this.tint !== 0xFFFFFF)
         {
@@ -308,18 +308,6 @@ Object.defineProperties(Sprite.prototype, {
             if(this.parent){
                 this.parent.sortChildrenByDepth();
             }
-        }
-    },
-
-    _width: {
-        get: function(){
-            return this.texture.width;
-        }
-    },
-
-    _height: {
-        get: function(){
-            return this.texture.height;
         }
     }
 });

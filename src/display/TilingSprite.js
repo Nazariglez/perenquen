@@ -1,6 +1,7 @@
 var PixiTilingSprite = require('../../lib/pixi/src/extras/TilingSprite'),
     utils = require('../core/utils'),
     mixin = require('./mixin'),
+    CONST = require('../core/const'),
     math = require('../../lib/pixi/src/core/math'),
     config = require('../core/config'),
     tempPoint = new math.Point(),
@@ -31,7 +32,75 @@ TilingSprite.prototype.setTilePosition = function(x,y){
     return this;
 };
 
-TilingSprite.prototype.displayObjectUpdateTransform = Sprite.prototype.displayObjectUpdateTransform;
+TilingSprite.prototype.displayObjectUpdateTransform = function(){
+    // create some matrix refs for easy access
+    var pt = this.parent.worldTransform;
+    var wt = this.worldTransform;
+
+    // temporary matrix variables
+    var a, b, c, d, tx, ty;
+
+    var anchorWidth = this.anchor.x * this._width * this.scale.x,
+        anchorHeight = this.anchor.y * this._height * this.scale.y,
+        pivotWidth = this.pivot.x * this._width * this.scale.x,
+        pivotHeight = this.pivot.y * this._height * this.scale.y;
+
+    // so if rotation is between 0 then we can simplify the multiplication process...
+    if (this.rotation % CONST.PI_2)
+    {
+        // check to see if the rotation is the same as the previous render. This means we only need to use sin and cos when rotation actually changes
+        if (this.rotation !== this.rotationCache)
+        {
+            this.rotationCache = this.rotation;
+            this._sr = Math.sin(this.rotation);
+            this._cr = Math.cos(this.rotation);
+        }
+
+        // get the matrix values of the displayobject based on its transform properties..
+        a  =  this._cr * this.scale.x;
+        b  =  this._sr * this.scale.x;
+        c  = -this._sr * this.scale.y;
+        d  =  this._cr * this.scale.y;
+        tx =  this.position.x + pivotWidth - anchorWidth;
+        ty =  this.position.y + pivotHeight - anchorHeight;
+
+        if (pivotWidth || pivotHeight)
+        {
+            tx -= pivotWidth * this._cr + pivotHeight * -this._sr;
+            ty -= pivotWidth * this._sr + pivotHeight * this._cr;
+        }
+
+        // concat the parent matrix with the objects transform.
+        wt.a  = a  * pt.a + b  * pt.c;
+        wt.b  = a  * pt.b + b  * pt.d;
+        wt.c  = c  * pt.a + d  * pt.c;
+        wt.d  = c  * pt.b + d  * pt.d;
+        wt.tx = tx * pt.a + ty * pt.c + pt.tx;
+        wt.ty = tx * pt.b + ty * pt.d + pt.ty;
+    }
+    else
+    {
+        // lets do the fast version as we know there is no rotation..
+        a  = this.scale.x;
+        d  = this.scale.y;
+
+        tx = this.position.x - anchorWidth;
+        ty = this.position.y - anchorHeight;
+
+        wt.a  = a  * pt.a;
+        wt.b  = a  * pt.b;
+        wt.c  = d  * pt.c;
+        wt.d  = d  * pt.d;
+        wt.tx = tx * pt.a + ty * pt.c + pt.tx;
+        wt.ty = tx * pt.b + ty * pt.d + pt.ty;
+    }
+
+    // multiply the alphas..
+    this.worldAlpha = this.alpha * this.parent.worldAlpha;
+
+    // reset the bounds each time this is called!
+    this._currentBounds = null;
+};
 
 TilingSprite.prototype.animate = function(gameTime, delta){
     if(this.update(gameTime, delta) === false)return this;
