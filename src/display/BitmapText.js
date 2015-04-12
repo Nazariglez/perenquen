@@ -283,3 +283,5 @@ function getWordWidth(word, font){
         spaceWidth: spaceWidth*scale
     };
 }
+
+//TODO: depth??

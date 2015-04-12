@@ -2,6 +2,7 @@ var SpriteRenderer = require('./SpriteRenderer'),
     PixiSprite = require('../../lib/pixi/src/core/sprites/Sprite'),
     Container = require('./Container'),
     utils = require('../core/utils'),
+    config = require('../core/config'),
     math = require('../../lib/pixi/src/core/math'),
     CONST = require('../core/const'),
     tempPoint = new math.Point(),
@@ -306,7 +307,7 @@ Object.defineProperties(Sprite.prototype, {
 
             this._depth = depth;
             if(this.parent){
-                this.parent.sortChildrenByDepth();
+                if(config.useSortChildrenByDepth)this.parent.sortChildrenByDepth();
             }
         }
     }

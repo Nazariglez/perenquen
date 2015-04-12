@@ -2,6 +2,7 @@ var PixiContainer = require('../../lib/pixi/src/core/display/Container'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
     CONST = require('../core/const'),
+    config = require('../core/config'),
     mixin = require('./mixin'),
     tempPoint = new math.Point();
 
@@ -299,7 +300,7 @@ Object.defineProperties(Container.prototype, {
 
             this._depth = depth;
             if(this.parent){
-                this.parent.sortChildrenByDepth();
+                if(config.useSortChildrenByDepth)this.parent.sortChildrenByDepth();
             }
         }
     }

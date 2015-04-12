@@ -301,7 +301,7 @@ Object.defineProperties(TilingSprite.prototype, {
 
             this._depth = depth;
             if(this.parent){
-                this.parent.sortChildrenByDepth();
+                if(config.useSortChildrenByDepth)this.parent.sortChildrenByDepth();
             }
         }
     },
