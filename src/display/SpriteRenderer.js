@@ -23,8 +23,6 @@ SpriteRenderer.prototype.render = function(sprite){
     // TODO trim??
     var aX = sprite.anchor.x;
     var aY = sprite.anchor.y;
-    var sX = sprite.scale.x;
-    var sY = sprite.scale.y;
 
     var w0, w1, h0, h1;
 

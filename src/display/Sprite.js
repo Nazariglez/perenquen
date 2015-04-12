@@ -222,8 +222,8 @@ Sprite.prototype._renderCanvas = function (renderer) {
 
         }
 
-        var anchorWidth = this.anchor.x * texture.width,
-            anchorHeight = this.anchor.y * texture.height;
+        var anchorWidth = this.anchor.x * this._width,
+            anchorHeight = this.anchor.y * this._height;
 
         if (this.tint !== 0xFFFFFF)
         {
