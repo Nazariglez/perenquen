@@ -1,5 +1,6 @@
 require('./polyfill');
 var CONST = require('./core/const'),
+    math = require('../lib/pixi/src/core/math'),
     addInherits = require('./core/utils').addInherits;
     interactionMouse = require('./input');
 
@@ -23,6 +24,12 @@ var core = {
     Pool : require('./extra/Pool'),
     NinePatch: require('./extra/NinePatch'),
     Point : require('../lib/pixi/src/core/math/Point'),
+    Matrix : require('../lib/pixi/src/core/math/Matrix'),
+    Rectangle : require('../lib/pixi/src/core/math/shapes/Rectangle'),
+    Circle : require('../lib/pixi/src/core/math/shapes/Circle'),
+    Polygon : require('../lib/pixi/src/core/math/shapes/Polygon'),
+    RoundedRectangle : require('../lib/pixi/src/core/math/shapes/RoundedRectangle'),
+    Ellipse : require('../lib/pixi/src/core/math/shapes/Ellipse'),
     ParticleContainer : require('./display/ParticleContainer'),
     Text : require('./display/Text'),
     BitmapText : require('./display/BitmapText'),
@@ -32,7 +39,8 @@ var core = {
     Easing : require('./tween/Easing'),
     Tween : require('./tween/Tween'),
     TweenManager : require('./tween/TweenManager'),
-    Path : require('./tween/Path')
+    Path : require('./tween/Path'),
+
 };
 
 //Add inheritance system
