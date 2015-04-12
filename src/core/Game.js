@@ -1,9 +1,9 @@
 var CONST = require('./const'),
     utils = require('./utils'),
+    config = require('./config'),
     AssetLoader = require('../loader/AssetLoader'),
     DataManager = require('../extra/DataManager'),
     autoDetectRenderer = require('../../lib/pixi/src/core').autoDetectRenderer,
-    WebGLRenderer = require('../../lib/pixi/src/core/renderers/webgl/WebGLRenderer'),
     SceneManager = require('./SceneManager');
 
 /**
@@ -26,7 +26,7 @@ function Game(width, height, options){
      * @member {object}
      * @default CONST.DEFAULT_GAME_OPTIONS
      */
-    this.config = utils.defaultObject(CONST.DEFAULT_GAME_OPTIONS, options);
+    this.config = parseConfig(options);
     utils._saidHello = !this.config.sayHello;
 
     var rendererOptions = parseRendererConfig(CONST.DEFAULT_RENDER_OPTIONS, this.config);
@@ -103,7 +103,7 @@ function Game(width, height, options){
      * Whether the renderer is a webgl
      * @member {boolean}
      */
-    this.isWebGL = (this.renderer instanceof WebGLRenderer);
+    this.isWebGL = (this.renderer.type === CONST.RENDERER_TYPE.WEBGL);
 
     /**
      * The scene manager for this game
@@ -332,6 +332,13 @@ function getRenderer(width, height, options, noWebGL){
     window.document.body.appendChild(renderer.view);
 
     return renderer;
+}
+
+function parseConfig(options){
+    var cfg = utils.defaultObject(CONST.DEFAULT_GAME_OPTIONS, options);
+    config.useDeltaAnimation = cfg.useDeltaAnimation;
+    config.useSortChildrenByDepth = cfg.useSortChildrenByDepth;
+    return cfg;
 }
 
 function parseRendererConfig(defaultConfig, config){
