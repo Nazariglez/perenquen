@@ -5,8 +5,7 @@ var SpriteRenderer = require('./SpriteRenderer'),
     config = require('../core/config'),
     math = require('../../lib/pixi/src/core/math'),
     CONST = require('../core/const'),
-    tempPoint = new math.Point(),
-    mixin = require('./mixin');
+    tempPoint = new math.Point();
 
 function Sprite(texture){
     PixiSprite.call(this, texture);
@@ -17,7 +16,6 @@ function Sprite(texture){
 
 Sprite.prototype = Object.create(PixiSprite.prototype);
 Sprite.prototype.constructor = Sprite;
-utils.mixin(Sprite, mixin);
 
 Sprite.prototype.displayObjectUpdateTransform = function(){
     // create some matrix refs for easy access

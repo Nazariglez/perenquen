@@ -1,8 +1,4 @@
-var Graphics = require('../../lib/pixi/src/core/graphics/Graphics'),
-    utils = require('../core/utils'),
-    mixin = require('./mixin');
-
-utils.mixin(Graphics, mixin);
+var Graphics = require('../../lib/pixi/src/core/graphics/Graphics');
 
 Graphics.prototype.drawPath = function(path){
     this.drawShape(path.polygon);

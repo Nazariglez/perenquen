@@ -1,6 +1,5 @@
 var PixiTilingSprite = require('../../lib/pixi/src/extras/TilingSprite'),
     utils = require('../core/utils'),
-    mixin = require('./mixin'),
     CONST = require('../core/const'),
     math = require('../../lib/pixi/src/core/math'),
     config = require('../core/config'),
@@ -20,7 +19,6 @@ function TilingSprite(texture, width, height){
 
 TilingSprite.prototype = Object.create(PixiTilingSprite.prototype);
 TilingSprite.prototype.constructor = TilingSprite;
-utils.mixin(TilingSprite, mixin);
 
 TilingSprite.prototype.setTileScale = function(x,y){
     this.tileScale.set(x,y);

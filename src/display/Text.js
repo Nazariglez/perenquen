@@ -1,8 +1,7 @@
 var PixiText = require('../../lib/pixi/src/core/text/Text'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
-    CONST = require('../core/const'),
-    mixin = require('./mixin');
+    CONST = require('../core/const');
 
 function Text(text, style, resolution){
     text = text || ' ';
@@ -14,7 +13,6 @@ function Text(text, style, resolution){
 
 Text.prototype = Object.create(PixiText.prototype);
 Text.prototype.constructor = Text;
-utils.mixin(Text, mixin);
 
 Text.fontPropertiesCache = {};
 Text.fontPropertiesCanvas = document.createElement('canvas');

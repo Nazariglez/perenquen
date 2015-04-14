@@ -3,8 +3,7 @@ var PixiBitmapText = require('../../lib/pixi/src/extras/BitmapText'),
     Sprite = require('./Sprite'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
-    CONST = require('../core/const'),
-    mixin = require('./mixin');
+    CONST = require('../core/const');
 
 function BitmapText(text, style){
     text = text || ' ';
@@ -20,7 +19,6 @@ function BitmapText(text, style){
 
 BitmapText.prototype = Object.create(PixiBitmapText.prototype);
 BitmapText.prototype.constructor = BitmapText;
-utils.mixin(BitmapText, mixin);
 
 BitmapText.prototype.containerUpdateTransform = Container.prototype.updateTransform;
 BitmapText.prototype.displayObjectUpdateTransform = Container.prototype.displayObjectUpdateTransform;

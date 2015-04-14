@@ -1,10 +1,11 @@
-var PixiContainer = require('../../lib/pixi/src/core/display/Container'),
+var DisplayObject = require('./DisplayObject'),
+    PixiContainer = require('../../lib/pixi/src/core/display/Container'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
     CONST = require('../core/const'),
     config = require('../core/config'),
-    mixin = require('./mixin'),
-    tempPoint = new math.Point();
+    tempPoint = new math.Point(),
+    PixiAddChild = PixiContainer.prototype.addChild;
 
 /**
  * A container represents a collection of display objects.
@@ -38,7 +39,6 @@ function Container(){
 
 Container.prototype = Object.create(PixiContainer.prototype);
 Container.prototype.constructor = Container;
-utils.mixin(Container, mixin);
 
 /**
  * Set the container width and height
@@ -258,6 +258,13 @@ Container.prototype.containsPoint = function( point )
     }
 
     return false;
+};
+
+//Overwrite pixi addchild
+PixiContainer.prototype.addChild = function(child){
+    PixiAddChild.call(this, child);
+    if(config.useSortChildrenByDepth)this.sortChildrenByDepth();
+    return this;
 };
 
 Object.defineProperties(Container.prototype, {
