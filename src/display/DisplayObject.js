@@ -1,6 +1,7 @@
 var DisplayObject = require('../../lib/pixi/src/core/display/DisplayObject'),
     config = require('../core/config'),
     math = require('../../lib/pixi/src/core/math'),
+    InputManager = require('../input/InputManager'),
     Tween = require('../tween/Tween');
 
 DisplayObject.prototype.addTo = function(parent){
