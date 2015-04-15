@@ -164,7 +164,6 @@ Text.prototype.setWordWrap = function(value){
 };
 
 //TODO: Pivot...
-//TODO: Check a bug in webGL renderer when te .text is changed
 //TODO: depth??
 module.exports = Text;
 
