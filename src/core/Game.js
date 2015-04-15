@@ -3,6 +3,7 @@ var CONST = require('./const'),
     config = require('./config'),
     AssetLoader = require('../loader/AssetLoader'),
     DataManager = require('../extra/DataManager'),
+    InputManager = require('../input/InputManager'),
     autoDetectRenderer = require('../../lib/pixi/src/core').autoDetectRenderer,
     SceneManager = require('./SceneManager');
 
@@ -123,6 +124,8 @@ function Game(width, height, options){
      */
     this.dataManager = new DataManager(this);
 
+    this.inputManager = new InputManager(this);
+
     /**
      * Store the resize method
      * @member {null|function}
@@ -143,11 +146,6 @@ function Game(width, height, options){
     if(this.config.game.scaleType !== CONST.GAME_SCALE_TYPE.NONE){
         this.enableAutoResize(true);
     }
-
-    //Disable context menu
-    this.renderer.view.addEventListener('contextmenu', function(e){
-        e.preventDefault();
-    });
 }
 
 Game.prototype.constructor = Game;

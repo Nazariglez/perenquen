@@ -2,7 +2,7 @@ require('./polyfill');
 var CONST = require('./core/const'),
     math = require('../lib/pixi/src/core/math'),
     addInherits = require('./core/utils').addInherits;
-    interactionMouse = require('./input');
+    //interactionMouse = require('./input');
 
 var core = {
     config : require('./core/config'),
@@ -40,6 +40,7 @@ var core = {
     Tween : require('./tween/Tween'),
     TweenManager : require('./tween/TweenManager'),
     Path : require('./tween/Path'),
+    InputManager : require('./input/InputManager')
 
 };
 
