@@ -35,4 +35,10 @@ InputManager.prototype.disableMouse = function(){
     return this.enableMouse(false);
 };
 
+InputManager.prototype.update = function(gameTime, delta){
+    if(this.mouse.isEnabled){
+        this.mouse.update(gameTime, delta);
+    }
+};
+
 module.exports = InputManager;

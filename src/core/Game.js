@@ -190,6 +190,7 @@ Game.prototype.animate = function(){
     this.updateTime();
     this.renderer.render(this.sceneManager);
     this.sceneManager.animate(this.time, this.delta);
+    this.inputManager.update(this.time, this.delta);
 
     this.postUpdate(this.time, this.delta);
     return this;
