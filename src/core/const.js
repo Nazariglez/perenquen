@@ -94,6 +94,8 @@ constants.DEFAULT_GAME_OPTIONS = {
         enableKeyboard: false,
         enableGamepad: false,
         enableAccelerometer: false,
+
+        mouseCheckFrecuency: 30,
         disableContextMenu: true,
         preventDefault: true
     }

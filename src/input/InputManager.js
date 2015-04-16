@@ -4,7 +4,7 @@ function InputManager(game){
     this.game = game;
     this.config = this.game.config.input;
 
-    this.mouse = new Mouse(this.game, this.config.preventDefault);
+    this.mouse = new Mouse(this.game, this.config.preventDefault, this.config.mouseCheckFrecuency);
 
     if(this.config.disableContextMenu){
         //Disable context menu
