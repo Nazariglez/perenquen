@@ -22,9 +22,6 @@ function Mouse(game, preventDefault, checkFrecuency){
     this._onMouseOut = this._onMouseOut.bind(this);
     this._onMouseMove = this._onMouseMove.bind(this);
 
-    this.isDown = false;
-    this.isDragging = false;
-
     this.stopPropagation = false;
 
     var scope = this;
@@ -44,7 +41,7 @@ function Mouse(game, preventDefault, checkFrecuency){
         }
     };
 
-    //TODO: Wheel!!!
+    //TODO: Wheel!!! click, dblclick, touches, tap, doubletap
 }
 
 Mouse.prototype.constructor = Mouse;
@@ -146,6 +143,16 @@ Mouse.prototype.processEvent = function(parent){
                         this.fireState(object, Mouse.States.rightUp);
                     }
 
+                    if(this.states[Mouse.States.middleDown]){
+                        object._middleDown = true;
+                        this.fireState(object, Mouse.States.middleDown);
+                    }
+
+                    if(this.states[Mouse.States.middleUp]){
+                        object._middleDown = false;
+                        this.fireState(object, Mouse.States.middleUp);
+                    }
+
                     if(this.states[Mouse.States.mouseMove]){
                         this.fireState(object, Mouse.States.mouseMove);
                         if(object._mouseDown){
@@ -153,6 +160,9 @@ Mouse.prototype.processEvent = function(parent){
                         }
                         if(object._rightDown){
                             this.fireState(object, Mouse.States.rightDrag);
+                        }
+                        if(object._middleDown){
+                            this.fireState(object, Mouse.States.middleDrag);
                         }
                     }
                 }
@@ -177,6 +187,13 @@ Mouse.prototype.processEvent = function(parent){
                         }
                     }
 
+                    if(this.states[Mouse.States.middleUp]){
+                        if(object._middleDown) {
+                            object._middleDown = false;
+                            this.fireState(object, Mouse.States.middleUp);
+                        }
+                    }
+
                     if(this.states[Mouse.States.mouseMove]){
                         if(object._mouseDown) {
                             this.fireState(object, Mouse.States.mouseDrag);
@@ -184,6 +201,10 @@ Mouse.prototype.processEvent = function(parent){
 
                         if(object._rightDown){
                             this.fireState(object, Mouse.States.rightDrag);
+                        }
+
+                        if(object._middleDown){
+                            this.fireState(object, Mouse.States.middleDrag);
                         }
                     }
                 }
@@ -235,6 +256,15 @@ Mouse.prototype.fireState = function(object, state){
         case Mouse.States.rightDrag:
             evt = "onRightDrag";
             break;
+        case Mouse.States.middleDown:
+            evt = "onMiddleDown";
+            break;
+        case Mouse.States.middleUp:
+            evt = "onMiddleUp";
+            break;
+        case Mouse.States.middleDrag:
+            evt = "onMiddleDrag";
+            break;
     }
 
     if(object[evt]){
@@ -268,8 +298,15 @@ Mouse.prototype._onMouseDown = function(e){
         e.preventDefault();
     }
 
+    var state = Mouse.States.mouseDown;
     var isRightButton = e.button === 2 || e.which === 3;
-    var state = (isRightButton) ? Mouse.States.rightDown : Mouse.States.mouseDown;
+    var isMiddleButton = e.button === 1 || e.which === 2;
+
+    if(isRightButton){
+        state = Mouse.States.rightDown;
+    }else if(isMiddleButton){
+        state = Mouse.States.middleDown;
+    }
 
     this.states[state] = true;
 };
@@ -280,8 +317,15 @@ Mouse.prototype._onMouseUp = function(e){
         e.preventDefault();
     }
 
+    var state = Mouse.States.mouseUp;
     var isRightButton = e.button === 2 || e.which === 3;
-    var state = (isRightButton) ? Mouse.States.rightUp : Mouse.States.mouseUp;
+    var isMiddleButton = e.button === 1 || e.which === 2;
+
+    if(isRightButton){
+        state = Mouse.States.rightUp;
+    }else if(isMiddleButton){
+        state = Mouse.States.middleUp;
+    }
 
     this.states[state] = true;
 };
@@ -301,7 +345,6 @@ Mouse.prototype._onMouseOut = function(e){
         e.preventDefault();
     }
 
-    //this.states[Mouse.States.mouseOut] = true;
 };
 
 Mouse.prototype._onMouseOver = function(e){
@@ -310,7 +353,6 @@ Mouse.prototype._onMouseOver = function(e){
         e.preventDefault();
     }
 
-    //this.states[Mouse.States.mouseOver] = true;
 };
 
 Mouse.prototype.getLocalPosition = function (displayObject, point, globalPos) {
@@ -339,8 +381,11 @@ Mouse.States = {
     rightDown: 4,
     rightUp: 5,
     rightDrag: 6,
-    mouseOver: 7,
-    mouseOut: 8
+    middleDown: 7,
+    middleUp: 8,
+    middleDrag: 9,
+    mouseOver: 10,
+    mouseOut: 11
 };
 
 
