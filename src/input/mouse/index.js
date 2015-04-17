@@ -5,6 +5,7 @@ function Mouse(game, preventDefault, checkFrecuency){
     this.global = new math.Point();
     this.canvas = this.game.canvas;
     this.resolution = this.game.renderer.resolution || 1;
+    this.delta = 0;
 
     this.tempPoint = new math.Point();
     this.isEnabled = false;
@@ -21,6 +22,7 @@ function Mouse(game, preventDefault, checkFrecuency){
     this._onMouseOver = this._onMouseOver.bind(this);
     this._onMouseOut = this._onMouseOut.bind(this);
     this._onMouseMove = this._onMouseMove.bind(this);
+    this._onMouseWheel = this._onMouseWheel.bind(this);
 
     this.stopPropagation = false;
 
@@ -30,6 +32,7 @@ function Mouse(game, preventDefault, checkFrecuency){
         y: -1,
         globalPosition: this.global,
         target: null,
+        delta: this.delta,
         getPosition: function(target){
             return scope.getLocalPosition(target || this.target, scope.tempPoint, this.globalPosition);
         },
@@ -41,7 +44,7 @@ function Mouse(game, preventDefault, checkFrecuency){
         }
     };
 
-    //TODO: Wheel!!! click, dblclick, touches, tap, doubletap
+    //TODO: pixelperfect?, click, dblclick, touches, tap, doubletap
 }
 
 Mouse.prototype.constructor = Mouse;
@@ -57,8 +60,6 @@ Mouse.prototype.enable = function(value){
         this._disableEvents();
     }
 
-    console.log('Mouse', this.isEnabled);
-
     return this;
 };
 
@@ -72,6 +73,14 @@ Mouse.prototype._enableEvents = function(){
     //this.canvas.addEventListener('mouseout', this._onMouseOut, true);
     //this.canvas.addEventListener('mouseover', this._onMouseOver, true);
     window.addEventListener('mouseup', this._onMouseUp, true);
+
+    if('onwheel' in window){
+        this.canvas.addEventListener('wheel', this._onMouseWheel, true);
+    }else if('onmousewheel' in window){
+        this.canvas.addEventListener('mousewheel', this._onMouseWheel, true);
+    }else if('MouseScrollEvent' in window){
+        this.canvas.addEventListener('DOMMouseScroll', this._onMouseWheel, true);
+    }
 };
 
 Mouse.prototype._disableEvents = function(){
@@ -80,6 +89,14 @@ Mouse.prototype._disableEvents = function(){
     //this.canvas.removeEventListener('mouseout', this._onMouseOut, true);
     //this.canvas.removeEventListener('mouseover', this._onMouseOver, true);
     window.removeEventListener('mouseup', this._onMouseUp, true);
+
+    if('onwheel' in window){
+        this.canvas.removeEventListener('wheel', this._onMouseWheel, true);
+    }else if('onmousewheel' in window){
+        this.canvas.removeEventListener('mousewheel', this._onMouseWheel, true);
+    }else if('MouseScrollEvent' in window){
+        this.canvas.removeEventListener('DOMMouseScroll', this._onMouseWheel, true);
+    }
 };
 
 Mouse.prototype.getGlobalCoords = function(e){
@@ -112,6 +129,7 @@ Mouse.prototype.processEvent = function(parent){
             this.event.y = this.tempPoint.y;
             this.event.globalPosition = this.global;
             this.event.target = object;
+            this.event.delta = this.delta;
 
             var hit = this.hit(object, this.global);
 
@@ -164,6 +182,10 @@ Mouse.prototype.processEvent = function(parent){
                         if(object._middleDown){
                             this.fireState(object, Mouse.States.middleDrag);
                         }
+                    }
+
+                    if(this.states[Mouse.States.mouseWheel]){
+                        this.fireState(object, Mouse.States.mouseWheel);
                     }
                 }
             }else{
@@ -265,6 +287,9 @@ Mouse.prototype.fireState = function(object, state){
         case Mouse.States.middleDrag:
             evt = "onMiddleDrag";
             break;
+        case Mouse.States.mouseWheel:
+            evt = "onMouseWheel";
+            break;
     }
 
     if(object[evt]){
@@ -355,6 +380,17 @@ Mouse.prototype._onMouseOver = function(e){
 
 };
 
+Mouse.prototype._onMouseWheel = function(e){
+    this.originalEvent = e;
+    if(this.preventDefault){
+        e.preventDefault();
+    }
+
+    //TODO: Firefox check...
+    this.delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+    this.states[Mouse.States.mouseWheel] = true;
+};
+
 Mouse.prototype.getLocalPosition = function (displayObject, point, globalPos) {
     var worldTransform = displayObject.worldTransform;
     var global = globalPos ? globalPos : this.global;
@@ -385,7 +421,8 @@ Mouse.States = {
     middleUp: 8,
     middleDrag: 9,
     mouseOver: 10,
-    mouseOut: 11
+    mouseOut: 11,
+    mouseWheel: 12
 };
 
 
