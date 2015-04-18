@@ -42,7 +42,7 @@ function Mouse(game, preventDefault, checkFrecuency){
         this.states.push([]);
     }
 
-    //TODO: pixelperfect?, click, dblclick, tap, doubletap?
+    //TODO: pixelperfect?
 }
 
 Mouse.prototype.constructor = Mouse;
@@ -166,8 +166,12 @@ Mouse.prototype.processEvent = function(parent){
                         }
 
                         if (this.states[n][Mouse.States.mouseUp]) {
-                            object._mouseData.mouseDown[n] = false;
                             this.fireState(object, Mouse.States.mouseUp, n);
+
+                            if(object._mouseData.mouseDown[n]){
+                                this.fireState(object, Mouse.States.mouseClick, n);
+                            }
+                            object._mouseData.mouseDown[n] = false;
                         }
 
                         if (this.states[n][Mouse.States.rightDown]) {
@@ -176,8 +180,12 @@ Mouse.prototype.processEvent = function(parent){
                         }
 
                         if (this.states[n][Mouse.States.rightUp]) {
-                            object._mouseData.rightDown = false;
                             this.fireState(object, Mouse.States.rightUp);
+
+                            if(object._mouseData.rightDown){
+                                this.fireState(object, Mouse.States.rightClick);
+                            }
+                            object._mouseData.rightDown = false;
                         }
 
                         if (this.states[n][Mouse.States.middleDown]) {
@@ -186,8 +194,12 @@ Mouse.prototype.processEvent = function(parent){
                         }
 
                         if (this.states[n][Mouse.States.middleUp]) {
-                            object._mouseData.middleDown = false;
                             this.fireState(object, Mouse.States.middleUp);
+
+                            if(object._mouseData.middleDown){
+                                this.fireState(object, Mouse.States.middleClick);
+                            }
+                            object._mouseData.middleDown = false;
                         }
 
                         if (this.states[n][Mouse.States.mouseMove]) {
@@ -323,6 +335,15 @@ Mouse.prototype.fireState = function(object, state, id){
             break;
         case Mouse.States.mouseWheel:
             evt = "onMouseWheel";
+            break;
+        case Mouse.States.mouseClick:
+            evt = "onMouseClick";
+            break;
+        case Mouse.States.rightClick:
+            evt = "onRightClick";
+            break;
+        case Mouse.States.middleClick:
+            evt = "onMiddleClick";
             break;
     }
 
@@ -550,9 +571,10 @@ Mouse.States = {
     mouseOver: 10,
     mouseOut: 11,
     mouseWheel: 12,
-    touchDown: 13,
-    touchUp: 14,
-    touchMove: 15
+    mouseClick: 13,
+    mouseDblClick: 14,
+    rightClick: 15,
+    middleClick: 16
 };
 
 
