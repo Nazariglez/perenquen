@@ -1,4 +1,5 @@
-var math = require('../../../lib/pixi/src/core/math');
+var math = require('../../../lib/pixi/src/core/math'),
+    EventData = require('./EventData');
 
 function Mouse(game, preventDefault, checkFrecuency){
     this.game = game;
@@ -26,23 +27,17 @@ function Mouse(game, preventDefault, checkFrecuency){
 
     this.stopPropagation = false;
 
-    var scope = this;
-    this.event = {
-        x: -1,
-        y: -1,
-        globalPosition: this.global,
-        target: null,
-        delta: this.delta,
-        getPosition: function(target){
-            return scope.getLocalPosition(target || this.target, scope.tempPoint, this.globalPosition);
-        },
-        stopPropagation: function(){
-            scope.stopPropagation = true;
-        },
-        hit: function(object, position){
-            return scope.hit(object, position || this.globalPosition);
+    var evt = null;
+    this.event = [];
+    if('ontouchstart' in window){
+        for(var i = 0; i < 10; i++){
+            evt = new EventData(this, i);
+            this.event.push(evt);
         }
-    };
+    }else{
+        evt = new EventData(this);
+        this.event.push(evt);
+    }
 
     //TODO: pixelperfect?, click, dblclick, touches, tap, doubletap
     //TODO: touch y multitouch http://www.html5rocks.com/es/mobile/touch/
@@ -119,6 +114,8 @@ Mouse.prototype.getGlobalCoords = function(e){
 
     this.global.x = ( ( x - rect.left ) * (this.canvas.width  / rect.width  ) ) / this.resolution;
     this.global.y = ( ( y - rect.top  ) * (this.canvas.height / rect.height ) ) / this.resolution;
+
+    return this.global;
 };
 
 Mouse.prototype.processEvent = function(parent){
@@ -127,119 +124,126 @@ Mouse.prototype.processEvent = function(parent){
     for(var i = len-1; i >= 0; i--){
         var object = parent.children[i];
 
-        if(object){
-            if(object.paused||!object.visible||this.stopPropagation){
+        if(object) {
+            if (object.paused || !object.visible || this.stopPropagation) {
                 return;
             }
 
-            if(object.children.length>0){
+            if (object.children.length > 0) {
                 this.processEvent(object);
                 this.stopPropagation = false;
             }
 
-            this.getLocalPosition(object, this.tempPoint, this.global);
-            this.event.x = this.tempPoint.x;
-            this.event.y = this.tempPoint.y;
-            this.event.globalPosition = this.global;
-            this.event.target = object;
-            this.event.delta = this.delta;
-
-            var hit = this.hit(object, this.global);
-
-            if(hit){
-
-                if(object.interactive){
-                    if(!object._mouseOver){
-                        object._mouseOver = true;
-                        this.fireState(object, Mouse.States.mouseOver);
-                    }
-
-                    if(this.states[Mouse.States.mouseDown]){
-                        object._mouseDown = true;
-                        this.fireState(object, Mouse.States.mouseDown);
-                    }
-
-                    if(this.states[Mouse.States.mouseUp]){
-                        object._mouseDown = false;
-                        this.fireState(object, Mouse.States.mouseUp);
-                    }
-
-                    if(this.states[Mouse.States.rightDown]){
-                        object._rightDown = true;
-                        this.fireState(object, Mouse.States.rightDown);
-                    }
-
-                    if(this.states[Mouse.States.rightUp]){
-                        object._rightDown = false;
-                        this.fireState(object, Mouse.States.rightUp);
-                    }
-
-                    if(this.states[Mouse.States.middleDown]){
-                        object._middleDown = true;
-                        this.fireState(object, Mouse.States.middleDown);
-                    }
-
-                    if(this.states[Mouse.States.middleUp]){
-                        object._middleDown = false;
-                        this.fireState(object, Mouse.States.middleUp);
-                    }
-
-                    if(this.states[Mouse.States.mouseMove]){
-                        this.fireState(object, Mouse.States.mouseMove);
-                        if(object._mouseDown){
-                            this.fireState(object, Mouse.States.mouseDrag);
-                        }
-                        if(object._rightDown){
-                            this.fireState(object, Mouse.States.rightDrag);
-                        }
-                        if(object._middleDown){
-                            this.fireState(object, Mouse.States.middleDrag);
-                        }
-                    }
-
-                    if(this.states[Mouse.States.mouseWheel]){
-                        this.fireState(object, Mouse.States.mouseWheel);
-                    }
+            for (var n = 0; n < this.event.length; n++) {
+                if(this.event[n].isTouch && !this.event[n].isDown){
+                    //if is touch event and is not down continue the loop
+                    continue;
+                }else{
+                    this.event[n].delta = this.delta;
                 }
-            }else{
-                if(object.interactive){
-                    if(object._mouseOver){
-                        object._mouseOver = false;
-                        this.fireState(object, Mouse.States.mouseOut);
-                    }
 
-                    if(this.states[Mouse.States.mouseUp]){
-                        if(object._mouseDown) {
-                            object._mouseDown = false;
-                            this.fireState(object, Mouse.States.mouseUp);
+                this.getLocalPosition(object, this.tempPoint, this.event[n].globalPosition);
+                this.event[n].x = this.tempPoint.x;
+                this.event[n].y = this.tempPoint.y;
+                this.event[n].target = object;
+
+                var hit = this.hit(object, this.event[n].globalPosition);
+
+                if (hit) {
+
+                    if (object.interactive) {
+                        if (!object._mouseOver) {
+                            object._mouseOver = true;
+                            this.fireState(object, Mouse.States.mouseOver);
                         }
-                    }
 
-                    if(this.states[Mouse.States.rightUp]){
-                        if(object._rightDown) {
+                        if (this.states[Mouse.States.mouseDown]) {
+                            object._mouseDown = true;
+                            this.fireState(object, Mouse.States.mouseDown, n);
+                        }
+
+                        if (this.states[Mouse.States.mouseUp]) {
+                            object._mouseDown = false;
+                            this.fireState(object, Mouse.States.mouseUp, n);
+                        }
+
+                        if (this.states[Mouse.States.rightDown]) {
+                            object._rightDown = true;
+                            this.fireState(object, Mouse.States.rightDown);
+                        }
+
+                        if (this.states[Mouse.States.rightUp]) {
                             object._rightDown = false;
                             this.fireState(object, Mouse.States.rightUp);
                         }
-                    }
 
-                    if(this.states[Mouse.States.middleUp]){
-                        if(object._middleDown) {
+                        if (this.states[Mouse.States.middleDown]) {
+                            object._middleDown = true;
+                            this.fireState(object, Mouse.States.middleDown);
+                        }
+
+                        if (this.states[Mouse.States.middleUp]) {
                             object._middleDown = false;
                             this.fireState(object, Mouse.States.middleUp);
                         }
+
+                        if (this.states[Mouse.States.mouseMove]) {
+                            this.fireState(object, Mouse.States.mouseMove);
+                            if (object._mouseDown) {
+                                this.fireState(object, Mouse.States.mouseDrag, n);
+                            }
+                            if (object._rightDown) {
+                                this.fireState(object, Mouse.States.rightDrag);
+                            }
+                            if (object._middleDown) {
+                                this.fireState(object, Mouse.States.middleDrag);
+                            }
+                        }
+
+                        if (this.states[Mouse.States.mouseWheel]) {
+                            this.fireState(object, Mouse.States.mouseWheel);
+                        }
                     }
-
-                    if(this.states[Mouse.States.mouseMove]){
-                        if(object._mouseDown) {
-                            this.fireState(object, Mouse.States.mouseDrag);
+                } else {
+                    if (object.interactive) {
+                        if (object._mouseOver) {
+                            object._mouseOver = false;
+                            this.fireState(object, Mouse.States.mouseOut);
                         }
 
-                        if(object._rightDown){
-                            this.fireState(object, Mouse.States.rightDrag);
+                        if (this.states[Mouse.States.mouseUp]) {
+                            if (object._mouseDown) {
+                                object._mouseDown = false;
+                                this.fireState(object, Mouse.States.mouseUp, n);
+                            }
                         }
 
-                        if(object._middleDown){
-                            this.fireState(object, Mouse.States.middleDrag);
+                        if (this.states[Mouse.States.rightUp]) {
+                            if (object._rightDown) {
+                                object._rightDown = false;
+                                this.fireState(object, Mouse.States.rightUp);
+                            }
+                        }
+
+                        if (this.states[Mouse.States.middleUp]) {
+                            if (object._middleDown) {
+                                object._middleDown = false;
+                                this.fireState(object, Mouse.States.middleUp);
+                            }
+                        }
+
+                        if (this.states[Mouse.States.mouseMove]) {
+                            if (object._mouseDown) {
+                                this.fireState(object, Mouse.States.mouseDrag, n);
+                            }
+
+                            if (object._rightDown) {
+                                this.fireState(object, Mouse.States.rightDrag);
+                            }
+
+                            if (object._middleDown) {
+                                this.fireState(object, Mouse.States.middleDrag);
+                            }
                         }
                     }
                 }
@@ -261,7 +265,8 @@ Mouse.prototype.hit = function(object, position){
     return hit;
 };
 
-Mouse.prototype.fireState = function(object, state){
+Mouse.prototype.fireState = function(object, state, id){
+    id = id || 0;
     var evt = "";
     switch(state){
         case Mouse.States.mouseDown:
@@ -306,7 +311,7 @@ Mouse.prototype.fireState = function(object, state){
     }
 
     if(object[evt]){
-        object[evt](this.event);
+        object[evt](this.event[id]);
     }
 };
 
@@ -320,8 +325,8 @@ Mouse.prototype.update = function(gameTime, delta){
 
     this.lastTime = gameTime;
 
-    if(this.originalEvent && this.states.indexOf(true) >= 0){
-        this.getGlobalCoords(this.originalEvent);
+    if(this.states.indexOf(true) >= 0){
+        //this.getGlobalCoords(this.originalEvent);
         this.processEvent(this.game.sceneManager);
     }
 
@@ -331,10 +336,10 @@ Mouse.prototype.update = function(gameTime, delta){
 };
 
 Mouse.prototype._onMouseDown = function(e){
-    this.originalEvent = e;
     if(this.preventDefault){
         e.preventDefault();
     }
+
     var state = Mouse.States.mouseDown;
     if(!e.targetTouches) {
         var isRightButton = e.button === 2 || e.which === 3;
@@ -345,22 +350,30 @@ Mouse.prototype._onMouseDown = function(e){
         } else if (isMiddleButton) {
             state = Mouse.States.middleDown;
         }
+
+        this.event[0].isTouch = false;
+        this.event[0].originalEvent = e;
+        this.event[0].isDown = true;
+        this.event[0].globalPosition.copy(this.getGlobalCoords(e));
     }else{
-        this.originalEvent = e.targetTouches[0];
+
+        for(var i = 0; i < e.targetTouches.length; i++){
+            this.event[i].isTouch = true;
+            this.event[i].originalEvent = e.targetTouches[i];
+            this.event[i].isDown = true;
+            this.event[i].touches = this.event;
+            this.event[i].globalPosition.copy(this.getGlobalCoords(e.targetTouches[i]));
+        }
+
     }
-
-
-    //alert(state);
 
     this.states[state] = true;
 };
 
 Mouse.prototype._onMouseUp = function(e){
-    this.originalEvent = e;
     if(this.preventDefault){
         e.preventDefault();
     }
-    console.log(e);
 
     var state = Mouse.States.mouseUp;
     if(!e.changedTouches) {
@@ -372,22 +385,42 @@ Mouse.prototype._onMouseUp = function(e){
         } else if (isMiddleButton) {
             state = Mouse.States.middleUp;
         }
+
+        this.event[0].originalEvent = e;
+        this.event[0].isDown = false;
+        this.event[0].isTouch = false;
+        this.event[0].globalPosition.copy(this.getGlobalCoords(e));
     }else{
-        console.log(e);
-        this.originalEvent = e.changedTouches[0];
+
+        for(var i = 0; i < e.changedTouches.length; i++){
+            this.event[i].isTouch = true;
+            this.event[i].originalEvent = e.changedTouches[i];
+            this.event[i].isDown = true;
+            this.event[i].touches = this.event;
+            this.event[i].globalPosition.copy(this.getGlobalCoords(e.changedTouches[i]));
+        }
+
     }
 
     this.states[state] = true;
 };
 
 Mouse.prototype._onMouseMove = function(e){
-    this.originalEvent = e;
     if(this.preventDefault){
         e.preventDefault();
     }
 
     if(e.targetTouches){
-        this.originalEvent = e.targetTouches[0];
+        for(var i = 0; i < e.targetTouches.length; i++){
+            this.event[i].isTouch = true;
+            this.event[i].originalEvent = e.targetTouches[i];
+            this.event[i].touches = this.event;
+            this.event[i].globalPosition.copy(this.getGlobalCoords(e.targetTouches[i]));
+        }
+    }else{
+        this.event[0].originalEvent = e;
+        this.event[0].isTouch = false;
+        this.event[0].globalPosition.copy(this.getGlobalCoords(e));
     }
 
     this.states[Mouse.States.mouseMove] = true;
