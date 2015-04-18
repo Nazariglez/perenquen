@@ -53,6 +53,8 @@ module.exports = function(){
         }
 
         var textureUrl = xmlUrl + resource.data.getElementsByTagName('page')[0].getAttribute('file');
+
+        //TODO: Reuse existing texture -> https://github.com/GoodBoyDigital/pixi.js/blob/dev/src/loaders/bitmapFontParser.js#L110-L114
         var loadOptions = {
             crossOrigin: resource.crossOrigin,
             loadType: Resource.LOAD_TYPE.IMAGE

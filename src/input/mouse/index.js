@@ -45,6 +45,7 @@ function Mouse(game, preventDefault, checkFrecuency){
     };
 
     //TODO: pixelperfect?, click, dblclick, touches, tap, doubletap
+    //TODO: touch y multitouch http://www.html5rocks.com/es/mobile/touch/
 }
 
 Mouse.prototype.constructor = Mouse;
