@@ -69,6 +69,7 @@ Mouse.prototype.disable = function(){
 };
 
 Mouse.prototype._enableEvents = function(){
+    //Mouse events
     this.canvas.addEventListener('mousedown', this._onMouseDown, true);
     this.canvas.addEventListener('mousemove', this._onMouseMove, true);
     //this.canvas.addEventListener('mouseout', this._onMouseOut, true);
@@ -82,9 +83,15 @@ Mouse.prototype._enableEvents = function(){
     }else if('MouseScrollEvent' in window){
         this.canvas.addEventListener('DOMMouseScroll', this._onMouseWheel, true);
     }
+
+    //Touch events
+    this.canvas.addEventListener('touchstart', this._onMouseDown, true);
+    this.canvas.addEventListener('touchend', this._onMouseUp, true);
+    this.canvas.addEventListener('touchmove', this._onMouseMove, true);
 };
 
 Mouse.prototype._disableEvents = function(){
+    //Mouse events
     this.canvas.removeEventListener('mousedown', this._onMouseDown, true);
     this.canvas.removeEventListener('mousemove', this._onMouseMove, true);
     //this.canvas.removeEventListener('mouseout', this._onMouseOut, true);
@@ -98,6 +105,11 @@ Mouse.prototype._disableEvents = function(){
     }else if('MouseScrollEvent' in window){
         this.canvas.removeEventListener('DOMMouseScroll', this._onMouseWheel, true);
     }
+
+    //Touch events
+    this.canvas.removeEventListener('touchstart', this._onMouseDown, true);
+    this.canvas.removeEventListener('touchend', this._onMouseUp, true);
+    this.canvas.removeEventListener('touchmove', this._onMouseMove, true);
 };
 
 Mouse.prototype.getGlobalCoords = function(e){
@@ -323,16 +335,22 @@ Mouse.prototype._onMouseDown = function(e){
     if(this.preventDefault){
         e.preventDefault();
     }
-
     var state = Mouse.States.mouseDown;
-    var isRightButton = e.button === 2 || e.which === 3;
-    var isMiddleButton = e.button === 1 || e.which === 2;
+    if(!e.targetTouches) {
+        var isRightButton = e.button === 2 || e.which === 3;
+        var isMiddleButton = e.button === 1 || e.which === 2;
 
-    if(isRightButton){
-        state = Mouse.States.rightDown;
-    }else if(isMiddleButton){
-        state = Mouse.States.middleDown;
+        if (isRightButton) {
+            state = Mouse.States.rightDown;
+        } else if (isMiddleButton) {
+            state = Mouse.States.middleDown;
+        }
+    }else{
+        this.originalEvent = e.targetTouches[0];
     }
+
+
+    //alert(state);
 
     this.states[state] = true;
 };
@@ -342,15 +360,21 @@ Mouse.prototype._onMouseUp = function(e){
     if(this.preventDefault){
         e.preventDefault();
     }
+    console.log(e);
 
     var state = Mouse.States.mouseUp;
-    var isRightButton = e.button === 2 || e.which === 3;
-    var isMiddleButton = e.button === 1 || e.which === 2;
+    if(!e.changedTouches) {
+        var isRightButton = e.button === 2 || e.which === 3;
+        var isMiddleButton = e.button === 1 || e.which === 2;
 
-    if(isRightButton){
-        state = Mouse.States.rightUp;
-    }else if(isMiddleButton){
-        state = Mouse.States.middleUp;
+        if (isRightButton) {
+            state = Mouse.States.rightUp;
+        } else if (isMiddleButton) {
+            state = Mouse.States.middleUp;
+        }
+    }else{
+        console.log(e);
+        this.originalEvent = e.changedTouches[0];
     }
 
     this.states[state] = true;
@@ -360,6 +384,10 @@ Mouse.prototype._onMouseMove = function(e){
     this.originalEvent = e;
     if(this.preventDefault){
         e.preventDefault();
+    }
+
+    if(e.targetTouches){
+        this.originalEvent = e.targetTouches[0];
     }
 
     this.states[Mouse.States.mouseMove] = true;
@@ -423,7 +451,10 @@ Mouse.States = {
     middleDrag: 9,
     mouseOver: 10,
     mouseOut: 11,
-    mouseWheel: 12
+    mouseWheel: 12,
+    touchDown: 13,
+    touchUp: 14,
+    touchMove: 15
 };
 
 
