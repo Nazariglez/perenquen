@@ -129,4 +129,9 @@ DisplayObject.prototype.tween = function(manager){
     return tween;
 };
 
+DisplayObject.prototype.setVisible = function(value){
+    this.visible = (value !== false);
+    return this;
+};
+
 module.exports = DisplayObject;
