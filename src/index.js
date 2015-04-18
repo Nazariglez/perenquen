@@ -42,7 +42,8 @@ var core = {
     Path : require('./tween/Path'),
     InputManager : require('./input/InputManager'),
     Mouse : require('./input/mouse'),
-    Keyboard : require('./input/keyboard')
+    Keyboard : require('./input/keyboard'),
+    Key : require('./input/keyboard/Key')
 
 };
 

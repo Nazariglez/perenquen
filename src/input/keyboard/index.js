@@ -1,3 +1,5 @@
+var Key = require('./Key');
+
 function Keyboard(game){
     this.game = game;
     this.isEnabled = false;
