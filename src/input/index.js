@@ -1,5 +1,0 @@
-require('./mouse');
-
-module.exports = {
-
-};

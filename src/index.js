@@ -40,7 +40,9 @@ var core = {
     Tween : require('./tween/Tween'),
     TweenManager : require('./tween/TweenManager'),
     Path : require('./tween/Path'),
-    InputManager : require('./input/InputManager')
+    InputManager : require('./input/InputManager'),
+    Mouse : require('./input/mouse'),
+    Keyboard : require('./input/keyboard')
 
 };
 
