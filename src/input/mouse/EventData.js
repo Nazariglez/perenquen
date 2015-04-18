@@ -13,6 +13,8 @@ function EventData(manager, id){
     this.touches = null;
     this.isTouch = true;
     this.isDown = false;
+    this.active = false;
+    this._identifier = -1;
 }
 
 EventData.prototype.constructor = EventData;

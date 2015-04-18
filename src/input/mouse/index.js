@@ -15,6 +15,7 @@ function Mouse(game, preventDefault, checkFrecuency){
     this.lastTime = 0;
     this.originalEvent = null;
     this.states = [];
+    this.dirty = false;
 
     this.checkFrecuency = checkFrecuency || 30;
 
@@ -33,10 +34,12 @@ function Mouse(game, preventDefault, checkFrecuency){
         for(var i = 0; i < 10; i++){
             evt = new EventData(this, i);
             this.event.push(evt);
+            this.states.push([]);
         }
     }else{
         evt = new EventData(this);
         this.event.push(evt);
+        this.states.push([]);
     }
 
     //TODO: pixelperfect?, click, dblclick, touches, tap, doubletap
@@ -135,11 +138,10 @@ Mouse.prototype.processEvent = function(parent){
             }
 
             for (var n = 0; n < this.event.length; n++) {
-                if(this.event[n].isTouch && !this.event[n].isDown){
-                    //if is touch event and is not down continue the loop
-                    continue;
-                }else{
+                if(!this.event[n].isTouch){
                     this.event[n].delta = this.delta;
+                }else if(this.event[n].isTouch && !this.event[n].active){
+                    continue;
                 }
 
                 this.getLocalPosition(object, this.tempPoint, this.event[n].globalPosition);
@@ -157,37 +159,37 @@ Mouse.prototype.processEvent = function(parent){
                             this.fireState(object, Mouse.States.mouseOver);
                         }
 
-                        if (this.states[Mouse.States.mouseDown]) {
+                        if (this.states[n][Mouse.States.mouseDown]) {
                             object._mouseDown = true;
                             this.fireState(object, Mouse.States.mouseDown, n);
                         }
 
-                        if (this.states[Mouse.States.mouseUp]) {
+                        if (this.states[n][Mouse.States.mouseUp]) {
                             object._mouseDown = false;
                             this.fireState(object, Mouse.States.mouseUp, n);
                         }
 
-                        if (this.states[Mouse.States.rightDown]) {
+                        if (this.states[n][Mouse.States.rightDown]) {
                             object._rightDown = true;
                             this.fireState(object, Mouse.States.rightDown);
                         }
 
-                        if (this.states[Mouse.States.rightUp]) {
+                        if (this.states[n][Mouse.States.rightUp]) {
                             object._rightDown = false;
                             this.fireState(object, Mouse.States.rightUp);
                         }
 
-                        if (this.states[Mouse.States.middleDown]) {
+                        if (this.states[n][Mouse.States.middleDown]) {
                             object._middleDown = true;
                             this.fireState(object, Mouse.States.middleDown);
                         }
 
-                        if (this.states[Mouse.States.middleUp]) {
+                        if (this.states[n][Mouse.States.middleUp]) {
                             object._middleDown = false;
                             this.fireState(object, Mouse.States.middleUp);
                         }
 
-                        if (this.states[Mouse.States.mouseMove]) {
+                        if (this.states[n][Mouse.States.mouseMove]) {
                             this.fireState(object, Mouse.States.mouseMove);
                             if (object._mouseDown) {
                                 this.fireState(object, Mouse.States.mouseDrag, n);
@@ -200,7 +202,7 @@ Mouse.prototype.processEvent = function(parent){
                             }
                         }
 
-                        if (this.states[Mouse.States.mouseWheel]) {
+                        if (this.states[n][Mouse.States.mouseWheel]) {
                             this.fireState(object, Mouse.States.mouseWheel);
                         }
                     }
@@ -211,28 +213,28 @@ Mouse.prototype.processEvent = function(parent){
                             this.fireState(object, Mouse.States.mouseOut);
                         }
 
-                        if (this.states[Mouse.States.mouseUp]) {
+                        if (this.states[n][Mouse.States.mouseUp]) {
                             if (object._mouseDown) {
                                 object._mouseDown = false;
                                 this.fireState(object, Mouse.States.mouseUp, n);
                             }
                         }
 
-                        if (this.states[Mouse.States.rightUp]) {
+                        if (this.states[n][Mouse.States.rightUp]) {
                             if (object._rightDown) {
                                 object._rightDown = false;
                                 this.fireState(object, Mouse.States.rightUp);
                             }
                         }
 
-                        if (this.states[Mouse.States.middleUp]) {
+                        if (this.states[n][Mouse.States.middleUp]) {
                             if (object._middleDown) {
                                 object._middleDown = false;
                                 this.fireState(object, Mouse.States.middleUp);
                             }
                         }
 
-                        if (this.states[Mouse.States.mouseMove]) {
+                        if (this.states[n][Mouse.States.mouseMove]) {
                             if (object._mouseDown) {
                                 this.fireState(object, Mouse.States.mouseDrag, n);
                             }
@@ -325,14 +327,22 @@ Mouse.prototype.update = function(gameTime, delta){
 
     this.lastTime = gameTime;
 
-    if(this.states.indexOf(true) >= 0){
-        //this.getGlobalCoords(this.originalEvent);
-        this.processEvent(this.game.sceneManager);
+    if(!this.dirty){
+        return;
     }
 
+    this.processEvent(this.game.sceneManager);
     for(var i = 0; i < this.states.length; i++){
-        this.states[i] = false;
+        for(var n = 0; n < this.states[i].length; n++) {
+            this.states[i][n] = false;
+        }
     }
+
+    for(i = 0; i < this.event.length; i++){
+        this.event[i].active = false;
+    }
+
+    this.dirty = false;
 };
 
 Mouse.prototype._onMouseDown = function(e){
@@ -355,19 +365,25 @@ Mouse.prototype._onMouseDown = function(e){
         this.event[0].originalEvent = e;
         this.event[0].isDown = true;
         this.event[0].globalPosition.copy(this.getGlobalCoords(e));
+
+        this.states[0][state] = true;
     }else{
 
         for(var i = 0; i < e.targetTouches.length; i++){
+            this.event[i]._identifier = e.targetTouches[i].identifier;
             this.event[i].isTouch = true;
             this.event[i].originalEvent = e.targetTouches[i];
             this.event[i].isDown = true;
             this.event[i].touches = this.event;
+            this.event[i].active = true;
             this.event[i].globalPosition.copy(this.getGlobalCoords(e.targetTouches[i]));
+
+            this.states[i][state] = true;
         }
 
     }
 
-    this.states[state] = true;
+    this.dirty = true;
 };
 
 Mouse.prototype._onMouseUp = function(e){
@@ -390,19 +406,33 @@ Mouse.prototype._onMouseUp = function(e){
         this.event[0].isDown = false;
         this.event[0].isTouch = false;
         this.event[0].globalPosition.copy(this.getGlobalCoords(e));
+
+        this.states[0][state] = true;
     }else{
 
         for(var i = 0; i < e.changedTouches.length; i++){
-            this.event[i].isTouch = true;
-            this.event[i].originalEvent = e.changedTouches[i];
-            this.event[i].isDown = true;
-            this.event[i].touches = this.event;
-            this.event[i].globalPosition.copy(this.getGlobalCoords(e.changedTouches[i]));
+            var id;
+            for(var n = 0; n < this.event.length; n++){
+                if(this.event[n]._identifier === e.changedTouches[i].identifier){
+                    id = n;
+                    break;
+                }
+            }
+
+            this.event[id].isTouch = true;
+            this.event[id].originalEvent = e.changedTouches[i];
+            this.event[id].isDown = false;
+            this.event[id].touches = this.event;
+            this.event[id].active = true;
+            this.event[id].globalPosition.copy(this.getGlobalCoords(e.changedTouches[i]));
+
+            this.states[id][state] = true;
         }
 
     }
 
-    this.states[state] = true;
+    this.dirty = true;
+
 };
 
 Mouse.prototype._onMouseMove = function(e){
@@ -412,18 +442,24 @@ Mouse.prototype._onMouseMove = function(e){
 
     if(e.targetTouches){
         for(var i = 0; i < e.targetTouches.length; i++){
+            this.event[i]._identifier = e.targetTouches[i].identifier;
             this.event[i].isTouch = true;
             this.event[i].originalEvent = e.targetTouches[i];
             this.event[i].touches = this.event;
+            this.event[i].active = true;
             this.event[i].globalPosition.copy(this.getGlobalCoords(e.targetTouches[i]));
+
+            this.states[i][Mouse.States.mouseMove] = true;
         }
     }else{
         this.event[0].originalEvent = e;
         this.event[0].isTouch = false;
         this.event[0].globalPosition.copy(this.getGlobalCoords(e));
+
+        this.states[0][Mouse.States.mouseMove] = true;
     }
 
-    this.states[Mouse.States.mouseMove] = true;
+    this.dirty = true;
 };
 
 Mouse.prototype._onMouseOut = function(e){
@@ -450,7 +486,7 @@ Mouse.prototype._onMouseWheel = function(e){
 
     //TODO: Firefox check...
     this.delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-    this.states[Mouse.States.mouseWheel] = true;
+    this.states[0][Mouse.States.mouseWheel] = true;
 };
 
 Mouse.prototype.getLocalPosition = function (displayObject, point, globalPos) {
