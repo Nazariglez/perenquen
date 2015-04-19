@@ -321,6 +321,18 @@ Object.defineProperties(Game.prototype, {
         get: function(){
             return this.sceneManager.currentScene;
         }
+    },
+
+    mouse: {
+        get: function(){
+            return this.inputManager.mouse;
+        }
+    },
+
+    keyboard: {
+        get: function(){
+            return this.inputManager.keyboard;
+        }
     }
 });
 

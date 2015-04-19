@@ -61,8 +61,12 @@ InputManager.prototype.disableKeyboard = function(){
 };
 
 InputManager.prototype.update = function(gameTime, delta){
-    if(this.mouse.isEnabled){
+    if(this.mouse && this.mouse.isEnabled){
         this.mouse.update(gameTime, delta);
+    }
+
+    if(this.keyboard && this.keyboard.isEnabled){
+        this.keyboard.update(gameTime, delta);
     }
 };
 
