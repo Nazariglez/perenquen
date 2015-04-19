@@ -51,24 +51,14 @@ Keyboard.prototype._disableEvents = function(){
     window.removeEventListener('keyup', this._onKeyUp, true);
 };
 
-Keyboard.prototype.addPreventDefault = function(key){
+Keyboard.prototype.setPreventDefault = function(key, value){
+    value = (value !== false);
     if(Object.prototype.toString.call(key) === "[object Array]"){
         for(var i = 0; i < key.length; i++){
-            this.preventDefaultKeys[key[i]] = true;
+            this.preventDefaultKeys[key[i]] = value;
         }
     }else {
-        this.preventDefaultKeys[key] = true;
-    }
-    return this;
-};
-
-Keyboard.prototype.removePreventDefault = function(key){
-    if(Object.prototype.toString.call(key) === "[object Array]"){
-        for(var i = 0; i < key.length; i++){
-            this.preventDefaultKeys[key[i]] = false;
-        }
-    }else {
-        this.preventDefaultKeys[key] = false;
+        this.preventDefaultKeys[key] = value;
     }
     return this;
 };
