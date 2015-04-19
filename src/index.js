@@ -45,7 +45,7 @@ var core = {
     Keyboard : require('./input/keyboard'),
     Key : require('./input/keyboard/Key'),
     HotKey : require('./input/keyboard/HotKey'),
-    Device : require('./extra/Device')
+    Device : require('./core/Device')
 
 };
 

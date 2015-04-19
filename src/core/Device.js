@@ -1,5 +1,5 @@
 //Based on https://github.com/arasatasaygin/is.js/blob/master/is.js
-require('../polyfill');
+require('../polyfill/index');
 
 var userAgent = 'navigator' in window && 'userAgent' in navigator && navigator.userAgent.toLowerCase() || '',
     vendor = 'navigator' in window && 'vendor' in navigator && navigator.vendor.toLowerCase() || '',
