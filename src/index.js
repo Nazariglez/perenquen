@@ -43,7 +43,9 @@ var core = {
     InputManager : require('./input/InputManager'),
     Mouse : require('./input/mouse'),
     Keyboard : require('./input/keyboard'),
-    Key : require('./input/keyboard/Key')
+    Key : require('./input/keyboard/Key'),
+    HotKey : require('./input/keyboard/HotKey'),
+    Device : require('./extra/Device')
 
 };
 
