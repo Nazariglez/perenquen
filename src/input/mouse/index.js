@@ -1,4 +1,5 @@
 var math = require('../../../lib/pixi/src/core/math'),
+    Device = require('../../core/Device'),
     EventData = require('./EventData');
 
 function Mouse(game, preventDefault, checkFrecuency){
@@ -30,7 +31,7 @@ function Mouse(game, preventDefault, checkFrecuency){
 
     var evt = null;
     this.event = [];
-    if('ontouchstart' in window){
+    if(Device.isTouchDevice){
         for(var i = 0; i < 10; i++){
             evt = new EventData(this, i);
             this.event.push(evt);
@@ -82,9 +83,11 @@ Mouse.prototype._enableEvents = function(){
     }
 
     //Touch events
-    this.canvas.addEventListener('touchstart', this._onMouseDown, true);
-    this.canvas.addEventListener('touchend', this._onMouseUp, true);
-    this.canvas.addEventListener('touchmove', this._onMouseMove, true);
+    if(Device.isTouchDevice) {
+        this.canvas.addEventListener('touchstart', this._onMouseDown, true);
+        this.canvas.addEventListener('touchend', this._onMouseUp, true);
+        this.canvas.addEventListener('touchmove', this._onMouseMove, true);
+    }
 };
 
 Mouse.prototype._disableEvents = function(){
@@ -104,9 +107,11 @@ Mouse.prototype._disableEvents = function(){
     }
 
     //Touch events
-    this.canvas.removeEventListener('touchstart', this._onMouseDown, true);
-    this.canvas.removeEventListener('touchend', this._onMouseUp, true);
-    this.canvas.removeEventListener('touchmove', this._onMouseMove, true);
+    if(Device.isTouchDevice) {
+        this.canvas.removeEventListener('touchstart', this._onMouseDown, true);
+        this.canvas.removeEventListener('touchend', this._onMouseUp, true);
+        this.canvas.removeEventListener('touchmove', this._onMouseMove, true);
+    }
 };
 
 Mouse.prototype.getGlobalCoords = function(e){

@@ -36,9 +36,9 @@ var isIphone = /iphone/i.test(userAgent),
 
 var canVibrate = !!navigator.vibrate && (isMobile || isTablet);
 
-//TODO: Check audio support
+//TODO: Check audio support, wheelSupport, fullScreensupport, etc...
 
-module.exports = {
+var Device = module.exports = {
     isChrome : isChrome,
     isFirefox : isFirefox,
     isIE : isIE,
@@ -65,7 +65,7 @@ module.exports = {
     isCordova : isCordova,
     isCrosswalk : isCrosswalk,
 
-    isOnline : navigator.onLine,
+    //isOnline : navigator.onLine,
     canVibrate : canVibrate,
 
     vibrate : function(value){
@@ -74,4 +74,12 @@ module.exports = {
         }
     }
 };
+
+Object.defineProperties(Device, {
+    isOnline: {
+        get : function() {
+            return window.navigator.onLine;
+        }
+    }
+});
 
