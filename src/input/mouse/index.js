@@ -74,12 +74,9 @@ Mouse.prototype._enableEvents = function(){
     //this.canvas.addEventListener('mouseover', this._onMouseOver, true);
     window.addEventListener('mouseup', this._onMouseUp, true);
 
-    if('onwheel' in window){
-        this.canvas.addEventListener('wheel', this._onMouseWheel, true);
-    }else if('onmousewheel' in window){
-        this.canvas.addEventListener('mousewheel', this._onMouseWheel, true);
-    }else if('MouseScrollEvent' in window){
-        this.canvas.addEventListener('DOMMouseScroll', this._onMouseWheel, true);
+    //Mouse Wheel up/down events
+    if(Device.hasMouseWheel){
+        this.canvas.addEventListener(Device.getMouseWheelEvent(), this._onMouseWheel, true);
     }
 
     //Touch events
@@ -98,12 +95,9 @@ Mouse.prototype._disableEvents = function(){
     //this.canvas.removeEventListener('mouseover', this._onMouseOver, true);
     window.removeEventListener('mouseup', this._onMouseUp, true);
 
-    if('onwheel' in window){
-        this.canvas.removeEventListener('wheel', this._onMouseWheel, true);
-    }else if('onmousewheel' in window){
-        this.canvas.removeEventListener('mousewheel', this._onMouseWheel, true);
-    }else if('MouseScrollEvent' in window){
-        this.canvas.removeEventListener('DOMMouseScroll', this._onMouseWheel, true);
+    //Mouse Wheel up/down events
+    if(Device.hasMouseWheel){
+        this.canvas.removeEventListener(Device.getMouseWheelEvent(), this._onMouseWheel, true);
     }
 
     //Touch events

@@ -34,9 +34,16 @@ var isIphone = /iphone/i.test(userAgent),
     isCrosswalk = /Crosswalk/.test(userAgent),
     isCordova = !!window.cordova;
 
-var canVibrate = !!navigator.vibrate && (isMobile || isTablet);
+var hasVibrate = !!navigator.vibrate && (isMobile || isTablet),
+    hasMouseWheel = 'onwheel' in window || 'onmousewheel' in window || 'MouseScrollEvent' in window;
 
-//TODO: Check audio support, wheelSupport, fullScreensupport, etc...
+//FullScreen
+var div = document.createElement('div');
+var fullScreenRequest = div.requestFullscreen || div.webkitRequestFullScreen || div.msRequestFullScreen || div.mozRequestFullScreen,
+    fullScreenCancel = document.cancelFullScreen || document.exitFullScreen || document.webkitCancelFullScreen || document.msCancelFullScreen || document.mozCancelFullScreen,
+    hasFullScreen = !!(fullScreenRequest && fullScreenCancel);
+
+//TODO: Check audio support, fullScreensupport, etc...
 
 var Device = module.exports = {
     isChrome : isChrome,
@@ -66,10 +73,29 @@ var Device = module.exports = {
     isCrosswalk : isCrosswalk,
 
     //isOnline : navigator.onLine,
-    canVibrate : canVibrate,
+    hasVibrate : hasVibrate,
+    hasMouseWheel : hasMouseWheel,
+    hasFullScreen : hasFullScreen,
+
+    fullScreenRequest : fullScreenRequest ? fullScreenRequest.name : undefined,
+    fullScreenCancel : fullScreenCancel ? fullScreenCancel.name : undefined,
+
+    getMouseWheelEvent : function(){
+        if(!hasMouseWheel)return;
+        var evt;
+        if('onwheel' in window){
+            evt = 'wheel';
+        }else if('onmousewheel' in window){
+            evt = 'mousewheel';
+        }else if('MouseScrollEvent' in window){
+            evt = 'DOMMouseScroll';
+        }
+
+        return evt;
+    },
 
     vibrate : function(value){
-        if(canVibrate){
+        if(hasVibrate){
             navigator.vibrate(value);
         }
     }
@@ -82,4 +108,3 @@ Object.defineProperties(Device, {
         }
     }
 });
-

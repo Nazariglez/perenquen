@@ -5,7 +5,8 @@ var CONST = require('./const'),
     DataManager = require('../extra/DataManager'),
     InputManager = require('../input/InputManager'),
     autoDetectRenderer = require('../../lib/pixi/src/core').autoDetectRenderer,
-    SceneManager = require('./SceneManager');
+    SceneManager = require('./SceneManager'),
+    Device = require('./Device');
 
 /**
  * The main object of your game.
@@ -312,6 +313,20 @@ Game.prototype.enableAutoResize = function(value, mode){
     this._gameResizeListener();
 
     return this;
+};
+
+Game.prototype.setFullScreen = function(value){
+    if(!Device.hasFullScreen)return this;
+    value = (value !== false);
+
+    if(value){
+        this.canvas[Device.fullScreenRequest]();
+    }else{
+        document[Device.fullScreenCancel]();
+    }
+
+    return this;
+
 };
 
 module.exports = Game;
