@@ -35,7 +35,8 @@ var isIphone = /iphone/i.test(userAgent),
     isCordova = !!window.cordova;
 
 var hasVibrate = !!navigator.vibrate && (isMobile || isTablet),
-    hasMouseWheel = 'onwheel' in window || 'onmousewheel' in window || 'MouseScrollEvent' in window;
+    hasMouseWheel = 'onwheel' in window || 'onmousewheel' in window || 'MouseScrollEvent' in window,
+    hasAccelerometer = 'DeviceMotionEvent' in window;
 
 //FullScreen
 var div = document.createElement('div');
@@ -76,6 +77,7 @@ var Device = module.exports = {
     hasVibrate : hasVibrate,
     hasMouseWheel : hasMouseWheel,
     hasFullScreen : hasFullScreen,
+    hasAccelerometer : hasAccelerometer,
 
     fullScreenRequest : fullScreenRequest ? fullScreenRequest.name : undefined,
     fullScreenCancel : fullScreenCancel ? fullScreenCancel.name : undefined,

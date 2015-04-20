@@ -1,5 +1,6 @@
 var Mouse = require('./mouse'),
-    Keyboard = require('./keyboard');
+    Keyboard = require('./keyboard'),
+    Accelerometer = require('./Accelerometer');
 
 function InputManager(game){
     this.game = game;
@@ -7,6 +8,7 @@ function InputManager(game){
 
     this.mouse = null;
     this.keyboard = null;
+    this.accel = null;
 
     if(this.config.disableContextMenu){
         //Disable context menu
@@ -58,6 +60,25 @@ InputManager.prototype.enableKeyboard = function(value){
 
 InputManager.prototype.disableKeyboard = function(){
     return this.enableKeyboard(false);
+};
+
+InputManager.prototype.enableAccelerometer = function(value){
+    value = (value !== false);
+    if(value){
+        if(!this.accel){
+            this.accel = new Accelerometer();
+        }
+
+        this.accel.enable();
+    }else{
+        this.accel.disable();
+    }
+
+    return this;
+};
+
+InputManager.prototype.disableAccelerometer = function(){
+    return this.enableAccelerometer(false);
 };
 
 InputManager.prototype.update = function(gameTime, delta){

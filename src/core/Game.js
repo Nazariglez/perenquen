@@ -125,6 +125,8 @@ function Game(width, height, options){
      */
     this.dataManager = new DataManager(this);
 
+
+    //TODO: Maybe rename to "input" instead "inputManager" ?
     this.inputManager = new InputManager(this);
 
     /**
