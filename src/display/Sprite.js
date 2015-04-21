@@ -3,6 +3,7 @@ var SpriteRenderer = require('./SpriteRenderer'),
     Container = require('./Container'),
     utils = require('../core/utils'),
     config = require('../core/config'),
+    CanvasTinter = require('../../lib/pixi/src/core/renderers/canvas/utils/CanvasTinter'),
     math = require('../../lib/pixi/src/core/math'),
     CONST = require('../core/const'),
     tempPoint = new math.Point();
@@ -221,8 +222,8 @@ Sprite.prototype._renderCanvas = function (renderer) {
 
         }
 
-        var anchorWidth = this.anchor.x * this.texture.width,
-            anchorHeight = this.anchor.y * this.texture.height;
+        var anchorWidth = this.anchor.x * this.texture.width/resolution,
+            anchorHeight = this.anchor.y * this.texture.height/resolution;
 
         if (this.tint !== 0xFFFFFF)
         {
@@ -231,6 +232,7 @@ Sprite.prototype._renderCanvas = function (renderer) {
                 this.cachedTint = this.tint;
 
                 // TODO clean up caching - how to clean up the caches?
+                // TODO: dont works with spritesheets
                 this.tintedTexture = CanvasTinter.getTintedTexture(this, this.tint);
             }
 
@@ -248,6 +250,7 @@ Sprite.prototype._renderCanvas = function (renderer) {
         }
         else
         {
+            //TODO: cuando la resolución del renderer es mayor a 1 los sprites se muestran mal
             renderer.context.drawImage(
                 texture.baseTexture.source,
                 texture.crop.x * resolution,
