@@ -54,6 +54,7 @@ utils.mixin = function(obj, mixin){
  */
 utils.addInherits = function(obj){
     obj.extend = Class.extend;
+    obj.inject = Class.inject;
     obj.prototype[CONST.DEFAULT_CONSTRUCTOR_NAME] = obj;
 };
 
