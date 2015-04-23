@@ -1,16 +1,12 @@
 require('./polyfill');
 var CONST = require('./core/const'),
     Class = require('./core/Class'),
-    math = require('../lib/pixi/src/core/math'),
-    addInherits = require('./core/utils').addInherits,
-    ctor = CONST.DEFAULT_CONSTRUCTOR_NAME;
-    //interactionMouse = require('./input');
+    math = require('../lib/pixi/src/core/math');
 
 var core = {
     config : require('./core/config'),
     utils : require('./core/utils'),
     plugin : require('./core/plugin'),
-    //inject : require('./core/inject'),
 
     Class : Class,
     Game : Class.parse(require('./core/Game')),
