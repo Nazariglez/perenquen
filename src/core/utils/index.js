@@ -49,16 +49,6 @@ utils.mixin = function(obj, mixin){
 };
 
 /**
- * Provide the ability to inherits easily
- * @param obj
- */
-utils.addInherits = function(obj){
-    obj.extend = Class.extend;
-    obj.inject = Class.inject;
-    obj.prototype[CONST.DEFAULT_CONSTRUCTOR_NAME] = obj;
-};
-
-/**
  * Watch when the browser lost the focus and notify the game object
  * @param game {Game}
  */

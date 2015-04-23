@@ -59,7 +59,10 @@ Class.extend = function(childProto){
     return child;
 };
 
-
+/**
+ * Inject new features in a class
+ * @param fn {function}
+ */
 Class.inject = function(fn){
     var baseClassProto = this.prototype,
         newProto = Object.create(this.prototype),
@@ -80,29 +83,58 @@ Class.inject = function(fn){
     };
 
 
+    //TODO: Check Object.defineProperties
     for(var pr in proto){
         if (proto.hasOwnProperty(pr)) {
-            if(typeof proto[pr] === "function") {
+            var property = Object.getOwnPropertyDescriptor(proto, pr);
+
+            if(typeof property.value === "function") {
                 if(isSuper && baseClass._super[pr] && typeof baseClass._super[pr] === "function"){
-                    proto[pr] = inheritanceFn(pr, proto[pr]);
+                    property.value = inheritanceFn(pr, property.value);
                     if (pr === ctorName && baseClass._super.constructor) {
-                        proto[pr] = inheritanceFn("constructor", proto[pr]);
+                        property.value = inheritanceFn("constructor", property.value);
                     }else{
-                        proto[pr] = inheritanceFn(pr, proto[pr]);
+                        property.value = inheritanceFn(pr, property.value);
                     }
                 }
 
                 if (pr === ctorName) {
-                    ctor = proto[pr];
-                    newProto.constructor = proto[pr];
+                    ctor = property.value;
+                    newProto.constructor = property.value;
                 }
             }
-            
-            newProto[pr] = proto[pr];
+
+            newProto[pr] = property.value;
         }
     }
 
     this.prototype = newProto;
+};
+
+/**
+ * Convert a normal function class in a PQClass
+ * @param cls {Class}
+ * @returns {*}
+ */
+Class.parse = function(cls){
+    if(typeof cls !== "function")return;
+
+    var name = cls.name || "PQClass";
+
+    var parsedClass = Function("return function " + name + "(){if(this['"+ctorName+"'])this['"+ctorName+"'].apply(this, arguments)};")();//jshint ignore:line
+    for(var key in cls){
+        if(cls.hasOwnProperty(key)){
+            parsedClass[key] = cls[key];
+        }
+    }
+
+    parsedClass.prototype = cls.prototype;
+    parsedClass.prototype[ctorName] = cls.prototype.constructor;
+    parsedClass.extend = Class.extend;
+    parsedClass.inject = Class.inject;
+    parsedClass.prototype.constructor = parsedClass;
+
+    return parsedClass;
 };
 
 module.exports = Class;
