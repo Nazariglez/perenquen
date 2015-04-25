@@ -32,7 +32,8 @@ var isIphone = /iphone/i.test(userAgent),
     isNodeWebkit = typeof process === "object" && process.title === "node" && typeof global === "object",
     isEjecta = !!window.ejecta,
     isCrosswalk = /Crosswalk/.test(userAgent),
-    isCordova = !!window.cordova;
+    isCordova = !!window.cordova,
+    isElectron = process && process.versions && (process.versions['electron'] || process.versions['atom-shell']);
 
 var hasVibrate = !!navigator.vibrate && (isMobile || isTablet),
     hasMouseWheel = 'onwheel' in window || 'onmousewheel' in window || 'MouseScrollEvent' in window,
@@ -72,6 +73,8 @@ var Device = module.exports = {
     isEjecta : isEjecta,
     isCordova : isCordova,
     isCrosswalk : isCrosswalk,
+    isElectron : isElectron,
+    isAtomShell : isElectron, //TODO: Remove soon, when atom-shell (version) is deprecated
 
     //isOnline : navigator.onLine,
     hasVibrate : hasVibrate,
