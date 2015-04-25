@@ -29,11 +29,11 @@ var isIphone = /iphone/i.test(userAgent),
     isDesktop = !isMobile && !isTablet,
     isTouchDevice = 'ontouchstart' in window ||'DocumentTouch' in window && document instanceof DocumentTouch,
     isCocoon = !!navigator.isCocoonJS,
-    isNodeWebkit = typeof process === "object" && process.title === "node" && typeof global === "object",
+    isNodeWebkit = !!(typeof process === "object" && process.title === "node" && typeof global === "object"),
     isEjecta = !!window.ejecta,
     isCrosswalk = /Crosswalk/.test(userAgent),
     isCordova = !!window.cordova,
-    isElectron = process && process.versions && (process.versions['electron'] || process.versions['atom-shell']);
+    isElectron = !!(process && process.versions && (process.versions.electron || process.versions['atom-shell']));
 
 var hasVibrate = !!navigator.vibrate && (isMobile || isTablet),
     hasMouseWheel = 'onwheel' in window || 'onmousewheel' in window || 'MouseScrollEvent' in window,
