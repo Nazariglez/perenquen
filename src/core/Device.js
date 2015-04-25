@@ -45,7 +45,7 @@ var fullScreenRequest = div.requestFullscreen || div.webkitRequestFullScreen || 
     fullScreenCancel = document.cancelFullScreen || document.exitFullScreen || document.webkitCancelFullScreen || document.msCancelFullScreen || document.mozCancelFullScreen,
     hasFullScreen = !!(fullScreenRequest && fullScreenCancel);
 
-//TODO: Check audio support, fullScreensupport, etc...
+//TODO: Check audio support, etc...
 
 var Device = module.exports = {
     isChrome : isChrome,

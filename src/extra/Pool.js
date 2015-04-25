@@ -114,7 +114,6 @@ Pool.prototype.createNewObject = function(){
 
 module.exports = Pool;
 
-// jshint ignore:start
 function applyFix(obj, args){
     var ev = "Function('obj',";
     var fn = "\"return new obj(";
@@ -130,6 +129,5 @@ function applyFix(obj, args){
     fn += ")\"";
     ev += fn + ")";
 
-    return (eval(ev)).apply(this, ([obj]).concat(args));
+    return (eval(ev)).apply(this, ([obj]).concat(args)); //jshint ignore:line
 }
-// jshint ignore:end
