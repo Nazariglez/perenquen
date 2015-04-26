@@ -117,7 +117,7 @@ Class.inject = function(fn){
  * @returns {*}
  */
 Class.parse = function(cls){
-    if(typeof cls !== "function")return;
+    if(typeof cls !== "function")return cls;
 
     var name = cls.name || "PQClass";
 
