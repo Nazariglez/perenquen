@@ -1,6 +1,7 @@
 var PixiText = require('../../lib/pixi/src/core/text/Text'),
     utils = require('../core/utils'),
     math = require('../../lib/pixi/src/core/math'),
+    Sprite = require('../display/Sprite'),
     CONST = require('../core/const');
 
 function Text(text, style, resolution){
@@ -17,6 +18,8 @@ Text.prototype.constructor = Text;
 Text.fontPropertiesCache = {};
 Text.fontPropertiesCanvas = document.createElement('canvas');
 Text.fontPropertiesContext = Text.fontPropertiesCanvas.getContext('2d');
+
+//TODO: wrong displayObjectTransform, need a custom transform
 
 Text.prototype.updateText = function (){
     var style = this._style;
@@ -163,7 +166,7 @@ Text.prototype.setWordWrap = function(value){
     return this;
 };
 
-//TODO: Pivot...
+//TODO: Pivot, anchor...
 //TODO: depth??
 module.exports = Text;
 
