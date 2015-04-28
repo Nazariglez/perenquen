@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Class Inject</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Perenquen.js Game</title>
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        Perenquen.js has a custom class system,
+        with him you can inject code in core or custom classes, or extend them
+
+        Now we can learn how to inject code in custom or core classes,
+        this is very useful to create plugins for example
+     */
+
+    //Creating a basic class, for that we need extend from PQ.Class
+    var CustomClass = PQ.Class.extend({
+        _init: function(arg1, arg2){
+            console.log('Ey, look at me! I am a customClass constructor!!');
+            console.log('[Args: ',arg1, arg2, ']');
+        }
+    });
+
+    //Now we will inject some code in our CustomClass
+    CustomClass.inject(function(base){
+        //base: is the prototype of this class before the inject
+
+        return {
+            _init: function(arg1, arg2){
+                console.log('Overwriting args');
+                arg1 = "overwrite arg1";
+                arg2 = "overwrite arg2";
+
+                //Call the base constructor if you want
+                base._init.call(this, arg1, arg2);
+
+                console.log('easy, right?');
+            }
+        }
+    });
+    
+    //Creating the instance of our CustomClass
+    var instanceCustomClass = new CustomClass('Argument1', 12+50); //After the inject this params are ignored
+
+</script>
+</body>
+</html>

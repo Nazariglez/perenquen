@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Class Extend</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Perenquen.js Game</title>
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        Perenquen.js has a custom class system,
+        with him you can inject code in core or custom classes, or extend them
+
+        Now we can learn how to create extend core classes
+     */
+
+    //Extend PQ.Graphics for create a new child Class with awesome methods!
+    var AwesomeGraphics = PQ.Graphics.extend({
+        _init: function(){
+            this._super(); //Call the parent constructor
+        },
+
+        drawSomethingAwesome: function(){
+            this.beginFill(0xff0000)
+                    .drawCircle(0, 0, 50)
+                    .drawCircle(80, 0, 50)
+                    .drawCircle(160, 0, 50)
+                    .endFill();
+
+            return this;
+        }
+    });
+
+    //Extend PQ.Container to create a customContainer
+    var CustomContainer = PQ.Container.extend({
+        _init: function(){
+            this._super(); //Call the parent constructor
+
+            //Set some properties
+            this.setSize(150,150)
+                .setRotation(45 * PQ.DEG_TO_RAD);
+
+            //Create here an awesome graphics!
+            var awGraphics = new AwesomeGraphics()
+
+                    //Parent methods
+                    .beginFill(0x00ff00)
+                    .drawRect(20, 100, 50, 50)
+                    .endFill()
+
+                    .addTo(this);
+
+            awGraphics.drawSomethingAwesome();
+        }
+    });
+
+
+    //Create the game
+    var game = new PQ.Game();
+    game.start();
+
+    //Creating our CustomContainer
+    var container = new CustomContainer()
+            .setPosition(game.scene.width/2, game.scene.height/2)
+            .addTo(game.scene);
+
+</script>
+</body>
+</html>
