@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Example Screen Adapt</title>
+    <title>Example Window Size</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Perenquen.js Game</title>
     <script src="../../build/perenquen.dev.js"></script>
@@ -40,7 +40,8 @@
 
     //Load assets
     game.assetLoader.add([
-        {name: "logo", url: "../../media/logo.png"}
+        {name: "logo", url: "../../media/logo.png"},
+        {name: "background", url: "../assets/background.png"}
     ]).load(onAssetsLoaded);
 
 
@@ -55,14 +56,12 @@
         var scale = Math.min(game.width/WW, game.height/HH);
         container.setScale(scale, scale);
 
-        //It's ready, easy, right?, now we make a simple graphics to show the container bounds
-        var lineWidth = 2;
-        var bound = new PQ.Graphics()
-                .lineStyle(lineWidth, 0x0000ff, 0.7)
-                .drawRect(0,0,container.width-lineWidth, container.height-lineWidth)
+        //It's ready, easy, right?, now add a simple background
+        var background = new PQ.Sprite('background')
+                .setPosition(container.width/2, container.height/2)
                 .addTo(container);
 
-        //and also add the PQ logo to he middle of the container
+        //add the PQ logo to he middle of the container
         var logo = new PQ.Sprite('logo')
                 .setPosition(container.width/2, container.height/2)
                 .addTo(container);
