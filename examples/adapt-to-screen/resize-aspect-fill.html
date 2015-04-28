@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Resize Aspect Fill</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Perenquen.js Game</title>
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        The game scale to fill all the screen, but always using the same aspect ratio,
+        doesn't matter if you resize the screen, the game adapts again,
+        this way could hide a part of the game
+     */
+
+    //Set the game config
+    var config = {
+        game : {
+            //Set the fill scale type here
+            scaleType: PQ.GAME_SCALE_TYPE.ASPECT_FILL
+        }
+    };
+
+
+    //Create and start game, for default the game size is 800x600 landscape
+    var game = new PQ.Game(config);
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {name: "logo", url: "../../media/logo.png"},
+        {name: "background", url: "../assets/background.png"}
+    ]).load(onAssetsLoaded);
+
+
+    function onAssetsLoaded(){
+        //Add a simple background
+        var background = new PQ.Sprite('background')
+                .setPosition(game.scene.width/2, game.scene.height/2)
+                .addTo(game.scene);
+
+        //Add the PQ logo to he middle of the container
+        var logo = new PQ.Sprite('logo')
+                .setPosition(game.scene.width/2, game.scene.height/2)
+                .addTo(game.scene);
+    }
+
+</script>
+</body>
+</html>
