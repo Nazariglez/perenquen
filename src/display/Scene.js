@@ -40,7 +40,7 @@ Scene.prototype._init = function(game){
     addChild(this, this.camera);
 
     //HUD
-    
+
     this.manager = null;
     this.timerManager = new TimerManager();
     this.tweenManager = new TweenManager();

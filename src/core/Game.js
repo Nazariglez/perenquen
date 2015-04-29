@@ -17,6 +17,12 @@ var CONST = require('./const'),
  * @param [options] {DEFAULT_GAME_OPTIONS}
  */
 function Game(width, height, options){
+    this._init(width, height, options);
+}
+
+Game.prototype.constructor = Game;
+
+Game.prototype._init = function(width, height, options){
     if(typeof width === "object"){
         options = width;
         width = null;
@@ -149,9 +155,7 @@ function Game(width, height, options){
     if(this.config.game.scaleType !== CONST.GAME_SCALE_TYPE.NONE){
         this.enableAutoResize(true);
     }
-}
-
-Game.prototype.constructor = Game;
+};
 
 /**
  * Start the request animation frame
