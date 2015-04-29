@@ -119,6 +119,13 @@ Class.inject = function(fn){
 Class.parse = function(cls){
     if(typeof cls !== "function")return cls;
 
+    //Has a _init like a constructor? just add extend and inject
+    if(cls.prototype._init){
+        cls.extend = Class.extend;
+        cls.inject = Class.inject;
+        return cls;
+    }
+
     var name = cls.name || "PQClass";
 
     var parsedClass = Function("return function " + name + "(){if(this['"+ctorName+"'])this['"+ctorName+"'].apply(this, arguments)};")();//jshint ignore:line

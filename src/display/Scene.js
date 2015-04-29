@@ -7,6 +7,17 @@ var Container = require('./Container'),
     Camera = require('./Camera');
 
 function Scene(game){
+    this._init(game);
+}
+
+Scene.prototype = Object.create(Container.prototype);
+Scene.prototype.constructor = Scene;
+
+Scene.prototype.displayObjectUpdateTransform = function(){
+    Container.prototype.displayObjectUpdateTransform.call(this);
+};
+
+Scene.prototype._init = function(game){
     Container.call(this);
 
     this.initiated = false; //TODO: Comprobar si esto es necesario
@@ -29,20 +40,12 @@ function Scene(game){
     addChild(this, this.camera);
 
     //HUD
-
-
+    
     this.manager = null;
     this.timerManager = new TimerManager();
     this.tweenManager = new TweenManager();
 
     this.paused = false;
-}
-
-Scene.prototype = Object.create(Container.prototype);
-Scene.prototype.constructor = Scene;
-
-Scene.prototype.displayObjectUpdateTransform = function(){
-    Container.prototype.displayObjectUpdateTransform.call(this);
 };
 
 Scene.prototype.setBackgroundColor = function(color){
