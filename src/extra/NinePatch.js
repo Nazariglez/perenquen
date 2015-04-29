@@ -38,7 +38,6 @@ NinePatch.prototype._init = function(texture, width, height){
 
 NinePatch.prototype._generateNineTexture = function(renderer){
     if(!this._nineTexture||!this._refreshNine)return;
-    console.log('update');
     var texture = this._nineTexture;
 
     var width = this._nWidth,
