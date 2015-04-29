@@ -9,6 +9,13 @@ var Container = require('../../lib/pixi/src/core/display/Container'),
  * @param game {Game}
  */
 function SceneManager(game){
+    this._init(game);
+}
+
+SceneManager.prototype = Object.create(Container.prototype);
+SceneManager.prototype.constructor = SceneManager;
+
+SceneManager.prototype._init = function(game){
     Container.call(this);
 
     /**
@@ -30,10 +37,7 @@ function SceneManager(game){
     this.currentScene = null;
 
     this.setCurrentScene(this.createScene('initial'));
-}
-
-SceneManager.prototype = Object.create(Container.prototype);
-SceneManager.prototype.constructor = SceneManager;
+};
 
 /**
  * Store a new scene
