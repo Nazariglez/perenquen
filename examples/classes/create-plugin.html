@@ -17,7 +17,49 @@
 <body>
 <script>
 
-    //TODO: Plguin system example
+    /*
+        Perenquen.js has a custom plugin system
+        You can create plugins easily, and enable or disable later
+
+        Just put it below of PQ script, or before the game instance
+     */
+
+    //First, we will create a new plugin with PQ.plugin, and named it "sayHello"
+    PQ.plugin('sayHello', function(){
+        /*
+            All code in this scope will only run if you enable the plugin
+         */
+
+        console.log('Hello world!');
+    });
+
+    //Enable plugin, commet this line if you want disable it
+    PQ.plugin.enable('sayHello'); //Also you can pass an array ['sayHello', others...]
+
+
+    //The best way to use this system is injecting code in our classes
+    PQ.plugin('red-scene-always', function(){
+
+        //This plugin set red background in the scene's prototype
+        PQ.Scene.inject(function(base){
+            var red = 0xff0000;
+
+            return {
+                _init: function(game){
+                    base._init.call(this, game);
+                    this.setBackgroundColor(red);
+                }
+            };
+        });
+
+    });
+
+    //Enable the plugins, comment this line if you want disable it
+    //Also you can pass a string instead of an array with the plugin name, like 'sayHello'
+    PQ.plugin.enable(['sayHello', 'red-scene-always']);
+
+    var game = new PQ.Game();
+    game.start();
 
 </script>
 </body>
