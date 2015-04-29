@@ -2,14 +2,18 @@ var Timer = require('../timer/Timer');
 
 //TODO: pause, backward, delay, reset
 function Timeline(manager){
+    this._init(manager);
+}
+
+Timeline.prototype.constructor = Timeline;
+
+Timeline.prototype._init = function(manager){
     this._listeners = [];
     this.index = 0;
     this.timer = new Timer(null, manager);
     //this.timer.onUpdate(this.tick.bind(this));
     this.timer.onEnd(this.end.bind(this));
-}
-
-Timeline.prototype.constructor = Timeline;
+};
 
 Timeline.prototype.tick = function(time, delta){
     console.log('tick',time);

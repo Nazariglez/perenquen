@@ -18,6 +18,13 @@ for(var i = 0; i < 9; i++){
 //TODO: Posibles residuos en la renderTexture al crear varios botones?
 
 function NinePatch(texture, width, height){
+    this._init(texture, width, height);
+}
+
+NinePatch.prototype = Object.create(Sprite.prototype);
+NinePatch.prototype.constructor = NinePatch;
+
+NinePatch.prototype._init = function(texture, width, height){
     this._nineTexture = null;
     this._refreshNine = false;
 
@@ -26,11 +33,8 @@ function NinePatch(texture, width, height){
 
     this._nRenderTexture = null;
 
-    Sprite.call(this, texture);
-}
-
-NinePatch.prototype = Object.create(Sprite.prototype);
-NinePatch.prototype.constructor = NinePatch;
+    Sprite.prototype._init.call(this, texture);
+};
 
 NinePatch.prototype._generateNineTexture = function(renderer){
     if(!this._nineTexture||!this._refreshNine)return;

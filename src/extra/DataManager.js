@@ -1,13 +1,17 @@
 function DataManager(game){
+    this._init(game);
+}
+
+DataManager.prototype.constructor = DataManager;
+
+DataManager.prototype._init = function(game){
     this.game = game;
     this.id = game.id || "pq.bundle.default";
 
     this.data = null;
 
     this.load();
-}
-
-DataManager.prototype.constructor = DataManager;
+};
 
 DataManager.prototype.load = function(){
     this.data = JSON.parse(localStorage.getItem(this.id)) || getDefaultData(this.game.version);

@@ -7,6 +7,12 @@
  * @param [num] {number}
  */
 function Pool(objectConstructor, args, num){
+    this._init(objectConstructor, args, num);
+}
+
+Pool.prototype.constructor = Pool;
+
+Pool.prototype._init = function(objConstructor, args, num){
 
     /**
      * All objects in this pool
@@ -35,9 +41,7 @@ function Pool(objectConstructor, args, num){
 
     if(num)this.generateObjects(num);
     return this;
-}
-
-Pool.prototype.constructor = Pool;
+};
 
 /**
  * Get the pool length
