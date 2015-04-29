@@ -13,6 +13,13 @@ var DisplayObject = require('./DisplayObject'),
  * @memberof PQ
  */
 function Container(){
+    this._init();
+}
+
+Container.prototype = Object.create(PixiContainer.prototype);
+Container.prototype.constructor = Container;
+
+Container.prototype._init = function(){
     PixiContainer.call(this);
 
     /**
@@ -35,10 +42,7 @@ function Container(){
 
     this.speed = new math.Point(0,0);
     this.rotationSpeed = 0;
-}
-
-Container.prototype = Object.create(PixiContainer.prototype);
-Container.prototype.constructor = Container;
+};
 
 /**
  * Set the container width and height

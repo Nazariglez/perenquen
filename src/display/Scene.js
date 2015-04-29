@@ -18,7 +18,7 @@ Scene.prototype.displayObjectUpdateTransform = function(){
 };
 
 Scene.prototype._init = function(game){
-    Container.call(this);
+    Container.prototype._init.call(this);
 
     this.initiated = false; //TODO: Comprobar si esto es necesario
 

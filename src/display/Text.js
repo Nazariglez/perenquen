@@ -5,11 +5,7 @@ var PixiText = require('../../lib/pixi/src/core/text/Text'),
     CONST = require('../core/const');
 
 function Text(text, style, resolution){
-    text = text || ' ';
-    PixiText.call(this, text, style, resolution);
-
-    this.speed = new math.Point();
-    this.anchor = new math.Point(0.5, 0.5);
+    this._init(text, style, resolution);
 }
 
 Text.prototype = Object.create(PixiText.prototype);
@@ -20,6 +16,14 @@ Text.fontPropertiesCanvas = document.createElement('canvas');
 Text.fontPropertiesContext = Text.fontPropertiesCanvas.getContext('2d');
 
 //TODO: wrong displayObjectTransform, need a custom transform
+
+Text.prototype._init = function(text, style, resolution){
+    text = text || ' ';
+    PixiText.call(this, text, style, resolution);
+
+    this.speed = new math.Point();
+    this.anchor = new math.Point(0.5, 0.5);
+};
 
 Text.prototype.updateText = function (){
     var style = this._style;

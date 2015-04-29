@@ -8,6 +8,13 @@ var PixiTilingSprite = require('../../lib/pixi/src/extras/TilingSprite'),
     Sprite = require('./Sprite');
 
 function TilingSprite(texture, width, height){
+    this._init(texture, width, height);
+}
+
+TilingSprite.prototype = Object.create(PixiTilingSprite.prototype);
+TilingSprite.prototype.constructor = TilingSprite;
+
+TilingSprite.prototype._init = function(texture, width, height){
     if(typeof texture === "string"){
         texture = utils.assetCache.getTexture(texture);
     }
@@ -16,10 +23,7 @@ function TilingSprite(texture, width, height){
     this.speed = new math.Point(0,0);
     this.rotationSpeed = 0;
     this.tileSpeed = new math.Point(0,0);
-}
-
-TilingSprite.prototype = Object.create(PixiTilingSprite.prototype);
-TilingSprite.prototype.constructor = TilingSprite;
+};
 
 TilingSprite.prototype.setTileScale = function(x,y){
     this.tileScale.set(x,y);

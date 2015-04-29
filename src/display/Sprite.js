@@ -9,14 +9,18 @@ var SpriteRenderer = require('./SpriteRenderer'),
     tempPoint = new math.Point();
 
 function Sprite(texture){
-    PixiSprite.call(this, texture);
-    this.setAnchor(0.5,0.5);
-    this.speed = new math.Point(0,0);
-    this.rotationSpeed = 0;
+    this._init(texture);
 }
 
 Sprite.prototype = Object.create(PixiSprite.prototype);
 Sprite.prototype.constructor = Sprite;
+
+Sprite.prototype._init = function(texture){
+    PixiSprite.call(this, texture);
+    this.setAnchor(0.5,0.5);
+    this.speed = new math.Point(0,0);
+    this.rotationSpeed = 0;
+};
 
 Sprite.prototype.displayObjectUpdateTransform = function(){
     // create some matrix refs for easy access

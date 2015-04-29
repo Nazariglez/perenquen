@@ -1,7 +1,14 @@
 var Container = require('./Container');
 
 function Camera(scene){
-    Container.call(this);
+    this._init(scene);
+}
+
+Camera.prototype = Object.create(Container.prototype);
+Camera.prototype.constructor = Camera;
+
+Camera.prototype._init = function(scene){
+    Container.prototype._init.call(this);
     this.scene = scene;
 
     this._zoom = 1;
@@ -11,10 +18,7 @@ function Camera(scene){
 
     this.setSize(scene.width, scene.height)
         .setPosition(scene.width/2, scene.height/2);
-}
-
-Camera.prototype = Object.create(Container.prototype);
-Camera.prototype.constructor = Camera;
+};
 
 Camera.prototype.setFollow = function(target){
 

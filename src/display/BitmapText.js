@@ -6,6 +6,16 @@ var PixiBitmapText = require('../../lib/pixi/src/extras/BitmapText'),
     CONST = require('../core/const');
 
 function BitmapText(text, style){
+    this._init(text, style);
+}
+
+BitmapText.prototype = Object.create(PixiBitmapText.prototype);
+BitmapText.prototype.constructor = BitmapText;
+
+BitmapText.prototype.containerUpdateTransform = Container.prototype.updateTransform;
+BitmapText.prototype.displayObjectUpdateTransform = Container.prototype.displayObjectUpdateTransform;
+
+BitmapText.prototype._init = function(text, style){
     text = text || ' ';
     this.wordWrap = style.wordWrap || false;
     this.wordWrapWidth = style.wordWrapWidth || 100;
@@ -15,13 +25,7 @@ function BitmapText(text, style){
     this.speed = new math.Point();
 
     PixiBitmapText.call(this, text, style);
-}
-
-BitmapText.prototype = Object.create(PixiBitmapText.prototype);
-BitmapText.prototype.constructor = BitmapText;
-
-BitmapText.prototype.containerUpdateTransform = Container.prototype.updateTransform;
-BitmapText.prototype.displayObjectUpdateTransform = Container.prototype.displayObjectUpdateTransform;
+};
 
 BitmapText.prototype.setStyle = function(style){
     if(style.font)this.font = style.font;
