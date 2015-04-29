@@ -1,6 +1,12 @@
 var Key = require('./Key');
 
 function HotKey(key, manager){
+    this._init(key, manager);
+}
+
+HotKey.prototype.constructor = HotKey;
+
+HotKey.prototype._init = function(key, manager){
     this.key = key;
     this.manager = manager;
     this.isPressed = false;
@@ -10,9 +16,7 @@ function HotKey(key, manager){
     this.crtl = false;
     this.shift = false;
     this.alt = false;
-}
-
-HotKey.prototype.constructor = HotKey;
+};
 
 HotKey.prototype.update = function(gameTime, delta){
     this.isDown = this.manager.isDown(this.key);

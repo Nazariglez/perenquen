@@ -1,6 +1,12 @@
 var HotKey = require('./HotKey');
 
 function Keyboard(game){
+    this._init(game);
+}
+
+Keyboard.prototype.constructor = Keyboard;
+
+Keyboard.prototype._init = function(game){
     this.game = game;
     this.isEnabled = false;
 
@@ -19,9 +25,7 @@ function Keyboard(game){
         pressed : [],
         released : []
     };
-}
-
-Keyboard.prototype.constructor = Keyboard;
+};
 
 Keyboard.prototype.enable = function(value){
     value = (value !== false);

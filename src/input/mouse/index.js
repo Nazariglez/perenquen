@@ -3,6 +3,12 @@ var math = require('../../../lib/pixi/src/core/math'),
     EventData = require('./EventData');
 
 function Mouse(game, preventDefault, checkFrecuency){
+    this._init(game, preventDefault, checkFrecuency);
+}
+
+Mouse.prototype.constructor = Mouse;
+
+Mouse.prototype._init = function(game, preventDefault, checkFrecuency){
     this.game = game;
     this.global = new math.Point();
     this.canvas = this.game.canvas;
@@ -44,9 +50,7 @@ function Mouse(game, preventDefault, checkFrecuency){
     }
 
     //TODO: pixelperfect?
-}
-
-Mouse.prototype.constructor = Mouse;
+};
 
 Mouse.prototype.enable = function(value){
     value = (value !== false);

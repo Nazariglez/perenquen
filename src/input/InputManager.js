@@ -3,6 +3,12 @@ var Mouse = require('./mouse'),
     Accelerometer = require('./Accelerometer');
 
 function InputManager(game){
+    this._init(game);
+}
+
+InputManager.prototype.constructor = InputManager;
+
+InputManager.prototype._init = function(game){
     this.game = game;
     this.config = this.game.config.input;
 
@@ -20,9 +26,7 @@ function InputManager(game){
     if(this.config.enableMouse){
         this.enableMouse();
     }
-}
-
-InputManager.prototype.constructor = InputManager;
+};
 
 InputManager.prototype.enableMouse = function(value){
     value = (value !== false);

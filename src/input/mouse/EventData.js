@@ -2,6 +2,12 @@ var math = require('../../../lib/pixi/src/core/math'),
     tempPoint = new math.Point();
 
 function EventData(manager, id){
+    this._init(manager, id);
+}
+
+EventData.prototype.constructor = EventData;
+
+EventData.prototype._init = function(manager, id){
     this.manager = manager;
     this.id = id || 0;
     this.x = -1;
@@ -15,9 +21,7 @@ function EventData(manager, id){
     this.isDown = false;
     this.active = false;
     this._identifier = -1;
-}
-
-EventData.prototype.constructor = EventData;
+};
 
 EventData.prototype.getPosition = function(target){
     return this.manager.getLocalPosition(target || this.target, tempPoint, this.globalPosition);

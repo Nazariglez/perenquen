@@ -1,6 +1,12 @@
 var Device = require('../core/Device');
 
 function Accelerometer(){
+    this._init();
+}
+
+Accelerometer.prototype.constructor = Accelerometer;
+
+Accelerometer.prototype._init = function(){
     this.isEnabled = false;
 
     this.x = 0;
@@ -8,9 +14,7 @@ function Accelerometer(){
     this.z = 0;
 
     this._onDeviceMotion = this._onDeviceMotion.bind(this);
-}
-
-Accelerometer.prototype.constructor = Accelerometer;
+};
 
 Accelerometer.prototype.set = function(accel){
     if(!accel)return this;
