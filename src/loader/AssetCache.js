@@ -1,11 +1,15 @@
 function AssetCache(){
+    this._init();
+}
+
+AssetCache.prototype.constructor = AssetCache;
+
+AssetCache.prototype._init = function(){
     this.textures = {};
     this.audios = {};
     this.particles = {};
     this.json = {};
-}
-
-AssetCache.prototype.constructor = AssetCache;
+};
 
 AssetCache.prototype.addTexture = function(name, url, texture){
     name = name || url;
@@ -31,4 +35,4 @@ AssetCache.prototype.getTexture = function(name){
     return (texture) ? texture.asset : null;
 };
 
-module.exports = new AssetCache();
+module.exports = AssetCache;

@@ -18,6 +18,7 @@ var core = {
     TilingSprite : Class.parse(require('./display/TilingSprite')),
     Camera : Class.parse(require('./display/Camera')),
     AssetLoader : Class.parse(require('./loader/AssetLoader')),
+    AssetCache : Class.parse(require('./loader/AssetCache')),
     Texture : Class.parse(require('../lib/pixi/src/core/textures/Texture')),
     Pool : Class.parse(require('./extra/Pool')),
     NinePatch: Class.parse(require('./extra/NinePatch')),

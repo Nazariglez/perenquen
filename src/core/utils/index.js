@@ -57,7 +57,7 @@ utils.watchVisibilityChanges = require('./visibilityChange');
 /**
  * Store all assets loaded
  */
-utils.assetCache = require('../../loader/AssetCache');
+utils.assetCache = new (require('../../loader/AssetCache'))();
 
 /**
  * Replace keys in the text
