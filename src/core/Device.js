@@ -1,4 +1,4 @@
-//Based on https://github.com/arasatasaygin/is.js/blob/master/is.js
+//Many checks are based on https://github.com/arasatasaygin/is.js/blob/master/is.js
 require('../polyfill/index');
 
 var userAgent = 'navigator' in window && 'userAgent' in navigator && navigator.userAgent.toLowerCase() || '',
