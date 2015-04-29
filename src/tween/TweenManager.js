@@ -1,11 +1,15 @@
 var Tween = require('./Tween');
 
 function TweenManager(){
-    this.tweens = [];
-    this._toDelete = [];
+    this._init();
 }
 
 TweenManager.prototype.constructor = TweenManager;
+
+TweenManager.prototype._init = function(){
+    this.tweens = [];
+    this._toDelete = [];
+};
 
 TweenManager.prototype.tick = function(delta){
     var len = this.tweens.length;

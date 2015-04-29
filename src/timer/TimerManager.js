@@ -2,11 +2,15 @@ var Timer = require('./Timer'),
     Timeline = require('../extra/Timeline');
 
 function TimerManager(){
-    this.timers = [];
-    this._toDelete = [];
+    this._init();
 }
 
 TimerManager.prototype.constructor = TimerManager;
+
+TimerManager.prototype._init = function(){
+    this.timers = [];
+    this._toDelete = [];
+};
 
 TimerManager.prototype.tick = function(delta){
     var len = this.timers.length;

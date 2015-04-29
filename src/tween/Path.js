@@ -3,6 +3,12 @@ var Graphics = require('../display/Graphics'),
     math = require('../../lib/pixi/src/core/math/index');
 
 function Path(){
+    this._init();
+}
+
+Path.prototype.constructor = Path;
+
+Path.prototype._init = function(){
     this.curveAccuracy = 30;
     this.polygon = new math.Polygon();
     this.polygon.closed = false;
@@ -10,9 +16,7 @@ function Path(){
     this.tmpPoint = new math.Point();
     this.tmpPoint2 = new math.Point();
     this.tmpDistance = [];
-}
-
-Path.prototype.constructor = Path;
+};
 
 Path.prototype.setCurveAccuracy = function(value){
     this.curveAccuracy = value || 30;
@@ -378,3 +382,5 @@ Object.defineProperties(Path.prototype, {
         }
     }
 });
+
+//TODO: Relative movement (using the initial position of the target)

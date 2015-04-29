@@ -1,4 +1,10 @@
 function Timer(time, manager){
+    this._init(time, manager);
+}
+
+Timer.prototype.constructor = Timer;
+
+Timer.prototype._init = function(time, manager){
     this.time = time || 0;
     if(manager){
         this.manager = manager;
@@ -22,9 +28,7 @@ function Timer(time, manager){
     this.onTimerRepeat = function(){};
     this.onTimerUpdate = function(){};
     this.onTimerEnd = function(){};
-}
-
-Timer.prototype.constructor = Timer;
+};
 
 Timer.prototype.setTime = function(time){
     this.time = time;

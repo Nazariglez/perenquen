@@ -6,6 +6,13 @@ var ResourceLoader = require('resource-loader'),
     bitmapFontTXTParser = require('./bitmapFontTXTParser');
 
 function AssetLoader(baseUrl, concurrency){
+    this._init(baseUrl, concurrency);
+}
+
+AssetLoader.prototype = Object.create(ResourceLoader.prototype);
+AssetLoader.prototype.constructor = AssetLoader;
+
+AssetLoader.prototype._init = function(baseUrl, concurrency){
     ResourceLoader.call(this, baseUrl, concurrency);
 
     this.use(ResourceLoader.middleware.parsing.blob())
@@ -14,9 +21,6 @@ function AssetLoader(baseUrl, concurrency){
         .use(bitmapFontXMLParser())
         .use(particleParser())
         .use(bitmapFontTXTParser());
-}
-
-AssetLoader.prototype = Object.create(ResourceLoader.prototype);
-AssetLoader.prototype.constructor = AssetLoader;
+};
 
 module.exports = AssetLoader;

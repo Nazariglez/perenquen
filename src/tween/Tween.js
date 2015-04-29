@@ -2,6 +2,12 @@ var Easing = require('./Easing'),
     TweenManager = require('./TweenManager');
 
 function Tween(target, manager){
+    this._init(target, manager);
+}
+
+Tween.prototype.constructor = Tween;
+
+Tween.prototype._init = function(target, manager){
     this.target = target;
     if(manager){
         this.manager = manager;
@@ -38,9 +44,7 @@ function Tween(target, manager){
     this.onTweenUpdate = function(){};
     this.onTweenEnd = function(){};
     this.onTweenPingPong = function(){};
-}
-
-Tween.prototype.constructor = Tween;
+};
 
 Tween.prototype.start = function(){
     this.active = true;
