@@ -32,6 +32,12 @@ Text.prototype.displayObjectUpdateTransform = function(){
     // temporary matrix variables
     var a, b, c, d, tx, ty;
 
+    //Avoid use _width or _height when are 0
+    if(!this._width||!this._height){
+        this._width = this.width/this.scale.x;
+        this._height = this.height/this.scale.y;
+    }
+
     var anchorWidth = this.anchor.x * this._width * this.scale.x,
         anchorHeight = this.anchor.y * this._height * this.scale.y,
         pivotWidth = this.pivot.x * this._width * this.scale.x,
