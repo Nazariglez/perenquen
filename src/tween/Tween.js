@@ -44,6 +44,13 @@ Tween.prototype._init = function(target, manager){
     this.onTweenUpdate = function(){};
     this.onTweenEnd = function(){};
     this.onTweenPingPong = function(){};
+
+    this._chainTween = null;
+};
+
+Tween.prototype.chain = function(tween){
+    this._chainTween = tween || new Tween(this.target);
+    return this._chainTween;
 };
 
 Tween.prototype.start = function(){
@@ -177,6 +184,11 @@ Tween.prototype.tick = function(delta){
             this.isEnded = true;
             this.active = false;
             this.onTweenEnd(realElapsed, delta);
+
+            if(this._chainTween){
+                this._chainTween.addTo(this.manager)
+                    .start();
+            }
         }
 
         return this;
