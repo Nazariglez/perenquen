@@ -19,14 +19,6 @@ utils.sayHello = function(){
  * @returns {object}
  */
 utils.defaultObject = function(parent, child){
-    /*parent = parent || {};
-    child = child || {};
-    for(var key in parent){
-        child[key] = (child[key] !== undefined && child[key] !== null) ? child[key] : parent[key];
-    }
-
-    return child;*/
-
     var parentCopy = JSON.parse(JSON.stringify(parent));
     for(var key in child){
         if(Object.prototype.toString.call(child[key]) === "[object Object]"){
@@ -37,15 +29,6 @@ utils.defaultObject = function(parent, child){
     }
 
     return parentCopy;
-};
-
-/**
- * Extend an object with the properties from other object
- * @param obj {object}
- * @param mixin {object}
- */
-utils.mixin = function(obj, mixin){
-    Object.assign(obj.prototype, mixin);
 };
 
 /**
