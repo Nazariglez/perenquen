@@ -1,5 +1,3 @@
-var ctorName = require('./const').DEFAULT_CONSTRUCTOR_NAME;
-
 /**
  * Just a basic class, does nothing. It's useful just to inherits from it.
  * @class
