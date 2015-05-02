@@ -3,13 +3,7 @@ var CONST = require('../const'),
     Pool = require('./../../extra/Pool'),
     Class = require('../Class');
 
-/**
- * logs out renderer type, audio type, and version
- */
-utils.sayHello = function(){
-    //TODO: RendererType, AudioType, Pixi credits
-    if(!this._saidHello)console.log('Perenquen.js v'+CONST.VERSION + ' [http://perequenjs.com]');
-};
+utils._saidHello = true; //Disable default sayHello
 
 /**
  * Set default parameters in child object with the parent values

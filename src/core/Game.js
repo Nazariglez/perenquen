@@ -35,8 +35,6 @@ Game.prototype._init = function(width, height, options){
      * @default CONST.DEFAULT_GAME_OPTIONS
      */
     this.config = parseConfig(options);
-    utils._saidHello = !this.config.sayHello;
-
     var rendererOptions = parseRendererConfig(CONST.DEFAULT_RENDER_OPTIONS, this.config);
 
     /**
@@ -76,6 +74,10 @@ Game.prototype._init = function(width, height, options){
      */
     this.renderer = getRenderer(this.width, this.height, rendererOptions, !this.config.game.useWebGL);
     this.resize(this.width, this.height);
+
+    if(this.config.sayHello){
+        this.sayHello();
+    }
 
     /**
      * Canvas element
@@ -333,6 +335,11 @@ Game.prototype.setFullScreen = function(value){
 
     return this;
 
+};
+
+Game.prototype.sayHello = function(){
+  console.log('Powered by perenquen.js v'+CONST.VERSION + ' [http://perequenjs.com]');
+    return this;
 };
 
 module.exports = Game;
