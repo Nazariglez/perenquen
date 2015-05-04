@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Parallax Effect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        A simple example to create a parallax effect
+     */
+
+    //Create and start game, for default the game size is 800x600 landscape
+    var game = new PQ.Game();
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/parallax.json"}
+    ]).load(onAssetsLoaded);
+
+    function onAssetsLoaded(){
+
+        //Just a basic container to scale all the assets
+        var scale = Math.min(800/300,600/170);
+        var container = new PQ.Container()
+                .setSize(500, 170)
+                .setScale(scale, scale)
+                .setPosition(game.scene.width/2, game.scene.height/2)
+                .addTo(game.scene);
+
+
+        //Parallax layers...
+        var z0 = new PQ.TilingSprite('skill-desc_0003_bg.png', 300, 170)
+                .setPosition(container.width/2, container.height)
+                .setTileSpeed(-40,0) //Layer Speed
+                .setAnchor(0.5, 1)
+                .addTo(container);
+
+        var z1 = new PQ.TilingSprite('skill-desc_0002_far-buildings.png', 300, 142)
+                .setPosition(container.width/2, container.height)
+                .setTileSpeed(-30,0) //Layer Speed
+                .setAnchor(0.5, 1)
+                .addTo(container);
+
+        var z2 = new PQ.TilingSprite('skill-desc_0001_buildings.png', 300, 142)
+                .setPosition(container.width/2, container.height)
+                .setTileSpeed(-20,0) //Layer Speed
+                .setAnchor(0.5, 1)
+                .addTo(container);
+
+        var z3 = new PQ.TilingSprite('skill-desc_0000_foreground.png', 300, 104)
+                .setPosition(container.width/2, container.height)
+                .setTileSpeed(-10,0) //Layer Speed
+                .setAnchor(0.5, 1)
+                .addTo(container);
+
+
+    }
+</script>
+</body>
+</html>
