@@ -326,4 +326,6 @@ Object.defineProperties(TilingSprite.prototype, {
     }
 });
 
+//TODO: En ocasiones se produce un salto extraño en los tiles con speedTile (canvas&&webgl)
+
 module.exports = TilingSprite;

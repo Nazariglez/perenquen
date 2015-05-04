@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Container</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        We can create object containers to set groupal scales, or othret properties
+     */
+
+    //Create and start game, for default the game size is 800x600 landscape
+    var game = new PQ.Game();
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/game.json"}
+    ]).load(onAssetsLoaded);
+
+    function onAssetsLoaded(){
+
+        //Add the first container
+        var container1 = new PQ.Container()
+                .setPosition(game.scene.width/2 - 200, game.scene.height/2 - 100)
+                .setSize(100,100)
+                .addTo(game.scene);
+
+        //add a second container with scale 0.60
+        var container2 = new PQ.Container()
+                .setPosition(game.scene.width/2 + 200, game.scene.height/2 - 100)
+                .setScale(0.6, 0.6)
+                .setSize(100,100)
+                .addTo(game.scene);
+
+        //add a 3th container with rotation
+        var container3 = new PQ.Container()
+                .setPosition(game.scene.width/2, game.scene.height/2 + 100)
+                .setSize(100,100)
+                .setRotation(120 * PQ.DEG_TO_RAD) //120 degrees
+                .addTo(game.scene);
+
+
+
+        //Now we will add some sprites
+        var containers = [container1, container2, container3];
+        for(var i = 0; i < 10; i++){
+            var containerIndex = 0;
+
+            for(var n = 0; n < 3; n++){
+                var sprite = new PQ.Sprite("player.png")
+                        .setPosition(Math.random() * 100, Math.random() * 100)
+                        .addTo(containers[containerIndex]);
+
+                containerIndex++;
+            }
+        }
+
+    }
+</script>
+</body>
+</html>
