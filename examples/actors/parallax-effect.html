@@ -17,7 +17,7 @@
 <script>
 
     /*
-        A simple example to create a parallax effect
+        A simple example using tiling sprites  to create a parallax effect
      */
 
     //Create and start game, for default the game size is 800x600 landscape
@@ -31,10 +31,14 @@
 
     function onAssetsLoaded(){
 
+        //Container size
+        var W = 300;
+        var H = 170;
+
         //Just a basic container to scale all the assets
-        var scale = Math.min(800/300,600/170);
+        var scale = Math.min(800/W,600/H);
         var container = new PQ.Container()
-                .setSize(500, 170)
+                .setSize(W, H)
                 .setScale(scale, scale)
                 .setPosition(game.scene.width/2, game.scene.height/2)
                 .addTo(game.scene);
