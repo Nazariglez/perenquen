@@ -1,13 +1,13 @@
 {
-  "name": "perenquenjs",
+  "name": "perenquen",
   "version": "0.3.0",
   "homepage": "http://perenquenjs.com",
-  "description": "HTML5 Game Framework for mobile, web and desktop development.",
+  "description": "HTML5 Game Engine (Core)",
   "author": "Nazari Gonzalez <nazari.nz@gmail.com> (http://www.nazariglez.com)",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Nazariglez/perenquenjs"
+    "url": "https://github.com/PerenquenEngine/perenquen-core"
   },
   "bin": {
     "perenquen": "./cli/perenquen"
