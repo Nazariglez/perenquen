@@ -338,7 +338,7 @@ Game.prototype.setFullScreen = function(value){
 };
 
 Game.prototype.sayHello = function(){
-  console.log('Powered by perenquen.js v'+CONST.VERSION + ' [http://perequenjs.com]');
+  console.log('Powered by Perenquen v'+CONST.VERSION + ' [http://.com]');
     return this;
 };
 
