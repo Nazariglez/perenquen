@@ -122,6 +122,11 @@ Scene.prototype.addChild = function(child){
     return this;
 };
 
+Scene.prototype.sortChildrenByDepth = function(){
+    this.camera.sortChildrenByDepth();
+    return this;
+};
+
 Object.defineProperties(Scene.prototype, {
     backgroundColor : {
         get: function(){
