@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Depth</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        All the actors are painted in the same order they were created,
+        but we can alter this order with "depth" property.
+
+        You can enable this feature in the game config before create the renderer to be used internally,
+        but it's a expensive feature if you had many actors, or you are continuously creating new actors.
+
+        So, with another way it would be used just when you want it, to sort only the containers what you want.
+     */
+
+    var config = {
+        //Automatic children sort (all the containers are affected)
+        useSortChildrenByDepth: true
+    };
+
+    //Create and start game, for default the game size is 800x600 landscape
+    var game = new PQ.Game(config);
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/ui.json"}
+    ]).load(onAssetsLoaded);
+
+    function onAssetsLoaded(){
+
+        //Original Sprite
+
+
+    }
+</script>
+</body>
+</html>
