@@ -45,6 +45,7 @@ var core = {
     Key : Class.parse(require('./input/keyboard/Key')),
     HotKey : Class.parse(require('./input/keyboard/HotKey')),
     Device : Class.parse(require('./core/Device')),
+    AnimationManager : Class.parse(require('./display/AnimationManager')),
     filters : require('../lib/pixi/src/filters')
 
 };

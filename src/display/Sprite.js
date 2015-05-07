@@ -21,7 +21,7 @@ Sprite.prototype._init = function(texture){
     this.setAnchor(0.5,0.5);
     this.speed = new math.Point(0,0);
     this.rotationSpeed = 0;
-    this.anims = new AnimationManager(this);
+    this.animationManager = new AnimationManager(this);
 };
 
 Sprite.prototype.displayObjectUpdateTransform = function(){
