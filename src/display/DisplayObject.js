@@ -44,7 +44,9 @@ DisplayObject.prototype.setPosition = function(x,y){
 };
 
 DisplayObject.prototype.setSpeed = function(x,y){
-    this.speed.set(x,y);
+    if(typeof y !== "number")y = x;
+    this.speedX = x;
+    this.speedY = y;
     return this;
 };
 
@@ -53,8 +55,13 @@ DisplayObject.prototype.setRotationSpeed = function(value){
     return this;
 };
 
-DisplayObject.prototype.setAngleSpeed = function(){
-    //todo
+DisplayObject.prototype.setVelocity = function(vel){
+    this.velocity = vel;
+    return this;
+};
+
+DisplayObject.prototype.setDirection = function(vel){
+    this.direction = vel;
     return this;
 };
 
@@ -135,3 +142,84 @@ DisplayObject.prototype.setVisible = function(value){
 };
 
 module.exports = DisplayObject;
+
+Object.defineProperties(DisplayObject.prototype, {
+    speedX: {
+        get: function(){
+            return this.speed.x;
+        },
+
+        set: function(value) {
+            if (value === this.speed.x)return;
+            this.speed.x = value;
+
+            this._direction = Math.atan(this.speed.y / this.speed.x);
+
+            var velX = Math.cos(this.direction) * this.speed.x,
+                velY = Math.sin(this.direction) * this.speed.y;
+
+            this._velocity = velX + velY;
+        }
+
+    },
+
+    speedY: {
+        get: function(){
+            return this.speed.y;
+        },
+
+        set: function(value) {
+            if (value === this.speed.y)return;
+            this.speed.y = value;
+
+            this._direction = Math.atan(this.speed.y / this.speed.x);
+
+            var velX = Math.cos(this.direction) * this.speed.x,
+                velY = Math.sin(this.direction) * this.speed.y;
+
+            this._velocity = velX + velY;
+        }
+
+    },
+
+    velocity : {
+        get: function(){
+            if(this._velocity === undefined){
+                var velX = Math.cos(this.direction) * this.speed.x,
+                    velY = Math.sin(this.direction) * this.speed.y;
+
+                this._velocity = velX + velY;
+            }
+            return this._velocity;
+        },
+
+        set: function(value){
+            if(value === this._velocity)return;
+            this._velocity = value;
+
+            this.speed.x = this._velocity * Math.cos(this.direction);
+            this.speed.y = this._velocity * Math.sin(this.direction);
+        }
+    },
+
+    direction : {
+        get: function(){
+            if(this._direction === undefined){
+                this._direction = 0;
+            }
+
+            return this._direction;
+        },
+
+        set: function(value){
+            if(value === this._direction)return;
+            this._direction = value;
+
+            this.speed.x = this.velocity * Math.cos(this._direction);
+            this.speed.y = this.velocity * Math.sin(this._direction);
+
+        }
+
+
+    }
+});
