@@ -1,4 +1,4 @@
-function Animations(sprite){
+function AnimationManager(sprite){
     this._init(sprite);
 }
 
@@ -8,4 +8,4 @@ Animations.prototype._init = function(sprite){
     this.sprite = sprite;
 };
 
-module.exports = Animations;
+module.exports = AnimationManager;

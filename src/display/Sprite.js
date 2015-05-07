@@ -6,7 +6,7 @@ var SpriteRenderer = require('./SpriteRenderer'),
     CanvasTinter = require('../../lib/pixi/src/core/renderers/canvas/utils/CanvasTinter'),
     math = require('../../lib/pixi/src/core/math'),
     CONST = require('../core/const'),
-    Animations = require('./Animations'),
+    AnimationManager = require('./AnimationManager'),
     tempPoint = new math.Point();
 
 function Sprite(texture){
@@ -21,7 +21,7 @@ Sprite.prototype._init = function(texture){
     this.setAnchor(0.5,0.5);
     this.speed = new math.Point(0,0);
     this.rotationSpeed = 0;
-    this.anims = new Animations(this);
+    this.anims = new AnimationManager(this);
 };
 
 Sprite.prototype.displayObjectUpdateTransform = function(){
