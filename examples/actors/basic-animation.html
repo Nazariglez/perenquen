@@ -39,7 +39,7 @@
         //Rotation speed, always in radians, for degrees use "degree * PQ.DEG_TO_RAD"
         var sprite = new PQ.Sprite("player.png")
                 .setScale(3,3)
-                .setPosition(200,200)
+                .setPosition(200,100)
                 .setRotationSpeed(50 * PQ.DEG_TO_RAD) //set speed rotation
                 .addTo(game.scene);
 
@@ -84,7 +84,7 @@
         };
 
         //Lineal speed both axis
-        sprite5 = new PQ.Sprite("player.png")
+        var sprite5 = new PQ.Sprite("player.png")
                 .setScale(3,3)
                 .setPosition(400,400)
                 .setSpeed(60, -60)
@@ -100,19 +100,27 @@
             }
         };
 
+        //General velocity and directional movement
+        var initialDirection = 45*PQ.DEG_TO_RAD;
+        var fixRotation = 90*PQ.DEG_TO_RAD; //This sprite (asset) is not aligned correctly
+
+        var sprite6 = new PQ.Sprite("player.png")
+                .setScale(3,3)
+                .setPosition(300,300)
+                .setRotation(fixRotation + initialDirection)
+                .setVelocity(100) //General velocity
+                .setDirection(initialDirection) //Movement direction in degrees
+                .addTo(game.scene);
+
+        sprite6.update = function(gameTime, delta){
+            //Circular movement
+            this.direction += 0.8 * delta;
+
+            //The sprite always looks in the correct direction
+            this.rotation = this.direction + (90*PQ.DEG_TO_RAD);
+        }
+
     }
-
-    var speed = -15;
-    var direction = 20 * PQ.DEG_TO_RAD;
-    var x = speed * Math.cos(direction);
-    var y = speed * Math.sin(direction);
-
-    var xSpeed = Math.cos(direction)*x;
-    var ySpeed = Math.sin(direction)*y;
-
-    var nDirection = Math.atan((y/speed)/(x/speed));
-
-    console.log(direction, nDirection);
 </script>
 </body>
 </html>
