@@ -6,7 +6,8 @@ var SpriteRenderer = require('./SpriteRenderer'),
     CanvasTinter = require('../../lib/pixi/src/core/renderers/canvas/utils/CanvasTinter'),
     math = require('../../lib/pixi/src/core/math'),
     CONST = require('../core/const'),
-    AnimationManager = require('./AnimationManager'),
+    AnimationManager = require('./animation/AnimationManager'),
+    Texture = require('../../lib/pixi/src/core/textures/Texture'),
     tempPoint = new math.Point();
 
 function Sprite(texture){
@@ -22,6 +23,69 @@ Sprite.prototype._init = function(texture){
     this.speed = new math.Point(0,0);
     this.rotationSpeed = 0;
     this.animationManager = new AnimationManager(this);
+    this.isCropped = false;
+    this._unCroppedTexture = null;
+};
+
+Sprite.prototype.animate = function(gameTime, delta){
+    if(this.update(gameTime, delta) === false)return this;
+
+    this.animationManager.animate(gameTime, delta);
+
+    var tick = (config.useDeltaAnimation) ? delta : 1;
+
+    if(this.speed && (this.speed.x !== 0 || this.speed.y !== 0)){
+        this.position.x += this.speed.x * tick;
+        this.position.y += this.speed.y * tick;
+    }
+
+    if(this.rotationSpeed && this.rotationSpeed !== 0){
+        this.rotation += this.rotationSpeed * tick;
+    }
+
+    var len = this.children.length;
+    for(var i = 0; i < len; i++){
+        this.children[i].animate(gameTime, delta);
+    }
+
+    return this;
+};
+
+Sprite.prototype.setCrop = function(x,y,width,height){
+    if(x === false){
+        if(this.isCropped) {
+            //this.texture.destroy(); //TODO: Maybe destroy the texture cropped?
+            this.texture = this._unCroppedTexture;
+            this.isCropped = false;
+        }
+        return this;
+    }
+
+    if(!this.isCropped){
+        this._unCroppedTexture = this.texture;
+        this.texture = new Texture(this.texture, this.texture.frame.clone(), this.texture.crop.clone());
+        this.isCropped = true;
+    }
+
+    var frameX = this._unCroppedTexture.frame.x,
+        frameY = this._unCroppedTexture.frame.y;
+
+    //TODO: No permitir que pasen medidas anteriores al frame, ni mayores, para evitar mostrar otras cosas en los sheets
+
+    this.texture.crop.x = frameX + x;
+    this.texture.crop.y = frameY + y;
+    this.texture.crop.width = width;
+    this.texture.crop.height = height;
+
+    this.texture.frame.width = this.texture.crop.width;
+    this.texture.frame.height = this.texture.crop.height;
+
+    this.texture.width = this.texture.frame.width;
+    this.texture.height = this.texture.frame.height;
+
+    this.texture._updateUvs();
+
+    return this;
 };
 
 Sprite.prototype.displayObjectUpdateTransform = function(){
@@ -286,6 +350,8 @@ Object.defineProperties(Sprite.prototype, {
             {
                 return;
             }
+
+            this.isCropped = false;
 
             this._texture = value;
             this.cachedTint = 0xFFFFFF;
