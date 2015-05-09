@@ -15,6 +15,11 @@
 </head>
 <body>
 <script>
+
+    /*
+     * Perenquen can draw a cropped sprite, or crop it dynamically
+     */
+
     var game = new PQ.Game();
     game.start();
 
@@ -33,6 +38,7 @@
                 .addTo(game.scene);
 
 
+        
         //Sprite cropped, 1/4 of this real sprite
         var sprite2 = new PQ.Sprite('bg')
                 .setScale(0.4)
@@ -62,17 +68,18 @@
                 .setCrop(400,300, 400, 300) //right-bottom corner
                 .addTo(game.scene);
 
+
+
         //Horizontal dinamic crop
         var sprite6 = new PQ.Sprite('bg')
                 .setScale(0.4)
-                //.setAnchor(0,0)
                 .setPosition(190, 440)
                 .addTo(game.scene);
 
         var horizontalCropX = 0;
         var horizontalPingPong = false;
         sprite6.update = function(gameTime, delta){
-            this.setCrop(horizontalCropX, 0, 800 - horizontalCropX, 600);
+            this.setCrop(horizontalCropX, 0, 800 - horizontalCropX*2, 600);
 
             if(!horizontalPingPong){
                 horizontalCropX+=100*delta;
@@ -80,7 +87,7 @@
                 horizontalCropX-=100*delta;
             }
 
-            if(horizontalCropX >= 799){
+            if(horizontalCropX >= 400){
                 horizontalPingPong = !horizontalPingPong;
             }else if(horizontalCropX <= 0){
                 horizontalPingPong = !horizontalPingPong;
@@ -90,14 +97,13 @@
         //Vertical dinamic crop
         var sprite7 = new PQ.Sprite('bg')
                 .setScale(0.4)
-                .setAnchor(0,0)
-                .setPosition(400, 320)
+                .setPosition(560, 440)
                 .addTo(game.scene);
 
         var verticalCropY = 0;
         var verticalPingPong = false;
         sprite7.update = function(gameTime, delta){
-            this.setCrop(0, verticalCropY, 800, 600 - verticalCropY);
+            this.setCrop(0, verticalCropY, 800, 600 - verticalCropY*2);
 
             if(!verticalPingPong){
                 verticalCropY+=100*delta;
@@ -105,7 +111,7 @@
                 verticalCropY-=100*delta;
             }
 
-            if(verticalCropY >= 599){
+            if(verticalCropY >= 300){
                 verticalPingPong = !verticalPingPong;
             }else if(verticalCropY <= 0){
                 verticalPingPong = !verticalPingPong;
