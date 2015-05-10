@@ -61,6 +61,7 @@ Animation.prototype._parseFrames = function(){
 };
 
 Animation.prototype._parseGrid = function(){
+    //TODO: add support to offset distances between cols and rows
     var rows = this.data.rows,
         cols = this.data.cols,
         texture = (typeof this.data.textures === "string") ? utils.assetCache.getTexture(this.data.textures) : this.data.textures,
@@ -143,6 +144,7 @@ Animation.prototype.animate = function(gameTime, delta){
     if(this._time >= this.time){
         this._time = 0;
         if(!this.loop){
+            this.index = 0;
             this.stop();
             this.onAnimEnd(this.sprite);
             return this;
