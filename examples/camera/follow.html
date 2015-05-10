@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Sprite Animation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    var game = new PQ.Game();
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/game.json"}
+    ]).load(onAssetsLoaded);
+
+    function onAssetsLoaded(){
+
+        player = new PQ.Sprite('player.png')
+                .setPosition(game.scene.width/2, game.scene.height/2)
+                .addTo(game.scene);
+
+    }
+</script>
+</body>
+</html>

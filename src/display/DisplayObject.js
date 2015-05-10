@@ -65,8 +65,6 @@ DisplayObject.prototype.setDirection = function(vel){
     return this;
 };
 
-//TODO: add setFlip(), flipX, flipY??
-
 DisplayObject.prototype.animate = function(gameTime, delta){
     if(this.update(gameTime, delta) !== false){
 
@@ -109,7 +107,9 @@ DisplayObject.prototype.setPivot = function(x,y){
 };
 
 DisplayObject.prototype.setScale = function(x,y){
-    this.scale.set(x,y);
+    if(typeof y !== "number")y = x;
+    this.scaleX = x;
+    this.scaleY = y;
     return this;
 };
 
@@ -140,6 +140,16 @@ DisplayObject.prototype.tween = function(manager){
 
 DisplayObject.prototype.setVisible = function(value){
     this.visible = (value !== false);
+    return this;
+};
+
+DisplayObject.prototype.setFlipX = function(value){
+    this.flipX = value;
+    return this;
+};
+
+DisplayObject.prototype.setFlipY = function(value){
+    this.flipY = value;
     return this;
 };
 
@@ -221,7 +231,62 @@ Object.defineProperties(DisplayObject.prototype, {
             this.speed.y = this.velocity * Math.sin(this._direction);
 
         }
+    },
 
+    flipX : {
+        get: function(){
+            if(!this._flipX)this._flipX = false;
+            return this._flipX;
+        },
 
+        set: function(value){
+            value = (value !== false);
+            if(!this._flipX)this._flipX = false;
+
+            if(value === this._flipX)return;
+            this._flipX = value;
+
+            this.scale.x = -this.scale.x;
+
+        }
+    },
+
+    flipY : {
+        get: function(){
+            if(!this._flipY)this._flipY = false;
+            return this._flipY;
+        },
+
+        set: function(value){
+            value = (value !== false);
+            if(!this._flipY)this._flipY = false;
+
+            if(value === this._flipY)return;
+            this._flipY = value;
+
+            this.scale.y = -this.scale.y;
+        }
+    },
+
+    scaleX: {
+        get: function(){
+            return (this.flipX) ? -this.scale.x : this.scale.x;
+        },
+
+        set: function(value){
+            this.scale.x = (this.flipX) ? -value : value;
+        }
+    },
+
+    scaleY: {
+        get: function(){
+            return (this.flipY) ? -this.scale.y : this.scale.y;
+        },
+
+        set: function(value){
+            this.scale.y = (this.flipY) ? -value : value;
+        }
     }
 });
+
+//TODO: flip invert anchors and pivot, maybe can implement flip in the renderer?
