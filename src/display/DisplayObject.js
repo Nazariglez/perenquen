@@ -65,6 +65,8 @@ DisplayObject.prototype.setDirection = function(vel){
     return this;
 };
 
+//TODO: add setFlip(), flipX, flipY??
+
 DisplayObject.prototype.animate = function(gameTime, delta){
     if(this.update(gameTime, delta) !== false){
 
