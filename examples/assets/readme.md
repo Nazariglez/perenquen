@@ -6,3 +6,4 @@
   - background.png ([Bevouliin](http://bevouliin.com/))
   - ui.png ([Kenney](http://www.kenney.nl/assets))
   - parallax.png ([Ansimux](http://opengameart.org/users/ansimuz))
+  - mascot_run.png ([Bevouliin](http://bevouliin.com/))
