@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Anchor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        All display object like containers, sprites, etc...
+        had a anchor points to set the position in the screen
+     */
+
+    var game = new PQ.Game();
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/ui.json"}
+    ]).load(onAssetsLoaded);
+
+    function onAssetsLoaded(){
+
+        //Just a reference
+        var graphic = new PQ.Graphics()
+                .lineStyle(1, 0x00ff00, 1)
+                .moveTo(200, 100)
+                .lineTo(200, 300)
+                .moveTo(100, 200)
+                .lineTo(300, 200)
+                .addTo(game.scene);
+
+        //Now we make a 5 sprites with same position but different anchor
+        var positionX = 200;
+        var positionY = 200;
+
+        var s1 = new PQ.Sprite("buttonSquare_brown.png")
+                .setPosition(positionX, positionY)
+                .setAlpha(0.5)
+                .setAnchor(0, 0) //top-left anchor
+                .addTo(game.scene);
+
+        var s2 = new PQ.Sprite("buttonSquare_brown.png")
+                .setPosition(positionX, positionY)
+                .setAlpha(0.5)
+                .setAnchor(0, 1) //bottom-left anchor
+                .addTo(game.scene);
+
+        var s3 = new PQ.Sprite("buttonSquare_brown.png")
+                .setPosition(positionX, positionY)
+                .setAlpha(0.5)
+                .setAnchor(1, 0) //top-right anchor
+                .addTo(game.scene);
+
+        var s4 = new PQ.Sprite("buttonSquare_brown.png")
+                .setPosition(positionX, positionY)
+                .setAlpha(0.5)
+                .setAnchor(1, 1) //bottom-right anchor
+                .addTo(game.scene);
+
+        var s5 = new PQ.Sprite("buttonSquare_brown.png")
+                .setPosition(positionX, positionY)
+                .setAlpha(0.5)
+                .setAnchor(0.5, 0.5) //mid anchor
+                .addTo(game.scene);
+    }
+</script>
+</body>
+</html>
