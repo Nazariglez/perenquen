@@ -5,4 +5,6 @@ Graphics.prototype.drawPath = function(path){
     return this;
 };
 
+//TODO: anchors? pivot? flip?
+
 module.exports = Graphics;
