@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Example Basic Animations</title>
+    <title>Example Flip</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="../../build/perenquen.dev.js"></script>
     <style>
@@ -17,109 +17,106 @@
 <script>
 
     /*
-         Basic animations, speed and rotation
+        You can flip a display object like sprite, animations, containers, tilingsprites, etc...
      */
 
-    //By default all animation use delta time, you can disable it to use frames
-    var config = {
-        //useDeltaAnimation: false
-    };
-
-    //Create and start game, for default the game size is 800x600 landscape
-    var game = new PQ.Game(config);
+    var game = new PQ.Game();
     game.start();
 
     //Load assets
     game.assetLoader.add([
-        {url: "../assets/game.json"}
+        {url: "../assets/mascot-full.json"}
     ]).load(onAssetsLoaded);
 
     function onAssetsLoaded(){
 
-        //Rotation speed, always in radians, for degrees use "degree * PQ.DEG_TO_RAD"
-        var sprite = new PQ.Sprite("player.png")
-                .setScale(3,3)
+        //Original sprite
+        var sprite = new PQ.Sprite("run/frame-1.png")
+                .setScale(0.5)
+                .setPosition(100,100)
+                .addTo(game.scene);
+
+        //Flipped in axis Y
+        var sprite1 = new PQ.Sprite("run/frame-1.png")
+                .setScale(0.5)
                 .setPosition(200,100)
-                .setRotationSpeed(50 * PQ.DEG_TO_RAD) //set speed rotation
+                .setFlipY() //Axis Y
                 .addTo(game.scene);
 
-        var sprite2 = new PQ.Sprite("player.png")
-                .setScale(3,3)
-                .setPosition(200,400)
-                .setRotationSpeed(-50 * PQ.DEG_TO_RAD) //set speed rotation
+        //Flipped in axis X
+        var sprite2 = new PQ.Sprite("run/frame-1.png")
+                .setScale(0.5)
+                .setPosition(300,100)
+                .setFlipX() //Axis X
                 .addTo(game.scene);
 
-        //Lineal speed axis X
-        var sprite3 = new PQ.Sprite("player.png")
-                .setScale(3,3)
-                .setPosition(400,200)
-                .setSpeed(40, 0)
+        //Flipped in both axis
+        var sprite3 = new PQ.Sprite("run/frame-1.png")
+                .setScale(0.5)
+                .setPosition(400,100)
+                .setFlipX() //Axis X
+                .setFlipY() //Axis Y
                 .addTo(game.scene);
 
-        sprite3.update = function(gameTime, delta){
 
-            //PingPong
-            if(this.x > 600){
-                this.setSpeed(-40, 0);
-            }else if(this.x < 400){
-                this.setSpeed(40, 0);
+
+        var sprite4 = new PQ.Sprite("run/frame-1.png")
+                .setPosition(game.scene.width/2,game.scene.height/2 + 100)
+                .addTo(game.scene);
+
+        //Flip an animation on each repeat loop
+        var runAnimation = sprite4.animationManager.createFromFrames('run',{
+            time: 500,
+            loop: true,
+            textures : [
+                    "run/frame-1.png",
+                    "run/frame-2.png",
+                    "run/frame-3.png",
+                    "run/frame-4.png",
+                    "run/frame-5.png"
+            ]
+        }).onRepeat(function(sprite, repeat){
+            if(repeat%2 === 0){
+                //Flip in axis X
+                sprite.flipX = !sprite.flipX;
+            }else{
+                //Flip in axis Y
+                sprite.flipY = !sprite.flipY;
             }
-        };
+        }).play();
 
-        //Lineal speed axis Y
-        var sprite4 = new PQ.Sprite("player.png")
-                .setScale(3,3)
-                .setPosition(600,200)
-                .setSpeed(0, 40)
+
+        //Text flipped in axis x
+        var text = new PQ.Text('Hello World!!!', {
+            fill: 0xffffff,
+            font: "30px Arial"
+        }).setPosition(150, game.scene.height/2 + 100)
+                .setFlipX()
+                .setRotationSpeed(10*PQ.DEG_TO_RAD)
                 .addTo(game.scene);
 
-        sprite4.update = function(gameTime, delta){
 
-            //PingPong
-            if(this.y > 400){
-                this.setSpeed(0, -40);
-            }else if(this.y < 200){
-                this.setSpeed(0, 40);
-            }
-        };
+        //Create a container and flip it
+        var container = new PQ.Container()
+                .setSize(400,400)
+                .setScale(0.4)
+                .setPosition(game.scene.width/2 + 250, game.scene.height/2)
+                .addTo(game.scene);
 
-        //Lineal speed both axis
-        var sprite5 = new PQ.Sprite("player.png")
-                .setScale(3,3)
+        var s1 = new PQ.Sprite("run/frame-2.png")
+                .setPosition(0,0)
+                .addTo(container);
+
+        var s2 = new PQ.Sprite("faint/frame-2.png")
+                .setPosition(200,200)
+                .addTo(container);
+
+        var s3 = new PQ.Sprite("jump/jump-up.png")
                 .setPosition(400,400)
-                .setSpeed(60, -60)
-                .addTo(game.scene);
+                .addTo(container);
 
-        sprite5.update = function(gameTime, delta){
-
-            //PingPong
-            if(this.y > 400){
-                this.setSpeed(60, -60);
-            }else if(this.y < 200){
-                this.setSpeed(-60, 60);
-            }
-        };
-
-        //General velocity and directional movement
-        var initialDirection = 45*PQ.DEG_TO_RAD;
-        var fixRotation = 90*PQ.DEG_TO_RAD; //This sprite (asset) is not aligned correctly
-
-        var sprite6 = new PQ.Sprite("player.png")
-                .setScale(3,3)
-                .setPosition(300,300)
-                .setRotation(fixRotation + initialDirection)
-                .setVelocity(100) //General velocity
-                .setDirection(initialDirection) //Movement direction in degrees
-                .addTo(game.scene);
-
-        sprite6.update = function(gameTime, delta){
-            //Circular movement
-            this.direction += 0.8 * delta;
-
-            //The sprite always looks in the correct direction
-            this.rotation = this.direction + (fixRotation);
-        }
-
+        //Flip our container
+        container.setFlipX();
     }
 </script>
 </body>
