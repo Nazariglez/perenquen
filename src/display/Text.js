@@ -42,8 +42,8 @@ Text.prototype.displayObjectUpdateTransform = function(){
 
     //Avoid use _width or _height when are 0
     if(!this._width||!this._height){
-        this._width = this.width/sx;
-        this._height = this.height/sy;
+        this._width = this.width/this.scale.x;
+        this._height = this.height/this.scale.y;
     }
 
     var anchorWidth = ax * this._width * sx,
