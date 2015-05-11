@@ -246,7 +246,7 @@ Object.defineProperties(DisplayObject.prototype, {
             if(value === this._flipX)return;
             this._flipX = value;
 
-            this.scale.x = -this.scale.x;
+            //this.scale.x = -this.scale.x;
 
         }
     },
@@ -264,7 +264,7 @@ Object.defineProperties(DisplayObject.prototype, {
             if(value === this._flipY)return;
             this._flipY = value;
 
-            this.scale.y = -this.scale.y;
+            //this.scale.y = -this.scale.y;
         }
     },
 
@@ -274,7 +274,7 @@ Object.defineProperties(DisplayObject.prototype, {
         },
 
         set: function(value){
-            this.scale.x = (this.flipX) ? -value : value;
+            this.scale.x = value; //(this.flipX) ? -value : value;
         }
     },
 
@@ -284,9 +284,7 @@ Object.defineProperties(DisplayObject.prototype, {
         },
 
         set: function(value){
-            this.scale.y = (this.flipY) ? -value : value;
+            this.scale.y = value; //(this.flipY) ? -value : value;
         }
     }
 });
-
-//TODO: flip invert anchors and pivot, maybe can implement flip in the renderer?
