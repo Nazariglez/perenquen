@@ -26,9 +26,54 @@
 
     function onAssetsLoaded(){
 
-        player = new PQ.Sprite('player.png')
+        var container = new PQ.Container()
+                .setSize(2000, 2000)
                 .setPosition(game.scene.width/2, game.scene.height/2)
                 .addTo(game.scene);
+
+        var background = new PQ.TilingSprite('starBackground.png', container.width, container.height)
+                .setPosition(container.width/2, container.height/2)
+                .addTo(container);
+
+        var graphic = new PQ.Graphics()
+                .lineStyle(1, 0xffffff, 0.1)
+                .addTo(container);
+
+        var sectorSize = 200;
+
+        for(var i = 1; i <= sectorSize; i++){
+            graphic.moveTo(sectorSize * i, 0)
+                    .lineTo(sectorSize * i, container.height)
+                    .moveTo(0, sectorSize*i)
+                    .lineTo(container.width, sectorSize*i);
+        }
+
+        function getText(x,y){
+            return new PQ.Text(x + " - " + y, {
+                fill: 0xffffff,
+                font: "30px Arial"
+            }).setAlpha(0.2);
+        }
+
+        for(var x = 0; x < 10; x++){
+            for(var y = 0; y < 10; y++){
+
+                getText(x,y).setPosition(200*x + 100, 200*y + 100)
+                        .addTo(container);
+
+            }
+        }
+
+        player = new PQ.Sprite('player.png')
+                .setPosition(container.width/2, container.height/2)
+                .setVelocity(60)
+                .addTo(container);
+
+        player.update = function(gameTime, delta){
+            player.direction += 1*delta;
+            player.velocity += 5*delta;
+        };
+
 
     }
 </script>
