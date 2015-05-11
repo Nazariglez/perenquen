@@ -93,6 +93,7 @@ Sprite.prototype.displayObjectUpdateTransform = function(){
     var pt = this.parent.worldTransform;
     var wt = this.worldTransform;
 
+    //anchor, pivot, and flip variables
     var sx = (this.flipX) ? -this.scale.x : this.scale.x,
         sy = (this.flipY) ? -this.scale.y : this.scale.y,
         ax = (this.flipX) ? 1-this.anchor.x : this.anchor.x,

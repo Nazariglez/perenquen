@@ -40,13 +40,21 @@ TilingSprite.prototype.displayObjectUpdateTransform = function(){
     var pt = this.parent.worldTransform;
     var wt = this.worldTransform;
 
+    //anchor, pivot, and flip variables
+    var sx = (this.flipX) ? -this.scale.x : this.scale.x,
+        sy = (this.flipY) ? -this.scale.y : this.scale.y,
+        ax = (this.flipX) ? 1-this.anchor.x : this.anchor.x,
+        ay = (this.flipY) ? 1-this.anchor.y : this.anchor.y,
+        px = (this.flipX) ? 1-this.pivot.x : this.pivot.x,
+        py = (this.flipY) ? 1-this.pivot.y : this.pivot.y;
+
     // temporary matrix variables
     var a, b, c, d, tx, ty;
 
-    var anchorWidth = this.anchor.x * this._width * this.scale.x,
-        anchorHeight = this.anchor.y * this._height * this.scale.y,
-        pivotWidth = this.pivot.x * this._width * this.scale.x,
-        pivotHeight = this.pivot.y * this._height * this.scale.y;
+    var anchorWidth = ax * this._width * sx,
+        anchorHeight = ay * this._height * sy,
+        pivotWidth = px * this._width * sx,
+        pivotHeight = py * this._height * sy;
 
     // so if rotation is between 0 then we can simplify the multiplication process...
     if (this.rotation % CONST.PI_2)
@@ -60,10 +68,10 @@ TilingSprite.prototype.displayObjectUpdateTransform = function(){
         }
 
         // get the matrix values of the displayobject based on its transform properties..
-        a  =  this._cr * this.scale.x;
-        b  =  this._sr * this.scale.x;
-        c  = -this._sr * this.scale.y;
-        d  =  this._cr * this.scale.y;
+        a  =  this._cr * sx;
+        b  =  this._sr * sx;
+        c  = -this._sr * sy;
+        d  =  this._cr * sy;
         tx =  this.position.x + pivotWidth - anchorWidth;
         ty =  this.position.y + pivotHeight - anchorHeight;
 
@@ -84,8 +92,8 @@ TilingSprite.prototype.displayObjectUpdateTransform = function(){
     else
     {
         // lets do the fast version as we know there is no rotation..
-        a  = this.scale.x;
-        d  = this.scale.y;
+        a  = sx;
+        d  = sy;
 
         tx = this.position.x - anchorWidth;
         ty = this.position.y - anchorHeight;
