@@ -3,6 +3,11 @@ var Container = require('./Container'),
     math = require('../../lib/pixi/src/core/math'),
     tempPoint = new math.Point();
 
+var Types = {
+    fixed : 0,
+    follow: 1
+};
+
 function Camera(scene){
     this._init(scene);
 }
@@ -15,8 +20,9 @@ Camera.prototype._init = function(scene){
     this.scene = scene;
 
     this._zoom = 1;
-    this.follow = null;
-    this.followPos = new math.Point();
+    this.target = null;
+    this.followType = Types.fixed;
+    this.followVelocity = 0;
 
     this.blockX = false;
     this.blockY = false;
@@ -25,13 +31,14 @@ Camera.prototype._init = function(scene){
         .setPosition(scene.width/2, scene.height/2);
 };
 
-Camera.prototype.setFollow = function(target){
+Camera.prototype.setFixedTarget = function(target){
     if(target === false){
-        this.follow = null;
+        this.target = null;
         return this;
     }
 
-    this.follow = target;
+    this.target = target;
+    this.followType = Types.fixed;
     return this;
 };
 
@@ -49,19 +56,19 @@ Camera.prototype.animate = function(gameTime, delta){
             this.rotation += this.rotationSpeed * tick;
         }
 
-        if(this.follow){
-            this._followTarget();
-        }
-
         var len = this.children.length;
         for(var i = 0; i < len; i++){
             this.children[i].animate(gameTime, delta);
         }
+
+        this.applyFollowTarget();
     }
 };
 
-Camera.prototype._followTarget = function(){
-    if(this.follow)this.goToTarget(this.follow);
+Camera.prototype.applyFollowTarget = function(){
+    if(this.target){
+        this.goToTarget(this.target);
+    }
 };
 
 Camera.prototype.unFollow = function(){
@@ -92,7 +99,7 @@ Camera.prototype.goToTarget = function(target){
     var x = -tempPoint.x + this.x + this.width/ 2,
         y = -tempPoint.y + this.y + this.height/2;
 
-    this.goToPosition(x,y);
+    this.position.set(x,y);
     return this;
 };
 
