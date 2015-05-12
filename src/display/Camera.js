@@ -3,17 +3,16 @@ var Container = require('./Container'),
     math = require('../../lib/pixi/src/core/math'),
     tempPoint = new math.Point();
 
-var Types = {
-    fixed : 0,
-    follow: 1
-};
-
 function Camera(scene){
     this._init(scene);
 }
 
 Camera.prototype = Object.create(Container.prototype);
 Camera.prototype.constructor = Camera;
+Camera.followTypes = {
+    fixed: 0,
+    follow: 1
+};
 
 Camera.prototype._init = function(scene){
     Container.prototype._init.call(this);
@@ -21,7 +20,7 @@ Camera.prototype._init = function(scene){
 
     this._zoom = 1;
     this.target = null;
-    this.followType = Types.fixed;
+    this.followType = Camera.followTypes.fixed;
     this.followVelocity = 0;
 
     this.blockX = false;
@@ -32,13 +31,13 @@ Camera.prototype._init = function(scene){
 };
 
 Camera.prototype.setFixedTarget = function(target){
-    if(target === false){
-        this.target = null;
-        return this;
-    }
+    this.setTarget(target);
+    this.followType = Camera.followTypes.fixed;
+    return this;
+};
 
-    this.target = target;
-    this.followType = Types.fixed;
+Camera.prototype.setTarget = function(target){
+    this.target = (!target) ? null : target;
     return this;
 };
 
@@ -69,10 +68,6 @@ Camera.prototype.applyFollowTarget = function(){
     if(this.target){
         this.goToTarget(this.target);
     }
-};
-
-Camera.prototype.unFollow = function(){
-    return this.setFollow(false);
 };
 
 Camera.prototype.setZoom = function(value){
