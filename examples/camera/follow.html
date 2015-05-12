@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Example Sprite Animation</title>
+    <title>Example Camera Fixed Follow</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="../../build/perenquen.dev.js"></script>
     <style>
@@ -24,17 +24,29 @@
         {url: "../assets/game.json"}
     ]).load(onAssetsLoaded);
 
-    function onAssetsLoaded(){
+    //enable keyboard, also you can enable from the config, see the keyboards examples
+    game.inputManager.enableKeyboard();
 
+    //Create arrow hotkeys
+    var up = game.inputManager.keyboard.getHotKey(PQ.Key.UP);
+    var down = game.inputManager.keyboard.getHotKey(PQ.Key.DOWN);
+    var left = game.inputManager.keyboard.getHotKey(PQ.Key.LEFT);
+    var right = game.inputManager.keyboard.getHotKey(PQ.Key.RIGHT);
+
+    function onAssetsLoaded(){
+        //Create a 2000x2000 container
         var container = new PQ.Container()
                 .setSize(2000, 2000)
                 .setPosition(game.scene.width/2, game.scene.height/2)
                 .addTo(game.scene);
 
+        //Add a tilingbackground
         var background = new PQ.TilingSprite('starBackground.png', container.width, container.height)
                 .setPosition(container.width/2, container.height/2)
                 .addTo(container);
 
+
+        //Create and label each sectors to know where you are.
         var graphic = new PQ.Graphics()
                 .lineStyle(1, 0xffffff, 0.1)
                 .addTo(container);
@@ -64,31 +76,47 @@
             }
         }
 
-        player = new PQ.Sprite('player.png')
+
+        //Now we can add the play
+        var player = new PQ.Sprite('player.png')
                 .setPosition(container.width/2, container.height/2)
-                .setVelocity(60)
+                .setRotation(90*PQ.DEG_TO_RAD)
                 .setScale(3)
                 .addTo(container);
 
+        //Implement a simple control system with arrow keys
+        var speed = 300;
         player.update = function(gameTime, delta){
-            player.direction += 1*delta;
-            player.velocity += 5*delta;
+            if(up.isDown){
+                this.setVelocity(speed);
+            }else if(down.isDown){
+                this.setVelocity(-speed);
+            }else if(down.isReleased || up.isReleased){
+                this.setVelocity(0);
+            }
+
+            if(left.isDown){
+                this.direction -= 3*delta;
+            }else if(right.isDown){
+                this.direction += 3*delta;
+            }
+
+            this.rotation = this.direction + 90*PQ.DEG_TO_RAD;
         };
 
-        var g = new PQ.Graphics()
+
+        //And add a cross in the HUD layer to show the center of the screen
+        var cross = new PQ.Graphics()
                 .lineStyle(1, 0xff0000, 0.5)
                 .moveTo(400, 0)
                 .lineTo(400, 600)
                 .moveTo(0, 300)
                 .lineTo(800, 300)
-                .addTo(game.scene.camera);
+                .addTo(game.scene.hud);
 
-        g.update = function(){
-            this.x = -game.scene.camera.x + game.scene.camera.width/2;
-            this.y = -game.scene.camera.y + game.scene.camera.height/2;
-        }
 
-        game.scene.camera.setFollow(player);
+        //Camera follows the target in fixed mode
+        game.scene.camera.setFixedTarget(player);
 
 
     }
