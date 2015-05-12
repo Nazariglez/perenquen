@@ -26,8 +26,6 @@ Scene.prototype._init = function(game){
     this.size.set(game.width,game.height);
     this.setAnchor(0,0);
 
-    //TODO: Camera&HUD
-
     this._backgroundColor = null;
     this._backgroundColorDirty = false;
 
@@ -40,6 +38,11 @@ Scene.prototype._init = function(game){
     addChild(this, this.camera);
 
     //HUD
+    this.hud = new Container()
+        .setSize(this.width, this.height)
+        .setPosition(this.width/2, this.height/2);
+
+    addChild(this, this.hud);
 
     this.manager = null;
     this.timerManager = new TimerManager();
