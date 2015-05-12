@@ -32,11 +32,6 @@ Camera.prototype.setFollow = function(target){
     }
 
     this.follow = target;
-    this.follow.parent.worldTransform.apply(this.follow.position, tempPoint);
-    this.followPos.x = tempPoint.x;
-    this.followPos.y = tempPoint.y;
-    this.x = -this.followPos.x;
-    this.y = -this.followPos.y;
     return this;
 };
 
@@ -54,21 +49,19 @@ Camera.prototype.animate = function(gameTime, delta){
             this.rotation += this.rotationSpeed * tick;
         }
 
+        if(this.follow){
+            this._followTarget();
+        }
+
         var len = this.children.length;
         for(var i = 0; i < len; i++){
             this.children[i].animate(gameTime, delta);
-        }
-
-        if(this.follow){
-            this._followTarget();
         }
     }
 };
 
 Camera.prototype._followTarget = function(){
-    this.follow.parent.worldTransform.apply(this.follow.position, tempPoint);
-    this.x -= tempPoint.x - this.followPos.x;
-    this.y -= tempPoint.y - this.followPos.y;
+    if(this.follow)this.goToTarget(this.follow);
 };
 
 Camera.prototype.unFollow = function(){
@@ -88,11 +81,19 @@ Camera.prototype.zoomOut = function(value){
 };
 
 Camera.prototype.goToPosition = function(x,y){
-
+    this.position.set(x,y);
+    return this;
 };
 
 Camera.prototype.goToTarget = function(target){
+    var parentMatrix = target.parent.worldTransform;
+    parentMatrix.apply(target.position, tempPoint);
 
+    var x = -tempPoint.x + this.x + this.width/ 2,
+        y = -tempPoint.y + this.y + this.height/2;
+
+    this.goToPosition(x,y);
+    return this;
 };
 
 Camera.prototype.setBlock = function(x,y){

@@ -67,12 +67,28 @@
         player = new PQ.Sprite('player.png')
                 .setPosition(container.width/2, container.height/2)
                 .setVelocity(60)
+                .setScale(3)
                 .addTo(container);
 
         player.update = function(gameTime, delta){
             player.direction += 1*delta;
             player.velocity += 5*delta;
         };
+
+        var g = new PQ.Graphics()
+                .lineStyle(1, 0xff0000, 0.5)
+                .moveTo(400, 0)
+                .lineTo(400, 600)
+                .moveTo(0, 300)
+                .lineTo(800, 300)
+                .addTo(game.scene.camera);
+
+        g.update = function(){
+            this.x = -game.scene.camera.x + game.scene.camera.width/2;
+            this.y = -game.scene.camera.y + game.scene.camera.height/2;
+        }
+
+        game.scene.camera.setFollow(player);
 
 
     }
