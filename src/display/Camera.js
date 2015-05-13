@@ -34,11 +34,20 @@ Camera.prototype._init = function(scene){
     this.minYBound = false;
     this.maxYBound = false;
 
+    this.zoomMin = 0.2;
+    this.zoomMax = 3;
+
     this.blockX = false;
     this.blockY = false;
 
     this.setSize(scene.width, scene.height)
         .setPosition(scene.width/2, scene.height/2);
+};
+
+Camera.prototype.setZoomLimits = function(min, max){
+    this.zoomMin = min || 0.2;
+    this.zoomMax = max || 3;
+    return this;
 };
 
 Camera.prototype.checkLimits = function(){
@@ -202,6 +211,8 @@ Object.defineProperties(Camera.prototype, {
             return this._zoom;
         },
         set: function(value){
+            if(value > this.zoomMax || value < this.zoomMin)return;
+
             this._zoom = value;
             this.scale.set(value);
         }
@@ -274,3 +285,5 @@ Object.defineProperties(Camera.prototype, {
 });
 
 module.exports = Camera;
+
+//TODO: No permitir hacer zoomOut si se pasa de los bounds establecidos
