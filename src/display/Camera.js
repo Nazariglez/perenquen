@@ -1,4 +1,5 @@
 var Container = require('./Container'),
+    CONST = require('../core/const'),
     config = require('../core/config'),
     math = require('../../lib/pixi/src/core/math'),
     tempPoint = new math.Point(),
@@ -12,10 +13,6 @@ function Camera(scene){
 
 Camera.prototype = Object.create(Container.prototype);
 Camera.prototype.constructor = Camera;
-Camera.followTypes = {
-    fixed: 0,
-    follow: 1
-};
 
 Camera.prototype._init = function(scene){
     Container.prototype._init.call(this);
@@ -24,8 +21,6 @@ Camera.prototype._init = function(scene){
     this._zoom = 1;
     this._target = null;
     this.targetOffset = new math.Point();
-    this.followType = Camera.followTypes.fixed;
-    this.followVelocity = 0;
 
     this._minX = false;
     this._maxX = false;
@@ -47,41 +42,33 @@ Camera.prototype._init = function(scene){
 };
 
 Camera.prototype.checkLimits = function(){
-    if(this._dirtyBounds){
-        this._dirtyBounds = false;
+     if(this.target){
 
-        //console.log('cheking bounds');
-        if(this.target){
+        var parentMatrix = this.target.parent.worldTransform,
+            minX = (this.minX !== false),
+            minY = (this.minY !== false),
+            maxX = (this.maxX !== false),
+            maxY = (this.maxY !== false);
 
-            var parentMatrix = this.target.parent.worldTransform,
-                minX = (this.minX !== false),
-                minY = (this.minY !== false),
-                maxX = (this.maxX !== false),
-                maxY = (this.maxY !== false);
+        if(minX || minY){
+            minPoint.x = (minX) ? this.minX : 0;
+            minPoint.y = (minY) ? this.minY : 0;
 
-            if(minX || minY){
-                minPoint.x = (minX) ? this.minX : 0;
-                minPoint.y = (minY) ? this.minY : 0;
+            this.worldTransform.applyInverse(parentMatrix.apply(minPoint, minPoint));
 
-                this.worldTransform.applyInverse(parentMatrix.apply(minPoint, minPoint));
-
-                if(minX)this.minXBound = -minPoint.x + this.x;
-                if(minY)this.minYBound = -minPoint.y + this.y;
-            }
-
-            if(maxX || maxY){
-                maxPoint.x = (maxX) ? this.maxX : 0;
-                maxPoint.y = (maxY) ? this.maxY : 0;
-
-                this.worldTransform.applyInverse(parentMatrix.apply(maxPoint, maxPoint));
-
-                if(maxX)this.maxXBound = -maxPoint.x + this.x + this.width;
-                if(maxY)this.maxYBound = -maxPoint.y + this.y + this.height;
-            }
-
+            if(minX)this.minXBound = -minPoint.x + this.x;
+            if(minY)this.minYBound = -minPoint.y + this.y;
         }
 
-        //console.log(this.minXBound, this.minYBound, this.maxXBound, this.maxYBound);
+        if(maxX || maxY){
+            maxPoint.x = (maxX) ? this.maxX : 0;
+            maxPoint.y = (maxY) ? this.maxY : 0;
+
+            this.worldTransform.applyInverse(parentMatrix.apply(maxPoint, maxPoint));
+
+            if(maxX)this.maxXBound = -maxPoint.x + this.x + this.width;
+            if(maxY)this.maxYBound = -maxPoint.y + this.y + this.height;
+        }
 
     }
 
@@ -93,17 +80,19 @@ Camera.prototype.setTargetOffset = function(x,y){
     return this;
 };
 
-Camera.prototype.setFixedTarget = function(target){
-    this.setTarget(target);
-    this.followType = Camera.followTypes.fixed;
-    return this;
-};
-
 Camera.prototype.setTarget = function(target){
     this.target = target;
     return this;
 };
 
+/**
+ * View Bounds (don't use if you want use rotation camera)
+ * @param minX
+ * @param minY
+ * @param maxX
+ * @param maxY
+ * @returns {Camera}
+ */
 Camera.prototype.setLimits = function(minX, minY, maxX, maxY){
     this.minX = minX;
     this.maxX = maxX;
@@ -143,15 +132,18 @@ Camera.prototype.applyFollowTarget = function(){
 };
 
 Camera.prototype.setZoom = function(value){
-
+    this.zoom = value;
+    return this;
 };
 
 Camera.prototype.zoomIn = function(value){
-
+    this.zoom += value;
+    return this;
 };
 
 Camera.prototype.zoomOut = function(value){
-
+    this.zoom -= value;
+    return this;
 };
 
 Camera.prototype.goToPosition = function(x,y){
@@ -210,8 +202,8 @@ Object.defineProperties(Camera.prototype, {
             return this._zoom;
         },
         set: function(value){
-            //todo:
             this._zoom = value;
+            this.scale.set(value);
         }
     },
 

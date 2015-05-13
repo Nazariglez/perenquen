@@ -17,7 +17,7 @@
 <script>
 
     /*
-        In this example we learn how to follow a target with the camera in fixed mode
+        In this example we learn how to follow a target with the camera
         Use arrow keys UP, DOWN, LEFT, RIGHT to move the spaceship
      */
 
@@ -81,7 +81,6 @@
             }
         }
 
-
         //Now we can add the play
         var player = new PQ.Sprite('player.png')
                 .setPosition(container.width/2, container.height/2)
@@ -109,6 +108,10 @@
             this.rotation = this.direction + 90*PQ.DEG_TO_RAD;
         };
 
+        //Camera follows the target in fixed mode
+        game.scene.camera.setLimits(0,0,2000,2000); //Limit the view
+        game.scene.camera.setTarget(player);
+
 
         //And add a cross in the HUD layer to show the center of the screen
         var cross = new PQ.Graphics()
@@ -118,10 +121,6 @@
                 .moveTo(0, 300)
                 .lineTo(800, 300)
                 .addTo(game.scene.hud);
-
-
-        //Camera follows the target in fixed mode
-        game.scene.camera.setFixedTarget(player);
 
 
     }
