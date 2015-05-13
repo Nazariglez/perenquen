@@ -540,6 +540,8 @@ Mouse.prototype._onMouseWheel = function(e){
     //TODO: Firefox check...
     this.delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
     this.states[0][Mouse.States.mouseWheel] = true;
+
+    this.dirty = true;
 };
 
 Mouse.prototype.getLocalPosition = function (displayObject, point, globalPos) {
