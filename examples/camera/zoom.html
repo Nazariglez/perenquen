@@ -82,6 +82,7 @@
         var camera = game.scene.camera;
         camera.setZoom(0.5); //Start in 0.2
 
+        //Use a simple tween to do the zoom
         camera.tween().to({
             zoom: 2
         }).setPingPong()

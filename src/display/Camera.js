@@ -11,6 +11,8 @@ function Camera(scene){
     this._init(scene);
 }
 
+//TODO: Zona de seguridad donde la camara no se movera
+
 Camera.prototype = Object.create(Container.prototype);
 Camera.prototype.constructor = Camera;
 
