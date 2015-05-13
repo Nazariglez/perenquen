@@ -270,7 +270,7 @@ Object.defineProperties(DisplayObject.prototype, {
 
     scaleX: {
         get: function(){
-            return (this.flipX) ? -this.scale.x : this.scale.x;
+            return this.scale.x;
         },
 
         set: function(value){
@@ -280,7 +280,7 @@ Object.defineProperties(DisplayObject.prototype, {
 
     scaleY: {
         get: function(){
-            return (this.flipY) ? -this.scale.y : this.scale.y;
+            return this.scale.y;
         },
 
         set: function(value){
