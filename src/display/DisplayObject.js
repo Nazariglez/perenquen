@@ -288,3 +288,5 @@ Object.defineProperties(DisplayObject.prototype, {
         }
     }
 });
+
+//TODO: next position x+speedX*delta; (para calcular bounding en los updates)
