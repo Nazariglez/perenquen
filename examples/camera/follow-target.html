@@ -84,7 +84,7 @@
         //Now we can add the play
         var player = new PQ.Sprite('player.png')
                 .setPosition(container.width/2, container.height/2)
-                .setRotation(90*PQ.DEG_TO_RAD)
+                .setRotation(PQ.utils.degToRad(90))
                 .setScale(3)
                 .addTo(container);
 
@@ -105,7 +105,7 @@
                 this.direction += 3*delta;
             }
 
-            this.rotation = this.direction + 90*PQ.DEG_TO_RAD;
+            this.rotation = this.direction + PQ.utils.degToRad(90);
         };
 
         //Camera follows the target in fixed mode

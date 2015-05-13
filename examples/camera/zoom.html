@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Example Camera Fixed Follow</title>
+    <title>Example Camera Zoom</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="../../build/perenquen.dev.js"></script>
     <style>
@@ -17,8 +17,7 @@
 <script>
 
     /*
-        In this example we learn how to follow a target with the camera
-        Use arrow keys UP, DOWN, LEFT, RIGHT to move the spaceship
+        In this example we learn how to do Zoom
      */
 
     var game = new PQ.Game();
@@ -28,15 +27,6 @@
     game.assetLoader.add([
         {url: "../assets/game.json"}
     ]).load(onAssetsLoaded);
-
-    //enable keyboard, also you can enable from the config, see the keyboards examples
-    game.inputManager.enableKeyboard();
-
-    //Create arrow hotkeys
-    var up = game.inputManager.keyboard.getHotKey(PQ.Key.UP);
-    var down = game.inputManager.keyboard.getHotKey(PQ.Key.DOWN);
-    var left = game.inputManager.keyboard.getHotKey(PQ.Key.LEFT);
-    var right = game.inputManager.keyboard.getHotKey(PQ.Key.RIGHT);
 
     function onAssetsLoaded(){
         //Create a 2000x2000 container
@@ -88,40 +78,16 @@
                 .setScale(3)
                 .addTo(container);
 
-        //Implement a simple control system with arrow keys
-        var speed = 300;
-        player.update = function(gameTime, delta){
-            if(up.isDown){
-                this.setVelocity(speed);
-            }else if(down.isDown){
-                this.setVelocity(-speed);
-            }else if(down.isReleased || up.isReleased){
-                this.setVelocity(0);
-            }
+        //Camera zoom
+        var camera = game.scene.camera;
+        camera.setZoom(0.5); //Start in 0.2
 
-            if(left.isDown){
-                this.direction -= 3*delta;
-            }else if(right.isDown){
-                this.direction += 3*delta;
-            }
-
-            this.rotation = this.direction + PQ.utils.degToRad(90);
-        };
-
-        //Camera follows the target in fixed mode
-        game.scene.camera.setLimits(0,0,2000,2000); //Limit the view
-        game.scene.camera.setTarget(player);
-
-
-        //And add a cross in the HUD layer to show the center of the screen
-        var cross = new PQ.Graphics()
-                .lineStyle(1, 0xff0000, 0.5)
-                .moveTo(400, 0)
-                .lineTo(400, 600)
-                .moveTo(0, 300)
-                .lineTo(800, 300)
-                .addTo(game.scene.hud);
-
+        camera.tween().to({
+            zoom: 2
+        }).setPingPong()
+            .setTime(4000)
+            .setLoop()
+            .start();
 
     }
 </script>
