@@ -42,4 +42,22 @@ utils.assetCache = new (require('../../loader/AssetCache'))();
  */
 utils.parseTextKeys = require('./parseTextKeys');
 
+/**
+ * Convert degrees to radians
+ * @param value
+ * @returns {number}
+ */
+utils.degToRad = function(value){
+    return value * CONST.DEG_TO_RAD;
+};
+
+/**
+ * Convert radians to degrees
+ * @param value
+ * @returns {number}
+ */
+utils.radToDeg = function(value){
+    return value * CONT.RAD_TO_DEG;
+};
+
 module.exports = utils;
