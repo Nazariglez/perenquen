@@ -57,7 +57,7 @@ Container.prototype.setSize = function(width, height){
 };
 
 /**
- * Retrieves the bounds of the Container as a rectangle. The bounds calculation takes all visible children into consideration.
+ * Retrieves the bounds of the Container as a rectangle.
  *
  * @return {Rectangle} The rectangular bounding area
  */
