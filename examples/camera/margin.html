@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Camera Margin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        In this example we learn how to follow a target with the camera
+        Use arrow keys UP, DOWN, LEFT, RIGHT to move the spaceship
+     */
+
+    var game = new PQ.Game();
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/game.json"}
+    ]).load(onAssetsLoaded);
+
+    //enable keyboard, also you can enable from the config, see the keyboards examples
+    game.inputManager.enableKeyboard();
+
+    //Create arrow hotkeys
+    var up = game.inputManager.keyboard.getHotKey(PQ.Key.UP);
+    var down = game.inputManager.keyboard.getHotKey(PQ.Key.DOWN);
+    var left = game.inputManager.keyboard.getHotKey(PQ.Key.LEFT);
+    var right = game.inputManager.keyboard.getHotKey(PQ.Key.RIGHT);
+
+    function onAssetsLoaded(){
+        //Create a 2000x2000 container
+        var container = new PQ.Container()
+                .setSize(2000, 2000)
+                .setPosition(game.scene.width/2, game.scene.height/2)
+                .addTo(game.scene);
+
+        //Add a tilingbackground
+        var background = new PQ.TilingSprite('starBackground.png', container.width, container.height)
+                .setPosition(container.width/2, container.height/2)
+                .addTo(container);
+
+
+        //Create and label each sectors to know where you are.
+        var graphic = new PQ.Graphics()
+                .lineStyle(1, 0xffffff, 0.1)
+                .addTo(container);
+
+        var sectorSize = 200;
+
+        for(var i = 1; i <= sectorSize; i++){
+            graphic.moveTo(sectorSize * i, 0)
+                    .lineTo(sectorSize * i, container.height)
+                    .moveTo(0, sectorSize*i)
+                    .lineTo(container.width, sectorSize*i);
+        }
+
+        function getText(x,y){
+            return new PQ.Text(x + " - " + y, {
+                fill: 0xffffff,
+                font: "30px Arial"
+            }).setAlpha(0.2);
+        }
+
+        for(var x = 0; x < 10; x++){
+            for(var y = 0; y < 10; y++){
+
+                getText(x,y).setPosition(200*x + 100, 200*y + 100)
+                        .addTo(container);
+
+            }
+        }
+
+        //Now we can add the play
+        var player = new PQ.Sprite('player.png')
+                .setPosition(container.width/2, container.height/2)
+                .setRotation(PQ.utils.degToRad(90))
+                .setScale(3)
+                .addTo(container);
+
+        //Implement a simple control system with arrow keys
+        var speed = 300;
+        player.update = function(gameTime, delta){
+            if(up.isDown){
+                this.setVelocity(speed);
+            }else if(down.isDown){
+                this.setVelocity(-speed);
+            }else if(down.isReleased || up.isReleased){
+                this.setVelocity(0);
+            }
+
+            if(left.isDown){
+                this.direction -= 3*delta;
+            }else if(right.isDown){
+                this.direction += 3*delta;
+            }
+
+            this.rotation = this.direction + PQ.utils.degToRad(90);
+        };
+
+        //Camera follows the target in fixed mode
+        game.scene.camera.setLimits(0,0,2000,2000); //Limit the view
+        game.scene.camera.setTarget(player);
+
+        //Set the margins
+        var marginTop = 100;
+        var marginBottom = 100;
+        var marginLeft = 100;
+        var marginRight = 100;
+        game.scene.camera.setMargin(marginTop, marginBottom, marginLeft, marginRight);
+
+
+        //And add a cross in the HUD layer to show the center of the screen
+        //And a rectangle to show the margins
+        var cross = new PQ.Graphics()
+                .lineStyle(1, 0xff0000, 0.5)
+                .moveTo(400, 0)
+                .lineTo(400, 600)
+                .moveTo(0, 300)
+                .lineTo(800, 300)
+                .lineStyle(2, 0x00ff00, 0.5)
+                .drawRect(marginLeft, marginTop, 800 - marginLeft - marginRight, 600 - marginTop - marginBottom)
+                .addTo(game.scene.hud);
+
+
+    }
+</script>
+</body>
+</html>
