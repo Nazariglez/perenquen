@@ -29,8 +29,6 @@ Camera.prototype._init = function(scene){
     this._minY = false;
     this._maxY = false;
 
-    this._dirtyBounds = false;
-
     this.minXBound = false;
     this.maxXBound = false;
     this.minYBound = false;
@@ -42,6 +40,11 @@ Camera.prototype._init = function(scene){
     this.blockX = false;
     this.blockY = false;
 
+    this.marginTop = false;
+    this.marginBottom = false;
+    this.marginLeft = false;
+    this.marginRight = false;
+
     this.setSize(scene.width, scene.height)
         .setPosition(scene.width/2, scene.height/2);
 };
@@ -49,6 +52,14 @@ Camera.prototype._init = function(scene){
 Camera.prototype.setZoomLimits = function(min, max){
     this.zoomMin = min || 0.2;
     this.zoomMax = max || 3;
+    return this;
+};
+
+Camera.prototype.setMargin = function(top, bottom, left, right){
+    this.marginBottom = bottom;
+    this.marginTop = top;
+    this.marginLeft = left;
+    this.marginRight = right;
     return this;
 };
 
@@ -172,7 +183,18 @@ Camera.prototype.goToTarget = function(target){
 
     this.worldTransform.applyInverse(parentMatrix.apply(tempPoint, tempPoint));
     if(!this.blockX){
-        x = -tempPoint.x + this.x + this.width/2;
+        var existsMarginX = (typeof this.marginLeft === "number" || typeof this.marginRight === "number");
+        x = this.x;
+
+        if(existsMarginX){
+            if(typeof this.marginLeft === "number" && tempPoint.x < this.marginLeft) {
+                x = (x - tempPoint.x) + this.marginLeft;
+            }else if(typeof this.marginRight === "number" && tempPoint.x > this.width-this.marginRight) {
+                x = (x - tempPoint.x) + (this.width-this.marginRight);
+            }
+        }else{
+            x = (x - tempPoint.x) + this.width/2;
+        }
 
         if(this.minX !== false && x > this.minXBound){
             x = this.minXBound;
@@ -184,7 +206,20 @@ Camera.prototype.goToTarget = function(target){
     }
 
     if(!this.blockY){
-        y = -tempPoint.y + this.y + this.height/2;
+        var existsMarginY = (typeof this.marginTop === "number" || typeof this.marginBottom === "number");
+        y = this.y;
+
+        if(existsMarginY){
+            if(typeof this.marginTop === "number" && tempPoint.y < this.marginTop) {
+                y = (y - tempPoint.y) + this.marginTop;
+            }else if(typeof this.marginBottom === "number" && tempPoint.y > this.height-this.marginBottom) {
+                y = (y - tempPoint.y) + (this.height-this.marginBottom);
+            }
+        }else{
+            y = (y - tempPoint.y) + this.height/2;
+        }
+
+
         if(this.minY !== false && y > this.minYBound){
             y = this.minYBound;
         }else if(this.maxY !== false && y < this.maxYBound){
@@ -233,7 +268,6 @@ Object.defineProperties(Camera.prototype, {
                 this._target = value;
             }
 
-            this._dirtyBounds = true;
         }
     },
 
@@ -245,7 +279,6 @@ Object.defineProperties(Camera.prototype, {
             if(typeof value !== "number")value = false;
 
             this._minX = value;
-            this._dirtyBounds = true;
         }
     },
 
@@ -257,7 +290,6 @@ Object.defineProperties(Camera.prototype, {
             if(typeof value !== "number")value = false;
 
             this._maxX = value;
-            this._dirtyBounds = true;
         }
     },
 
@@ -269,7 +301,6 @@ Object.defineProperties(Camera.prototype, {
             if(typeof value !== "number")value = false;
 
             this._minY = value;
-            this._dirtyBounds = true;
         }
     },
 
@@ -281,7 +312,6 @@ Object.defineProperties(Camera.prototype, {
             if(typeof value !== "number")value = false;
 
             this._maxY = value;
-            this._dirtyBounds = true;
         }
     }
 });
