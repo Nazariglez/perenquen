@@ -42,7 +42,7 @@ var core = {
     InputManager : Class.parse(require('./input/InputManager')),
     Mouse : Class.parse(require('./input/mouse')),
     Keyboard : Class.parse(require('./input/keyboard')),
-    Key : Class.parse(require('./input/keyboard/Key')),
+    Key : Class.parse(require('./input/Key')),
     HotKey : Class.parse(require('./input/keyboard/HotKey')),
     Device : Class.parse(require('./core/Device')),
     AnimationManager : Class.parse(require('./display/animation/AnimationManager')),

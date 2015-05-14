@@ -1,4 +1,10 @@
 module.exports = {
+    MOUSE_LEFT: -1,
+    MOUSE_MIDDLE: -2,
+    MOUSE_RIGHT: -3,
+    WHEEL_UP: -4,
+    WHEEL_DOWN: -5,
+
     BACKSPACE: 8,
     TAB: 9,
     ENTER: 13,

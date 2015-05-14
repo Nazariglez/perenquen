@@ -1,4 +1,4 @@
-var Key = require('./Key');
+var Key = require('./../Key');
 
 function HotKey(key, manager){
     this._init(key, manager);
