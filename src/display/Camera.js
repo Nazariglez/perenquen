@@ -43,8 +43,15 @@ Camera.prototype._init = function(scene){
     this.marginLeft = false;
     this.marginRight = false;
 
+    this.culling = false; //TODO: Implementar culling
+
     this.setSize(scene.width, scene.height)
         .setPosition(scene.width/2, scene.height/2);
+};
+
+Camera.prototype.setCulling = function(value){
+    this.culling = (value !== false);
+    return this;
 };
 
 Camera.prototype.setZoomLimits = function(min, max){
