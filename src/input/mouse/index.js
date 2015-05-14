@@ -8,6 +8,11 @@ function Mouse(game, preventDefault, checkFrecuency){
 
 Mouse.prototype.constructor = Mouse;
 
+/*
+    TODO: Añadir un modo de asistencia, que es el actual, y añadir la opción de dar solo
+     TODO- la posición global y las hotkeys de botones, como el teclado, para evitar sobrecarga
+ */
+
 Mouse.prototype._init = function(game, preventDefault, checkFrecuency){
     this.game = game;
     this.global = new math.Point();
