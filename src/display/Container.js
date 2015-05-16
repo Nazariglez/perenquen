@@ -67,11 +67,11 @@ Container.prototype.getBounds = function (matrix){
         var width = this.size.x;
         var height = this.size.y;
 
-        var w0 = width * (1-this.anchor.x);
-        var w1 = width * -this.anchor.x;
+        var w0 = width;
+        var w1 = 0;
 
-        var h0 = height * (1-this.anchor.y);
-        var h1 = height * -this.anchor.y;
+        var h0 = height;
+        var h1 = 0;
 
         var worldTransform = matrix || this.worldTransform ;
 
