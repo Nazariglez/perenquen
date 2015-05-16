@@ -6,7 +6,6 @@ var Container = require('./Container'),
     minPoint = new math.Point(),
     maxPoint = new math.Point();
 
-//TODO: Separar camara de escena dejando que se implemente en cualquier container
 function Camera(scene){
     this._init(scene);
 }
@@ -245,6 +244,36 @@ Camera.prototype.setBlockX = function(value){
 Camera.prototype.setBlockY = function(value){
     this.blockY = (value !== false);
     return this;
+};
+
+Camera.prototype.isInView = function(object){
+    var isIn = false;
+    var objectBounds = object.getBounds(),
+        cameraBounds = this.getBounds();
+
+    var cameraX = cameraBounds.x - (this.x - (this.width/2)),
+        cameraY = cameraBounds.y - (this.y - (this.height/2)),
+        cameraXX = cameraX + cameraBounds.width,
+        cameraYY = cameraY + cameraBounds.height;
+
+    var objXX = objectBounds.x + objectBounds.width,
+        objYY = objectBounds.y + objectBounds.height;
+
+    if(objectBounds.x <= cameraXX && objXX >= cameraX){
+        if(objectBounds.y <= cameraYY && objYY >= cameraY){
+            isIn = true;
+        }
+    }
+
+    return isIn;
+};
+
+Camera.prototype.isCullingObject = function(object){
+    if(!this.culling)return false;
+
+
+    //TODO: terminar el culling comprobando en el render de cada objeto si se debe mostar o no
+    return this.isInView(object);
 };
 
 Object.defineProperties(Camera.prototype, {

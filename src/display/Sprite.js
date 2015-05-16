@@ -350,8 +350,7 @@ Sprite.prototype._renderCanvas = function (renderer) {
  * @param matrix {Matrix} the transformation matrix of the sprite
  * @return {Rectangle} the framing rectangle
  */
-Sprite.prototype.getBounds = function (matrix)
-{
+Sprite.prototype.getBounds = function (matrix){
     if(!this._currentBounds)
     {
 
