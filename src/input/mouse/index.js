@@ -1,6 +1,7 @@
 var math = require('../../../lib/pixi/src/core/math'),
     Device = require('../../core/Device'),
     Key = require('../Key'),
+    HotKey = require('./HotKey'),
     EventData = require('./EventData');
 
 function Mouse(game, preventDefault, checkFrecuency){
@@ -8,11 +9,6 @@ function Mouse(game, preventDefault, checkFrecuency){
 }
 
 Mouse.prototype.constructor = Mouse;
-
-/*
-    TODO: Añadir un modo de asistencia (interactividad), que es el actual, y añadir la opción de dar solo
-     TODO- la posición global y las hotkeys de botones, como el teclado, para evitar sobrecarga
- */
 
 Mouse.prototype._init = function(game, preventDefault, checkFrecuency){
     this.game = game;
@@ -388,8 +384,31 @@ Mouse.prototype.isPressed = function(key){
 };
 
 Mouse.prototype.isReleased = function(key){
-    //console.log(this.releasedKeys[key], key, this.releasedKeys.length);
     return !!this.releasedKeys[key];
+};
+
+
+Mouse.prototype.getHotKey = function(key){
+    var hotKey;
+    var stringKey = key.toString();
+    if(this.hotKeys[stringKey]){
+        hotKey = this.hotKeys[stringKey];
+    }else{
+        hotKey = new HotKey(key, this);
+    }
+
+    this.hotKeys[stringKey] = hotKey;
+
+    return hotKey;
+};
+
+Mouse.prototype.removeHotKey = function(key){
+    var stringKey = key.toString();
+    if(this.hotKeys[stringKey]){
+        delete this.hotKeys[stringKey];
+    }
+
+    return this;
 };
 
 Mouse.prototype.update = function(gameTime, delta){
