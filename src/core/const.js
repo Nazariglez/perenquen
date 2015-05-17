@@ -91,7 +91,7 @@ constants.DEFAULT_GAME_OPTIONS = {
     },
 
     input : {
-        enableMouse: true,
+        enableMouse: false,
         enableKeyboard: false,
         enableGamepad: false,
         enableAccelerometer: false,
