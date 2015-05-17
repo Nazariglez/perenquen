@@ -45,7 +45,24 @@ var fullScreenRequest = div.requestFullscreen || div.webkitRequestFullScreen || 
     fullScreenCancel = document.cancelFullScreen || document.exitFullScreen || document.webkitCancelFullScreen || document.msCancelFullScreen || document.mozCancelFullScreen,
     hasFullScreen = !!(fullScreenRequest && fullScreenCancel);
 
-//TODO: Check audio support, etc...
+//Audio
+var hasHTMLAudio = !!window.Audio,
+    webAudioContext = window.AudioContext || window.webkitAudioContext,
+    hasWebAudio = !!webAudioContext,
+    hasAudio = hasWebAudio || hasHTMLAudio,
+    hasMp3 = false,
+    hasOgg = false,
+    hasWav = false,
+    hasM4a = false;
+
+//Audio mimeTypes
+if(hasAudio&&hasHTMLAudio){
+    var audio = document.createElement('audio');
+    hasMp3 = audio.canPlayType('audio/mpeg;') !== "";
+    hasOgg = audio.canPlayType('audio/ogg; codecs="vorbis"') !== "";
+    hasWav = audio.canPlayType('audio/wav') !== "";
+    hasM4a = audio.canPlayType('audio/mp4; codecs="mp4a.40.5"') !== "";
+}
 
 var Device = module.exports = {
     isChrome : isChrome,
@@ -84,6 +101,16 @@ var Device = module.exports = {
 
     fullScreenRequest : fullScreenRequest ? fullScreenRequest.name : undefined,
     fullScreenCancel : fullScreenCancel ? fullScreenCancel.name : undefined,
+
+    hasAudio : hasAudio,
+    hasHTMLAudio : hasHTMLAudio,
+    hasWebAudio: hasWebAudio,
+    webAudioContext : webAudioContext,
+
+    hasMp3 : hasMp3,
+    hasM4a : hasM4a,
+    hasOgg : hasOgg,
+    hasWav : hasWav,
 
     getMouseWheelEvent : function(){
         if(!hasMouseWheel)return;
