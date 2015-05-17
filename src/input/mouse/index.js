@@ -1,5 +1,6 @@
 var math = require('../../../lib/pixi/src/core/math'),
     Device = require('../../core/Device'),
+    Key = require('../Key'),
     EventData = require('./EventData');
 
 function Mouse(game, preventDefault, checkFrecuency){
@@ -31,6 +32,12 @@ Mouse.prototype._init = function(game, preventDefault, checkFrecuency){
 
     this.interactive = false;
     this.checkFrecuency = checkFrecuency || 30;
+
+    this.pressedKeys = [];
+    this.releasedKeys = [];
+    this.downKeys = [];
+
+    this.hotKeys = {};
 
     this._onMouseDown = this._onMouseDown.bind(this);
     this._onMouseUp = this._onMouseUp.bind(this);
@@ -301,6 +308,7 @@ Mouse.prototype._addMouseData = function(object){
 
 Mouse.prototype.hit = function(object, position){
     var hit = false;
+    position = position || this.global;
 
     if(object.hitArea){
         object.worldTransform.applyInverse(position,  this.tempPoint);
@@ -371,7 +379,33 @@ Mouse.prototype.fireState = function(object, state, id){
     }
 };
 
+Mouse.prototype.isDown = function(key){
+    return (this.downKeys.indexOf(key) >= 0);
+};
+
+Mouse.prototype.isPressed = function(key){
+    return !!this.pressedKeys[key];
+};
+
+Mouse.prototype.isReleased = function(key){
+    //console.log(this.releasedKeys[key], key, this.releasedKeys.length);
+    return !!this.releasedKeys[key];
+};
+
 Mouse.prototype.update = function(gameTime, delta){
+    if(!this.interactive){
+        for(var key in this.hotKeys){
+            this.hotKeys[key].update(gameTime, delta);
+        }
+
+        for(var j = -5; j < 0; j++) {
+            this.pressedKeys[j] = false;
+            this.releasedKeys[j] = false;
+        }
+        return;
+    }
+
+    //Interactivity
     var t = gameTime - this.lastTime;
     var diff = (t*this.checkFrecuency);
 
@@ -404,6 +438,26 @@ Mouse.prototype._onMouseDown = function(e){
         e.preventDefault();
     }
 
+    if(!this.interactive){
+        this.getGlobalCoords(e);
+
+        var key = Key.MOUSE_LEFT;
+        if(!e.targetTouches) {
+            if (e.button === 2 || e.which === 3) {
+                key = Key.MOUSE_RIGHT;
+            } else if (e.button === 1 || e.which === 2) {
+                key = Key.MOUSE_MIDDLE;
+            }
+        }
+
+        if(!this.isDown(key)){
+            this.downKeys.push(key);
+            this.pressedKeys[key] = true;
+        }
+        return;
+    }
+
+    //Interactive events
     var state = Mouse.States.mouseDown;
     if(!e.targetTouches) {
         var isRightButton = e.button === 2 || e.which === 3;
@@ -451,6 +505,30 @@ Mouse.prototype._onMouseUp = function(e){
         e.preventDefault();
     }
 
+    if(!this.interactive){
+        this.getGlobalCoords(e);
+
+        var key = Key.MOUSE_LEFT;
+        if(!e.targetTouches) {
+            if (e.button === 2 || e.which === 3) {
+                key = Key.MOUSE_RIGHT;
+            } else if (e.button === 1 || e.which === 2) {
+                key = Key.MOUSE_MIDDLE;
+            }
+        }
+
+        if(this.isDown(key)){
+            this.pressedKeys[key] = false;
+            this.releasedKeys[key] = true;
+
+            var downIndex = this.downKeys.indexOf(key);
+            if(downIndex >= 0){
+                this.downKeys.splice(downIndex, 1);
+            }
+        }
+        return;
+    }
+
     var state = Mouse.States.mouseUp;
     if(!e.changedTouches) {
         var isRightButton = e.button === 2 || e.which === 3;
@@ -493,6 +571,11 @@ Mouse.prototype._onMouseUp = function(e){
 Mouse.prototype._onMouseMove = function(e){
     if(this.preventDefault){
         e.preventDefault();
+    }
+
+    if(!this.interactive){
+        this.getGlobalCoords(e);
+        return;
     }
 
     if(e.targetTouches){
@@ -555,6 +638,16 @@ Mouse.prototype._onMouseWheel = function(e){
 
     //TODO: Firefox check...
     this.delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+
+    if(!this.interactive){
+        this.getGlobalCoords(e);
+        var key = (this.delta === 1) ? Key.WHEEL_UP : Key.WHEEL_DOWN;
+        if(!this.isDown(key)){
+            this.pressedKeys[key] = true;
+        }
+        return;
+    }
+
     this.states[0][Mouse.States.mouseWheel] = true;
 
     this.dirty = true;
@@ -598,5 +691,17 @@ Mouse.States = {
     middleClick: 16
 };
 
+Object.defineProperties(Mouse.prototype, {
+    x: {
+        get: function(){
+            return this.global.x;
+        }
+    },
+    y: {
+        get: function(){
+            return this.global.y;
+        }
+    }
+});
 
 module.exports = Mouse;
