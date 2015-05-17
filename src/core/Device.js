@@ -56,7 +56,7 @@ var hasHTMLAudio = !!window.Audio,
     hasM4a = false;
 
 //Audio mimeTypes
-if(hasAudio&&hasHTMLAudio){
+if(hasAudio){
     var audio = document.createElement('audio');
     hasMp3 = audio.canPlayType('audio/mpeg;') !== "";
     hasOgg = audio.canPlayType('audio/ogg; codecs="vorbis"') !== "";
