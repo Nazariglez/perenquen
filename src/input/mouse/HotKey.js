@@ -24,4 +24,8 @@ MouseHotKey.prototype.remove = function(){
     this.manager.removeHotKey(this.key);
 };
 
+MouseHotKey.prototype.hit = function(object){
+    return this.manager.hit(object);
+};
+
 module.exports = MouseHotKey;
