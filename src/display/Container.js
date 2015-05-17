@@ -241,6 +241,10 @@ Container.prototype.displayObjectUpdateTransform = function(){
     this._currentBounds = null;
 };
 
+Container.prototype.getChildrenBounds = function(){
+    //TODO: Calcular bounds teniendo cuenta los children para la feature de culling
+};
+
 /**
  * Retrieves the non-global local bounds of the Container as a rectangle.
  * @return {Rectangle} The rectangular bounding area

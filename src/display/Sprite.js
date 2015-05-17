@@ -465,6 +465,10 @@ Sprite.prototype.getBounds = function (matrix){
     return this._currentBounds;
 };
 
+Sprite.prototype.getChildrenBounds = function(){
+    //TODO: Calcular bounds teniendo cuenta los children para la feature de culling
+};
+
 Object.defineProperties(Sprite.prototype, {
     texture : {
         get : function(){
