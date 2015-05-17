@@ -32,7 +32,7 @@ InputManager.prototype.enableMouse = function(value){
     value = (value !== false);
     if(value){
         if(!this.mouse){
-            this.mouse = new Mouse(this.game, this.config.preventDefault, this.config.mouseCheckFrecuency);
+            this.mouse = new Mouse(this.game, this.config.mousePreventDefault, this.config.enableMouseInteractivity, this.config.checkInteractivityFrecuency);
         }
 
         this.mouse.enable();

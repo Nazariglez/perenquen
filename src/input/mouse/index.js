@@ -10,7 +10,7 @@ function Mouse(game, preventDefault, checkFrecuency){
 
 Mouse.prototype.constructor = Mouse;
 
-Mouse.prototype._init = function(game, preventDefault, checkFrecuency){
+Mouse.prototype._init = function(game, preventDefault, interactive, checkFrecuency){
     this.game = game;
     this.global = new math.Point();
     this.canvas = this.game.canvas;
@@ -56,6 +56,10 @@ Mouse.prototype._init = function(game, preventDefault, checkFrecuency){
         evt = new EventData(this);
         this.event.push(evt);
         this.states.push([]);
+    }
+
+    if(interactive){
+        this.enableInteractivity();
     }
 
     //TODO: pixelperfect?
