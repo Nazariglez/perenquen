@@ -29,6 +29,7 @@ Mouse.prototype._init = function(game, preventDefault, checkFrecuency){
     this.states = [];
     this.dirty = false;
 
+    this.interactive = false;
     this.checkFrecuency = checkFrecuency || 30;
 
     this._onMouseDown = this._onMouseDown.bind(this);
@@ -69,6 +70,16 @@ Mouse.prototype.enable = function(value){
     }
 
     return this;
+};
+
+Mouse.prototype.enableInteractivity = function(value){
+    this.interactive = value !== false;
+    //this.enable(this.interactive);
+    return this;
+};
+
+Mouse.prototype.disableInteractivity = function(){
+    return this.enableInteractivity(false);
 };
 
 Mouse.prototype.disable = function(){
