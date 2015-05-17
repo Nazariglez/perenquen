@@ -41,11 +41,13 @@ var core = {
     Path : Class.parse(require('./tween/Path')),
     InputManager : Class.parse(require('./input/InputManager')),
     Mouse : Class.parse(require('./input/mouse')),
+    MouseHotKey : Class.parse(require('./input/mouse/HotKey')),
     Keyboard : Class.parse(require('./input/keyboard')),
     Key : Class.parse(require('./input/Key')),
     HotKey : Class.parse(require('./input/keyboard/HotKey')),
     Device : Class.parse(require('./core/Device')),
     AnimationManager : Class.parse(require('./display/animation/AnimationManager')),
+    AudioManager : Class.parse(require('./audio/AudioManager')),
     filters : require('../lib/pixi/src/filters')
 
 };

@@ -4,6 +4,7 @@ var CONST = require('./const'),
     AssetLoader = require('../loader/AssetLoader'),
     DataManager = require('../extra/DataManager'),
     InputManager = require('../input/InputManager'),
+    AudioManager = require('../audio/AudioManager'),
     autoDetectRenderer = require('../../lib/pixi/src/core').autoDetectRenderer,
     SceneManager = require('./SceneManager'),
     Device = require('./Device');
@@ -133,9 +134,17 @@ Game.prototype._init = function(width, height, options){
      */
     this.dataManager = new DataManager(this);
 
+    /**
+     * The manager for mouse, keyboard, etc...
+     * @type {InputManager}
+     */
+    this.inputManager = new InputManager(this); //TODO: Maybe rename to "input" instead "inputManager" ?
 
-    //TODO: Maybe rename to "input" instead "inputManager" ?
-    this.inputManager = new InputManager(this);
+    /**
+     * The audio manager for this game
+     * @type {AudioManager}
+     */
+    this.audioManager = new AudioManager(this);
 
     /**
      * Store the resize method
