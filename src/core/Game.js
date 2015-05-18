@@ -117,6 +117,12 @@ Game.prototype._init = function(width, height, options){
     this.isWebGL = (this.renderer.type === CONST.RENDERER_TYPE.WEBGL);
 
     /**
+     * Is webAudio using in this game
+     * @type {boolean}
+     */
+    this.isWebAudio = (Device.hasWebAudio && this.config.audio.useWebAudio);
+
+    /**
      * The scene manager for this game
      * @member {SceneManager}
      */

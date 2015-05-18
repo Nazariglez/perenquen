@@ -87,7 +87,7 @@ constants.DEFAULT_GAME_OPTIONS = {
 
     audio : {
         useWebAudio: true,
-        autoLoadOrder: ["mp3", "ogg", "wav", "m4a"]
+        allowedExtensions: ["m4a", "mp3", "ogg", "wav"]
     },
 
     input : {
