@@ -1,18 +1,44 @@
-var allowedExt = ['m4a','ogg','mp3','wav'];
+var Device = require('../core/Device');
 
 module.exports = function() {
     return function (resource, next) {
+        var game = this.game;
 
-        if (!resource.data) {
+        if (!Device.hasAudio || !game || !resource.data) {
             return next();
         }
+
+        var webAudio = game.isWebAudio,
+            allowed = game.config.audio.allowedExtensions;
 
         var ext = resource.url.split('?').shift().split('.').pop().toLowerCase();
 
-        if(allowedExt.indexOf(ext) === -1){
+        if(allowed.indexOf(ext) === -1){
             return next();
         }
 
+        var canPlay = false;
+        switch(ext){
+            case "m4a":
+                canPlay = Device.hasM4a;
+                break;
+            case "mp3":
+                canPlay = Device.hasMp3;
+                break;
+            case "ogg":
+                canPlay = Device.hasOgg;
+                break;
+            case "wav":
+                canPlay = Device.hasWav;
+                break;
+        }
+
+        if(!canPlay){
+            return next();
+        }
+
+
+        console.log(resource.loadType);
 
         next();
     };

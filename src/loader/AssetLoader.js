@@ -4,6 +4,7 @@ var ResourceLoader = require('resource-loader'),
     particleParser = require('./particleParser'),
     bitmapFontXMLParser = require('./bitmapFontXMLParser'),
     audioParser = require('./audioParser'),
+    audioSupportCheck = require('./audioSupportCheck'),
     bitmapFontTXTParser = require('./bitmapFontTXTParser');
 
 function AssetLoader(game, baseUrl, concurrency){
@@ -17,13 +18,14 @@ AssetLoader.prototype._init = function(game, baseUrl, concurrency){
     ResourceLoader.call(this, baseUrl, concurrency);
     this.game = game;
 
-    this.use(ResourceLoader.middleware.parsing.blob())
+    this.before(audioSupportCheck())
+        .use(ResourceLoader.middleware.parsing.blob())
         .use(spritesheetParser())
         .use(textureParser())
         .use(bitmapFontXMLParser())
         .use(particleParser())
         .use(bitmapFontTXTParser())
-        .use(audioParser(this));
+        .use(audioParser());
 };
 
 module.exports = AssetLoader;
@@ -32,3 +34,8 @@ module.exports = AssetLoader;
 var Resource = ResourceLoader.Resource;
 
 Resource.setExtensionXhrType('fnt', Resource.XHR_RESPONSE_TYPE.DOCUMENT);
+Resource.setExtensionLoadType('m4a', Resource.LOAD_TYPE.AUDIO);
+Resource.setExtensionLoadType('mp3', Resource.LOAD_TYPE.AUDIO);
+Resource.setExtensionLoadType('wav', Resource.LOAD_TYPE.AUDIO);
+Resource.setExtensionLoadType('ogg', Resource.LOAD_TYPE.AUDIO);
+Resource.setExtensionLoadType('audio', Resource.LOAD_TYPE.AUDIO);
