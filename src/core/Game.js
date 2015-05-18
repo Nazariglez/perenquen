@@ -126,7 +126,7 @@ Game.prototype._init = function(width, height, options){
      * Basic loader
      * @member {AssetLoader}
      */
-    this.assetLoader = new AssetLoader();
+    this.assetLoader = new AssetLoader(this);
 
     /**
      * Manage all data, using localstorage or not
