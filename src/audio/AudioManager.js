@@ -7,8 +7,6 @@ AudioManager.prototype.constructor = AudioManager;
 AudioManager.prototype._init = function(game){
     this.game = game;
     this.audios = [];
-
-    this.autoLoadOrder = ['m4a','ogg','mp3','wav'];
 };
 
 AudioManager.prototype.add = function(audio){
