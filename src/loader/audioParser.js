@@ -1,4 +1,5 @@
-var Device = require('../core/Device');
+var Device = require('../core/Device'),
+    utils = require('../core/utils');
 
 module.exports = function() {
     return function (resource, next) {
@@ -8,8 +9,7 @@ module.exports = function() {
             return next();
         }
 
-        var webAudio = game.isWebAudio,
-            allowed = game.config.audio.allowedExtensions;
+        var allowed = game.config.audio.allowedExtensions;
 
         var ext = resource.url.split('?').shift().split('.').pop().toLowerCase();
 
@@ -37,8 +37,7 @@ module.exports = function() {
             return next();
         }
 
-
-        console.log(resource.loadType);
+        game.audioManager._decodeAudio(resource.name, resource.url, resource.data);
 
         next();
     };
