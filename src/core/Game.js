@@ -129,6 +129,12 @@ Game.prototype._init = function(width, height, options){
     this.sceneManager = new SceneManager(this);
 
     /**
+     * The audio manager for this game
+     * @type {AudioManager}
+     */
+    this.audioManager = new AudioManager(this);
+
+    /**
      * Basic loader
      * @member {AssetLoader}
      */
@@ -145,12 +151,6 @@ Game.prototype._init = function(width, height, options){
      * @type {InputManager}
      */
     this.inputManager = new InputManager(this); //TODO: Maybe rename to "input" instead "inputManager" ?
-
-    /**
-     * The audio manager for this game
-     * @type {AudioManager}
-     */
-    this.audioManager = new AudioManager(this);
 
     /**
      * Store the resize method
