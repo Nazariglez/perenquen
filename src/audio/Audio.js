@@ -1,3 +1,5 @@
+var AudioLine = require('./AudioLine');
+
 function Audio(manager, data, id){
     this._init(manager, data, id);
 }
@@ -11,9 +13,10 @@ Audio.prototype._init = function(manager, data, id){
     this.source = null;
 
     this.loop = false;
+    this.volume = 1;
+    this.mute = false;
 
     if(this.context){
-        this.gainNode = this.context.createGain ? this.context.createGain() : this.context.createGainNode();
         this.context.decodeAudioData(data, this._decoded.bind(this));
     }else{
         this.source = data;
@@ -31,15 +34,28 @@ Audio.prototype._decoded = function(buffer){
     this.source.onended = this._onEnd.bind(this);
 };
 
-Audio.prototype.play = function(){
-    if(this.context) {
+Audio.prototype.playLikeMusic = function(loop, callback){
+    this.manager.playMusic(this.id, loop, callback);
+    return this;
+};
+
+Audio.prototype.playLikeSound = function(loop, callback){
+    return this.play(loop, callback);
+};
+
+Audio.prototype.play = function(loop, callback){
+    this.manager.playSound(this.id, loop, callback);
+    /*if(this.context) {
         this.gainNode.gain.value = 1;
         this.gainNode.connect(this.manager.gainNode);
         this.source.connect(this.gainNode);
 
         this.source.start(0, 0);
-    }
+    }else{
+        this.source.play();
+    }*/
 
+    return this;
 };
 
 Audio.prototype._onEnd = function(){
