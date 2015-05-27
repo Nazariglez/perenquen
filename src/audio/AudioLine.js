@@ -53,6 +53,17 @@ AudioLine.prototype.play = function(){
     return this;
 };
 
+AudioLine.prototype.stop = function(){
+    if(this.manager.context){
+
+    }else{
+        this.htmlAudio.pause();
+        this.htmlAudio.currentTime = 0;
+        this.reset();
+    }
+    return this;
+};
+
 AudioLine.prototype._onEnd = function(){
     if(this.callback){
         this.callback(this.manager, this.audio);

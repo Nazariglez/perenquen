@@ -69,6 +69,14 @@ AudioManager.prototype.playSound = function(id, loop, callback){
     return this._play(id, this.soundLines, loop, callback);
 };
 
+AudioManager.prototype.stopMusic = function(id){
+    return this._stop(id, this.musicLines);
+};
+
+AudioManager.prototype.stopSound = function(id){
+    return this._stop(id, this.soundLines);
+};
+
 AudioManager.prototype._play = function(id, lines, loop, callback){
     var line = this._getAvailableLineFrom(lines);
     if(!line){
@@ -85,7 +93,9 @@ AudioManager.prototype._play = function(id, lines, loop, callback){
 AudioManager.prototype._stop = function(id, lines){
     var audioLines = this._getLinesById(id, lines);
     if(audioLines.length > 0){
-        //TODO: Stop audios
+        for(var i = 0; i < audioLines.length; i++){
+            audioLines[i].stop();
+        }
     }
     return this;
 };
