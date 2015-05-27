@@ -10,6 +10,7 @@ AudioLine.prototype._init = function(manager){
     this.audio = null;
     this.htmlAudio = null;
     this.loop = false;
+    this.paused = false;
     this.callback = null;
 
     if(!this.context){
@@ -23,6 +24,7 @@ AudioLine.prototype.reset = function(){
     this.audio = null;
     this.loop = false;
     this.callback = null;
+    this.paused = false;
     return this;
 };
 
@@ -40,6 +42,8 @@ AudioLine.prototype.setAudio = function(audio, loop, callback){
 };
 
 AudioLine.prototype.play = function(){
+    if(this.paused)return this;
+
     if(this.manager.context){
 
     }else{
@@ -60,6 +64,30 @@ AudioLine.prototype.stop = function(){
         this.htmlAudio.pause();
         this.htmlAudio.currentTime = 0;
         this.reset();
+    }
+    return this;
+};
+
+AudioLine.prototype.pause = function(){
+    if(this.manager.context){
+
+    }else{
+        this.htmlAudio.pause();
+    }
+    this.paused = true;
+    return this;
+};
+
+AudioLine.prototype.resume = function(){
+    if(this.paused){
+
+        if(this.manager.context){
+
+        }else{
+            this.htmlAudio.play();
+        }
+
+        this.paused = false;
     }
     return this;
 };

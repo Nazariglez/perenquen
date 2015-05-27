@@ -77,6 +77,22 @@ AudioManager.prototype.stopSound = function(id){
     return this._stop(id, this.soundLines);
 };
 
+AudioManager.prototype.pauseMusic = function(id){
+    return this._pause(id, this.musicLines);
+};
+
+AudioManager.prototype.pauseSound = function(id){
+    return this._pause(id, this.soundLines);
+};
+
+AudioManager.prototype.resumeMusic = function(id){
+    return this._resume(id, this.musicLines);
+};
+
+AudioManager.prototype.resumeSound = function(id){
+    return this._resume(id, this.soundLines);
+};
+
 AudioManager.prototype._play = function(id, lines, loop, callback){
     var line = this._getAvailableLineFrom(lines);
     if(!line){
@@ -91,10 +107,57 @@ AudioManager.prototype._play = function(id, lines, loop, callback){
 };
 
 AudioManager.prototype._stop = function(id, lines){
+    if(!id){
+        for(var n = 0; n < lines.length; n++){
+            if(!lines[n].available){
+                lines[n].stop();
+            }
+        }
+        return this;
+    }
+
     var audioLines = this._getLinesById(id, lines);
     if(audioLines.length > 0){
         for(var i = 0; i < audioLines.length; i++){
             audioLines[i].stop();
+        }
+    }
+    return this;
+};
+
+AudioManager.prototype._pause = function(id, lines){
+    if(!id){
+        for(var n = 0; n < lines.length; n++){
+            if(!lines[n].available){
+                lines[n].pause();
+            }
+        }
+        return this;
+    }
+
+    var audioLines = this._getLinesById(id, lines);
+    if(audioLines.length > 0){
+        for(var i = 0; i < audioLines.length; i++){
+            audioLines[i].pause();
+        }
+    }
+    return this;
+};
+
+AudioManager.prototype._resume = function(id, lines){
+    if(!id){
+        for(var n = 0; n < lines.length; n++){
+            if(!lines[n].available){
+                lines[n].resume();
+            }
+        }
+        return this;
+    }
+
+    var audioLines = this._getLinesById(id, lines);
+    if(audioLines.length > 0){
+        for(var i = 0; i < audioLines.length; i++){
+            audioLines[i].resume();
         }
     }
     return this;
@@ -116,4 +179,16 @@ AudioManager.prototype._getLinesById = function(id, lines){
 
 };
 
+AudioManager.prototype.pauseAllLines = function(){
+    this.pauseMusic();
+    this.pauseSound();
+
+    return this;
+};
+
+AudioManager.prototype.resumeAllLines = function(){
+    this.resumeMusic();
+    this.resumeSound();
+    return this;
+};
 module.exports = AudioManager;

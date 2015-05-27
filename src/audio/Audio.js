@@ -34,12 +34,12 @@ Audio.prototype._decoded = function(buffer){
     this.source.onended = this._onEnd.bind(this);
 };
 
-Audio.prototype.playLikeMusic = function(loop, callback){
+Audio.prototype.playOnMusic = function(loop, callback){
     this.manager.playMusic(this.id, loop, callback);
     return this;
 };
 
-Audio.prototype.playLikeSound = function(loop, callback){
+Audio.prototype.playOnSound = function(loop, callback){
     return this.play(loop, callback);
 };
 
@@ -55,6 +55,20 @@ Audio.prototype.play = function(loop, callback){
         this.source.play();
     }*/
 
+    return this;
+};
+
+Audio.prototype.stopOnMusic = function(){
+    this.manager.stopMusic(this.id);
+    return this;
+};
+
+Audio.prototype.stopOnSound = function(){
+    return this.stop();
+};
+
+Audio.prototype.stop = function(){
+    this.manager.stopSound(this.id);
     return this;
 };
 
