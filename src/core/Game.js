@@ -120,7 +120,7 @@ Game.prototype._init = function(width, height, options){
      * Is webAudio using in this game
      * @type {boolean}
      */
-    this.isWebAudio = (Device.hasWebAudio && this.config.audio.useWebAudio);
+    this.isWebAudio = false; //(Device.hasWebAudio && this.config.audio.useWebAudio);
 
     /**
      * The scene manager for this game
@@ -181,7 +181,7 @@ Game.prototype._init = function(width, height, options){
 Game.prototype.start = function(){
     this.updateTime();
     this.animate();
-    //TODO: Unpause audio manager;
+    this.audioManager.resumeAllLines();
     return this;
 };
 
@@ -191,7 +191,7 @@ Game.prototype.start = function(){
  */
 Game.prototype.stop = function(){
     window.cancelAnimationFrame(this.raf);
-    //TODO: pause audioManager
+    this.audioManager.pauseAllLines();
     return this;
 };
 
