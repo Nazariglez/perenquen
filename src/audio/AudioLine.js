@@ -12,8 +12,9 @@ AudioLine.prototype._init = function(manager){
     this.loop = false;
     this.paused = false;
     this.callback = null;
+    this.muted = false;
 
-    if(!this.context){
+    if(!this.manager.context){
         this.htmlAudio = new Audio();
         this.htmlAudio.addEventListener('ended', this._onEnd.bind(this));
     }
@@ -25,6 +26,7 @@ AudioLine.prototype.reset = function(){
     this.loop = false;
     this.callback = null;
     this.paused = false;
+    this.muted = false;
     return this;
 };
 
@@ -50,9 +52,33 @@ AudioLine.prototype.play = function(){
         var audio = this.htmlAudio;
         audio.src = (this.audio.source.src !== "") ? this.audio.source.src : this.audio.source.children[0].src;
         audio.preload = "auto";
-        audio.volume = (this.audio.mute) ? 0 : this.audio.volume;
+        audio.volume = (this.audio.muted || this.muted) ? 0 : this.audio.volume;
         audio.load();
         audio.play();
+    }
+    return this;
+};
+
+AudioLine.prototype.mute = function(){
+    this.muted = true;
+    if(this.manager.context){
+
+    }else{
+        if(this.htmlAudio){
+            this.htmlAudio.volume = 0;
+        }
+    }
+    return this;
+};
+
+AudioLine.prototype.unmute = function(){
+    this.muted = false;
+    if(this.manager.context){
+
+    }else{
+        if(this.htmlAudio){
+            this.htmlAudio.volume = this.audio.volume;
+        }
     }
     return this;
 };

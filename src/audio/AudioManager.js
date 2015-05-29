@@ -14,6 +14,9 @@ AudioManager.prototype._init = function(game){
     this.soundMaxLines = 10;
     this.musicMaxLines = 2;
 
+    this.musicMuted = false;
+    this.soundMuted = false;
+
     if(this.game.isWebAudio){
         this.context = new Device.webAudioContext();
         this.gainNode = this.context.createGain ? this.context.createGain() : this.context.createGainNode();
@@ -93,6 +96,22 @@ AudioManager.prototype.resumeSound = function(id){
     return this._resume(id, this.soundLines);
 };
 
+AudioManager.prototype.muteMusic = function(id){
+    return this._mute(id, this.musicLines);
+};
+
+AudioManager.prototype.muteSound = function(id){
+    return this._mute(id, this.soundLines);
+};
+
+AudioManager.prototype.unmuteMusic = function(id){
+    return this._unmute(id, this.musicLines);
+};
+
+AudioManager.prototype.unmuteSound = function(id){
+    return this._unmute(id, this.soundLines);
+};
+
 AudioManager.prototype._play = function(id, lines, loop, callback){
     var line = this._getAvailableLineFrom(lines);
     if(!line){
@@ -120,6 +139,40 @@ AudioManager.prototype._stop = function(id, lines){
     if(audioLines.length > 0){
         for(var i = 0; i < audioLines.length; i++){
             audioLines[i].stop();
+        }
+    }
+    return this;
+};
+
+AudioManager.prototype._mute = function(id, lines){
+    if(!id){
+        for(var n = 0; n < lines.length; n++){
+            lines[n].mute();
+        }
+        return this;
+    }
+
+    var audioLines = this._getLinesById(id, lines);
+    if(audioLines.length > 0){
+        for(var i = 0; i < audioLines.length; i++){
+            audioLines[i].mute();
+        }
+    }
+    return this;
+};
+
+AudioManager.prototype._unmute = function(id, lines){
+    if(!id){
+        for(var n = 0; n < lines.length; n++){
+            lines[n].unmute();
+        }
+        return this;
+    }
+
+    var audioLines = this._getLinesById(id, lines);
+    if(audioLines.length > 0){
+        for(var i = 0; i < audioLines.length; i++){
+            audioLines[i].unmute();
         }
     }
     return this;
@@ -191,4 +244,6 @@ AudioManager.prototype.resumeAllLines = function(){
     this.resumeSound();
     return this;
 };
+
+//TODO: mute, unmute
 module.exports = AudioManager;
