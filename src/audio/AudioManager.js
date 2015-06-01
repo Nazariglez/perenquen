@@ -120,6 +120,11 @@ AudioManager.prototype._play = function(id, lines, loop, callback){
     }
 
     var audio = utils.assetCache.getAudio(id);
+    if(!audio){
+        console.error('Not found audio "' + id + '"');
+        return this;
+    }
+
     line.setAudio(audio, loop, callback)
         .play();
     return this;
@@ -245,5 +250,4 @@ AudioManager.prototype.resumeAllLines = function(){
     return this;
 };
 
-//TODO: mute, unmute
 module.exports = AudioManager;

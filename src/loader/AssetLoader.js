@@ -5,7 +5,8 @@ var ResourceLoader = require('resource-loader'),
     bitmapFontXMLParser = require('./bitmapFontXMLParser'),
     audioParser = require('./audioParser'),
     audioSupportCheck = require('./audioSupportCheck'),
-    bitmapFontTXTParser = require('./bitmapFontTXTParser');
+    bitmapFontTXTParser = require('./bitmapFontTXTParser'),
+    Device = require('../core/Device');
 
 function AssetLoader(game, baseUrl, concurrency){
     this._init(game, baseUrl, concurrency);
@@ -33,18 +34,36 @@ AssetLoader.prototype._init = function(game, baseUrl, concurrency){
 module.exports = AssetLoader;
 
 AssetLoader.prototype.setAudioType = function(){
-    if(this.game.isWebAudio){
-        Resource.setExtensionXhrType('m4a', Resource.XHR_RESPONSE_TYPE.BUFFER);
-        Resource.setExtensionXhrType('mp3', Resource.XHR_RESPONSE_TYPE.BUFFER);
-        Resource.setExtensionXhrType('wav', Resource.XHR_RESPONSE_TYPE.BUFFER);
-        Resource.setExtensionXhrType('ogg', Resource.XHR_RESPONSE_TYPE.BUFFER);
-        Resource.setExtensionXhrType('audio', Resource.XHR_RESPONSE_TYPE.BUFFER);
-    }else{
-        Resource.setExtensionLoadType('m4a', Resource.LOAD_TYPE.AUDIO);
-        Resource.setExtensionLoadType('mp3', Resource.LOAD_TYPE.AUDIO);
-        Resource.setExtensionLoadType('wav', Resource.LOAD_TYPE.AUDIO);
-        Resource.setExtensionLoadType('ogg', Resource.LOAD_TYPE.AUDIO);
-        Resource.setExtensionLoadType('audio', Resource.LOAD_TYPE.AUDIO);
+    var allowed = this.game.config.audio.allowedExtensions;
+    var canPlay = [];
+    for (var i = 0; i < allowed.length; i++) {
+        var can = false;
+        switch (allowed[i]) {
+            case "m4a":
+                can = Device.hasM4a;
+                break;
+            case "mp3":
+                can = Device.hasMp3;
+                break;
+            case "ogg":
+                can = Device.hasOgg;
+                break;
+            case "wav":
+                can = Device.hasWav;
+                break;
+        }
+
+        if (can) {
+            canPlay.push(allowed[i]);
+        }
+    }
+
+    for(var n = 0; n < canPlay.length; n++){
+        if(this.game.isWebAudio){
+            Resource.setExtensionXhrType(canPlay[n], Resource.XHR_RESPONSE_TYPE.BUFFER);
+        }else{
+            Resource.setExtensionLoadType(canPlay[n], Resource.LOAD_TYPE.AUDIO);
+        }
     }
 
     return this;

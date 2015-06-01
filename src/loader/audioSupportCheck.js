@@ -11,10 +11,11 @@ module.exports = function(){
         var ext = resource.url.split('?').shift().split('.').pop().toLowerCase();
 
         var allowed = game.config.audio.allowedExtensions;
-        if(ext === "audio") {
+        if(allowed.indexOf(ext) !== -1 || ext === "audio") {
 
+            //Get device allowed audiotypes
             var canPlay = [];
-            for (var i = 0; i < allowed.length; allowed++) {
+            for (var i = 0; i < allowed.length; i++) {
                 var can = false;
                 switch (allowed[i]) {
                     case "m4a":
@@ -36,15 +37,18 @@ module.exports = function(){
                 }
             }
 
-            if (canPlay.length === 0) {
-                resource.url = ""; //cancel
+            //Can not play sounds
+            if(canPlay.length === 0){
                 return next();
             }
 
-            ext = canPlay[0];
-            resource.url = resource.url.substr(0, resource.url.length - 5) + ext;
+            //It's "audio" ext?
+            if (ext === "audio") {
+                ext = canPlay[0];
+                resource.url = resource.url.substr(0, resource.url.length - 5) + ext;
 
-            return next();
+                return next();
+            }
 
         }
 
