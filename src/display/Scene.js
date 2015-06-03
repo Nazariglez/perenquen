@@ -117,7 +117,7 @@ Scene.prototype.createTween = function(target){
 };
 
 Scene.prototype.transitionTo = function(scene, effect){
-    //todo
+    return this.game.sceneManager.createTransition(this, scene, effect);
 };
 
 Scene.prototype.addChild = function(child){

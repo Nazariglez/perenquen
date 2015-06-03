@@ -1,4 +1,6 @@
 var Container = require('../../lib/pixi/src/core/display/Container'),
+    SceneTransition = require('../extra/SceneTransition'),
+    TweenManager = require('../tween/TweenManager'),
     Scene = require('../display/Scene');
 
 /**
@@ -30,11 +32,15 @@ SceneManager.prototype._init = function(game){
      */
     this.scenes = [];
 
+    this.dirtyInitiated = false;
+
     /**
      *
      * @member {Scene}
      */
     this.currentScene = null;
+
+    this.tweenManager = new TweenManager();
 
     this.setCurrentScene(this.createScene('initial'));
 };
@@ -49,6 +55,7 @@ SceneManager.prototype._init = function(game){
 SceneManager.prototype.addScene = function(scene, id){
     if(id)scene.id = id;
     this.scenes.push(scene);
+    this.dirtyInitiated = true;
     return this;
 };
 
@@ -59,6 +66,8 @@ SceneManager.prototype.addScene = function(scene, id){
  * @returns {SceneManager}
  */
 SceneManager.prototype.animate = function(gameTime, delta){
+    this.tweenManager.tick(delta);
+
     if(this.currentScene&&this.currentScene.animate){
         this.currentScene.animate(gameTime, delta);
     }
@@ -130,6 +139,28 @@ SceneManager.prototype.removeAllScenes = function(){
     this.children.length = 0;
     this.scenes.length = 0;
     return this;
+};
+
+SceneManager.prototype.createTransition = function(sceneOut, sceneIn, effect){
+    if(typeof sceneOut === "string")sceneOut = this.getSceneById(sceneOut);
+    if(typeof sceneIn === "string")sceneIn = this.getSceneById(sceneIn);
+
+    return new SceneTransition(sceneOut, sceneIn, effect, this);
+};
+
+SceneManager.prototype.renderWebGL = function(renderer){
+    if(this.dirtyInitiated){
+        this.dirtyInitiated = false;
+        for(var i = 0; i < this.scenes.length; i++){
+            if(!this.scenes[i].initiated){
+                this.scenes[i].initiated = true;
+                this.scenes[i].renderWebGL(renderer);
+                this.scenes[i].animate(0,0);
+            }
+        }
+    }
+
+    Container.prototype.renderWebGL.call(this, renderer);
 };
 
 
