@@ -1,4 +1,4 @@
-var Tween = require('../tween/Tween');
+var Transition = require('./Transition');
 
 function SceneTransition(sceneOut, sceneIn, effect, manager){
     this._init(sceneOut, sceneIn, effect, manager);
@@ -14,7 +14,7 @@ SceneTransition.prototype._init = function(sceneOut, sceneIn, effect, manager){
     this.manager.currentScene = null;
     this.manager.children.length = 0;
 
-    transitionEffect(this);
+    Transition.pushFromTop()(this);
 };
 
 SceneTransition.prototype.sortScenes = function(first, second){
