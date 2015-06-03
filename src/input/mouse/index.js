@@ -147,6 +147,7 @@ Mouse.prototype.getGlobalCoords = function(e){
 };
 
 Mouse.prototype.processEvent = function(parent){
+    if(!parent)return;
     var len = parent.children.length;
 
     for(var i = len-1; i >= 0; i--){
@@ -442,7 +443,8 @@ Mouse.prototype.update = function(gameTime, delta){
         return;
     }
 
-    this.processEvent(this.game.sceneManager);
+    this.processEvent(this.game.sceneManager.currentScene);
+
     for(var i = 0; i < this.states.length; i++){
         for(var n = 0; n < this.states[i].length; n++) {
             this.states[i][n] = false;
