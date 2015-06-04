@@ -148,20 +148,4 @@ SceneManager.prototype.createTransition = function(sceneOut, sceneIn, effect){
     return new SceneTransition(sceneOut, sceneIn, effect, this);
 };
 
-SceneManager.prototype.renderWebGL = function(renderer){
-    if(this.dirtyInitiated){
-        this.dirtyInitiated = false;
-        for(var i = 0; i < this.scenes.length; i++){
-            if(!this.scenes[i].initiated){
-                this.scenes[i].initiated = true;
-                this.scenes[i].renderWebGL(renderer);
-                this.scenes[i].animate(0,0);
-            }
-        }
-    }
-
-    Container.prototype.renderWebGL.call(this, renderer);
-};
-
-
 module.exports = SceneManager;

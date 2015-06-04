@@ -20,8 +20,6 @@ Scene.prototype.displayObjectUpdateTransform = function(){
 Scene.prototype._init = function(game){
     Container.prototype._init.call(this);
 
-    this.initiated = false; //TODO: Comprobar si esto es necesario
-
     this.game = game;
     this.size.set(game.width,game.height);
     this.setAnchor(0,0);
@@ -75,6 +73,15 @@ Scene.prototype.animate = function(gameTime, delta){
     this.timerManager.tick(delta);
     this.tweenManager.tick(delta);
 
+    var len = this.children.length;
+    for(var i = 0; i < len; i++){
+        this.children[i].animate(gameTime, delta);
+    }
+
+    return this;
+};
+
+Scene.prototype.renderWebGL = function(renderer){
     if(this._backgroundColorDirty){
         this.bgGraphic.clear();
         if(typeof this.backgroundColor === "number"){
@@ -84,12 +91,21 @@ Scene.prototype.animate = function(gameTime, delta){
         }
         this._backgroundColorDirty = false;
     }
+    Container.prototype.renderWebGL.call(this, renderer);
+    return this;
+};
 
-    var len = this.children.length;
-    for(var i = 0; i < len; i++){
-        this.children[i].animate(gameTime, delta);
+Scene.prototype.renderCanvas = function(renderer){
+    if(this._backgroundColorDirty){
+        this.bgGraphic.clear();
+        if(typeof this.backgroundColor === "number"){
+            this.bgGraphic.beginFill(this.backgroundColor)
+                .drawRect(0,0,this.width,this.height)
+                .endFill();
+        }
+        this._backgroundColorDirty = false;
     }
-
+    Container.prototype.renderCanvas.call(this, renderer);
     return this;
 };
 
