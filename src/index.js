@@ -49,6 +49,7 @@ var core = {
     AnimationManager : Class.parse(require('./display/animation/AnimationManager')),
     Animation : Class.parse(require('./display/animation/Animation')),
     AudioManager : Class.parse(require('./audio/AudioManager')),
+    Transition : Class.parse(require('./extra/Transition')),
     filters : require('../lib/pixi/src/filters')
 
 };
