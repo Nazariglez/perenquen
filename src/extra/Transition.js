@@ -250,6 +250,106 @@ module.exports = {
             tweenIn.start();
 
         };
+    },
+
+
+    exitToTop: function(){
+        return function(transition, sceneOut, sceneIn){
+            transition.sortScenes(sceneIn, sceneOut);
+
+            var tweenOut = new Tween(sceneOut, transition.tweenManager)
+                .from({
+                    x : 0,
+                    y : 0
+                }).to({
+                    x : 0,
+                    y : -sceneOut.height
+                }).setTime(transition.time)
+                .setDelay(transition.delay)
+                .setEasing(transition.easing)
+                .setExpire()
+
+                .onStart(transition._onTransitionStart.bind(transition))
+                .onEnd(transition._onTransitionEnd.bind(transition));
+
+            tweenOut.start();
+
+        };
+    },
+
+
+    exitToBottom: function(){
+        return function(transition, sceneOut, sceneIn){
+            transition.sortScenes(sceneIn, sceneOut);
+
+            var tweenOut = new Tween(sceneOut, transition.tweenManager)
+                .from({
+                    x : 0,
+                    y : 0
+                }).to({
+                    x : 0,
+                    y : sceneOut.height
+                }).setTime(transition.time)
+                .setDelay(transition.delay)
+                .setEasing(transition.easing)
+                .setExpire()
+
+                .onStart(transition._onTransitionStart.bind(transition))
+                .onEnd(transition._onTransitionEnd.bind(transition));
+
+            tweenOut.start();
+
+        };
+    },
+
+
+    exitToRight: function(){
+        return function(transition, sceneOut, sceneIn){
+            transition.sortScenes(sceneIn, sceneOut);
+
+            var tweenOut = new Tween(sceneOut, transition.tweenManager)
+                .from({
+                    x : 0,
+                    y : 0
+                }).to({
+                    x : -sceneOut.width,
+                    y : 0
+                }).setTime(transition.time)
+                .setDelay(transition.delay)
+                .setEasing(transition.easing)
+                .setExpire()
+
+                .onStart(transition._onTransitionStart.bind(transition))
+                .onEnd(transition._onTransitionEnd.bind(transition));
+
+            tweenOut.start();
+
+        };
+    },
+
+
+    exitToLeft: function(){
+        return function(transition, sceneOut, sceneIn){
+            transition.sortScenes(sceneIn, sceneOut);
+
+            var tweenOut = new Tween(sceneOut, transition.tweenManager)
+                .from({
+                    x : 0,
+                    y : 0
+                }).to({
+                    x : sceneOut.width,
+                    y : 0
+                }).setTime(transition.time)
+                .setDelay(transition.delay)
+                .setEasing(transition.easing)
+                .setExpire()
+
+                .onStart(transition._onTransitionStart.bind(transition))
+                .onEnd(transition._onTransitionEnd.bind(transition));
+
+            tweenOut.start();
+
+        };
     }
 
 

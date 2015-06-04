@@ -42,6 +42,12 @@ SceneTransition.prototype.sortScenes = function(first, second){
     this.manager.addChild(first);
     this.manager.addChild(second);
 
+    first.setPosition(0)
+        .setAlpha(1);
+
+    second.setPosition(0)
+        .setAlpha(1);
+
     return this;
 };
 
