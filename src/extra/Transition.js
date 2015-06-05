@@ -1,4 +1,5 @@
-var Tween = require('../tween/Tween');
+var Tween = require('../tween/Tween'),
+    Graphics = require('../display/Graphics');
 
 module.exports = {
 
@@ -350,8 +351,124 @@ module.exports = {
             tweenOut.start();
 
         };
+    },
+
+
+    fadeToColor: function(color){
+        color = color || 0x000001;
+
+        return function(transition, sceneOut, sceneIn){
+            transition.sortScenes(sceneIn, sceneOut);
+
+            var graph = new Graphics()
+                .beginFill(color)
+                .drawRect(0,0,sceneIn.width,sceneIn.height)
+                .endFill()
+                .setAlpha(0)
+                .addTo(transition.manager);
+
+            var tween = new Tween(graph, transition.tweenManager)
+                .from({
+                    alpha: 0
+                }).to({
+                    alpha: 1
+                }).setPingPong()
+                .setTime(transition.time)
+                .setDelay(transition.delay)
+                .setEasing(transition.easing)
+                .setExpire()
+
+                .onPingPong(function(){
+                    sceneOut.visible = false;
+                })
+
+                .onStart(transition._onTransitionStart.bind(transition))
+                .onEnd(transition._onTransitionEnd.bind(transition));
+
+            tween.start();
+
+        };
+    },
+
+
+    fadeIn: function(){
+        return function(transition, sceneOut, sceneIn){
+            transition.sortScenes(sceneOut, sceneIn);
+
+            var tweenIn = new Tween(sceneIn, transition.tweenManager)
+                .from({
+                    alpha: 0
+                }).to({
+                    alpha: 1
+                }).setTime(transition.time)
+                .setDelay(transition.delay)
+                .setEasing(transition.easing)
+                .setExpire()
+
+                .onStart(transition._onTransitionStart.bind(transition))
+                .onEnd(transition._onTransitionEnd.bind(transition));
+
+            tweenIn.start();
+
+        };
+    },
+
+
+    fadeOut: function(){
+        return function(transition, sceneOut, sceneIn){
+            transition.sortScenes(sceneIn, sceneOut);
+
+            var tweenOut = new Tween(sceneOut, transition.tweenManager)
+                .from({
+                    alpha: 1
+                }).to({
+                    alpha: 0
+                }).setTime(transition.time)
+                .setDelay(transition.delay)
+                .setEasing(transition.easing)
+                .setExpire()
+
+                .onStart(transition._onTransitionStart.bind(transition))
+                .onEnd(transition._onTransitionEnd.bind(transition));
+
+            tweenOut.start();
+
+        };
+    },
+
+
+    crossFade: function(){
+        return function(transition, sceneOut, sceneIn){
+            transition.sortScenes(sceneIn, sceneOut);
+
+            var tweenIn = new Tween(sceneIn, transition.tweenManager)
+                .from({
+                    alpha: 0
+                }).to({
+                    alpha: 1
+                }).setTime(transition.time)
+                .setDelay(transition.delay)
+                .setEasing(transition.easing)
+                .setExpire()
+
+                .onStart(transition._onTransitionStart.bind(transition))
+                .onEnd(transition._onTransitionEnd.bind(transition));
+
+            tweenIn.start();
+
+            var tweenOut = new Tween(sceneOut, transition.tweenManager)
+                .from({
+                    alpha: 1
+                }).to({
+                    alpha: 0
+                }).setTime(transition.time)
+                .setDelay(transition.delay)
+                .setEasing(transition.easing)
+                .setExpire();
+
+            tweenOut.start();
+
+        };
     }
-
-
 
 };
