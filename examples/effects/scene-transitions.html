@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Scene Transitions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        You can use transition effect to move between scene with scene.transitionTo(scene2).start()
+     */
+
+    var game = new PQ.Game({
+        //Enable mouse input to use in buttons
+        input : {
+            enableMouse: true,
+            enableMouseInteractivity: true
+        }
+    });
+
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/mascot-full.json"},
+        {url: "../assets/ui.json"}
+    ]).load(onAssetsLoaded);
+
+
+    //Transitions
+    var len = Object.keys(PQ.Transition).length;
+    console.log('PQ has ' + len + ' transition effects');
+
+    //Get different transition effect each time
+    var index = 0;
+    var getEffect = function(){
+        var name = Object.keys(PQ.Transition)[index];
+        index++;
+        if(index === len)index = 0;
+        console.log('Transition Effect: ',name);
+        return PQ.Transition[name]();
+    };
+
+
+    //Create a simple button
+    function createButton(text, scene){
+        var button = new PQ.Sprite("buttonLong_brown.png")
+                .setInteractive();
+
+        var buttonText = new PQ.Text(text, {
+            fill: 0xffffff,
+            font: "20px Arial"
+        }).setPosition(button.width/2, button.height/2)
+                .addTo(button);
+
+
+        button.onMouseDown = function(evt){
+
+            //Transition effect
+            game.scene.transitionTo(scene)
+                    .setEffect(getEffect()) //PQ.Transition.pushFromTop by default
+                    .setTime(1200) //100 by default
+
+                    //.setEasing(PQ.Easing.linear()) //Tween easing, linear by default
+                    //.setDelay(1000) //0 by default
+
+                    .onStart(function(){
+                        console.log('Transition Start')
+                    })
+
+                    .onEnd(function(){
+                        console.log('Transition End')
+                    })
+
+                    .start();
+        };
+
+        return button;
+    }
+
+
+
+    function onAssetsLoaded(){
+
+        //First scene -> ID: initial (by default)
+        var scene = game.scene;
+        scene.setBackgroundColor(0x000000);
+
+        //Button to go to scene2
+        var button1 = createButton("Go to scene2", "scene2")
+                .setPosition(scene.width/2, 100)
+                .addTo(scene);
+
+
+
+        var sprite = new PQ.Sprite("run/frame-1.png")
+                .setPosition(100, scene.height/2 + 100)
+                .setSpeed(100, 0)
+                .addTo(scene);
+
+        //Movement and flip
+        sprite.update = function(gameTime, delta){
+            if(this.x < 100){
+                this.setSpeed(100,0);
+                this.setFlipX(false);
+            }else if(this.x > scene.width-100){
+                this.setSpeed(-100,0);
+                this.setFlipX();
+            }
+        };
+
+        //Run animation
+        var runAnimation = sprite.animationManager.createFromFrames('run',{
+            time: 500,
+            loop: true,
+            textures : [
+                    "run/frame-1.png",
+                    "run/frame-2.png",
+                    "run/frame-3.png",
+                    "run/frame-4.png",
+                    "run/frame-5.png"
+            ]
+        }).play();
+
+
+
+
+        //Second Scene -> ID: scene2
+        var scene2 = game.sceneManager.createScene("scene2");
+        scene2.setBackgroundColor(0xc0c0c0);
+
+
+        //Button to go initial scene
+        var button2 = createButton("Go to initial", "initial")
+                .setPosition(scene2.width/2, 100)
+                .addTo(scene2);
+
+
+
+        var sprite2 = new PQ.Sprite("faint/frame-1.png")
+                .setPosition(scene2.width/2, scene2.height/2 + 100)
+                .addTo(scene2);
+
+        //Faint animation
+        var faintAnimation = sprite2.animationManager.createFromFrames('faint',{
+            time: 700,
+            loop: true,
+            textures : [
+                "faint/frame-1.png",
+                "faint/frame-2.png",
+                "faint/frame-3.png",
+                "faint/frame-4.png",
+                "faint/frame-5.png"
+            ]
+        }).play();
+
+    }
+</script>
+</body>
+</html>
