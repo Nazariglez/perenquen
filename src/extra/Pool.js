@@ -12,7 +12,7 @@ function Pool(objectConstructor, args, num){
 
 Pool.prototype.constructor = Pool;
 
-Pool.prototype._init = function(objConstructor, args, num){
+Pool.prototype._init = function(objectConstructor, args, num){
 
     /**
      * All objects in this pool
