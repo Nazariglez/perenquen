@@ -50,6 +50,7 @@ var core = {
     Animation : Class.parse(require('./display/animation/Animation')),
     AudioManager : Class.parse(require('./audio/AudioManager')),
     Transition : Class.parse(require('./extra/Transition')),
+    ParticleEmitter : Class.parse(require('./particle/ParticleEmitter')),
     filters : require('../lib/pixi/src/filters')
 
 };
