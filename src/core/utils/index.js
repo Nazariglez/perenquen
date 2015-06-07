@@ -60,4 +60,12 @@ utils.radToDeg = function(value){
     return value * CONT.RAD_TO_DEG;
 };
 
+utils.randomRange = function(min, max){
+    return (min + Math.random() * (max-min));
+};
+
+utils.iRandomRange = function(min, max){
+    return Math.floor(utils.randomRange(min, max+1));
+};
+
 module.exports = utils;
