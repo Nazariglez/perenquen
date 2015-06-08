@@ -22,6 +22,8 @@ ParticleEmitter.prototype._init = function(config){
     this.burst = 0;
 
     this.tempParticles = [];
+
+    this.particles = 0;
 };
 
 ParticleEmitter.prototype.start = function(burst){
@@ -55,6 +57,7 @@ ParticleEmitter.prototype.animate = function(gameTime, delta){
     for(var i = 0; i < this.tempParticles.length; i++){
         this.tempParticles[i].returnToPool();
         this.tempParticles[i].remove();
+        this.particles--;
     }
     this.tempParticles.length = 0;
 
@@ -66,10 +69,15 @@ ParticleEmitter.prototype.emit = function(){
         var xx = Math.random()*this.config.width,
             yy = Math.random()*this.config.height;
 
+        //TODO: mover el emitter sin mover particulas
+        //TODO: pemitir varias texturas en un array
+
         this.pool.getObject()
             .setEmitter(this)
             .setPosition(xx-this.config.width/2,yy-this.config.height/2)
             .addTo(this);
+
+        this.particles++;
     }
 
     return this;
@@ -91,8 +99,8 @@ var defaultConfig = {
             depth: 0,
             blend: null,
 
-            particlesPerEmission: 1,
-            emissionTime: 30,
+            particlesPerEmission: 100,
+            emissionTime: 20,
 
             scale: {
                 x:1,
@@ -100,28 +108,28 @@ var defaultConfig = {
             },
 
             size: {
-                min: 10,
-                max: 40,
-                increase: 20,
-                shake: 0,
+                min: 1,
+                max: 1,
+                increase: 0,
                 easing: null
             },
 
-            alpha: [ //TODO: alpha easing?
-                1
-            ],
+            alpha: {
+                start: 0.6,
+                end: 1,
+                easing: null
+            },
 
             color: {
-                min: 0xffffff,
-                max: 0xff00ff,
+                start: 0xffffff,
+                end: 0xff0000,
                 easing: null
             },
 
             speed: {
-                min: 60,
-                max: 120,
-                increase: 50,
-                shake: 0,
+                min: 400,
+                max: 520,
+                increase: -8000,
                 easing: null
             },
 
@@ -134,21 +142,19 @@ var defaultConfig = {
                 min: 0,
                 max: 359,
                 increase: 360,
-                shake: 0,
                 easing: null
             },
 
             direction: {
                 min: 0,
                 max: 359,
-                increase: 200,
-                shake: 0,
+                increase: -700,
                 easing: null
             },
 
             life: {
-                min: 1000,
-                max: 2000
+                min: 3000,
+                max: 5000
             }
         }
     ]
