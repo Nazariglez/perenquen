@@ -70,9 +70,8 @@ ParticleEmitter.prototype.emit = function(){
             yy = Math.random()*this.config.height;
 
         //TODO: mover el emitter sin mover particulas
-        //TODO: pemitir varias texturas en un array
-
         this.pool.getObject()
+            .setTexture(this.getRandomTexture())
             .setEmitter(this)
             .setPosition(xx-this.config.width/2,yy-this.config.height/2)
             .addTo(this);
@@ -83,6 +82,10 @@ ParticleEmitter.prototype.emit = function(){
     return this;
 };
 
+ParticleEmitter.prototype.getRandomTexture = function(){
+    return this.config.texture[Math.floor(Math.random() * this.config.texture.length)];
+};
+
 module.exports = ParticleEmitter;
 
 
@@ -91,7 +94,7 @@ var defaultConfig = {
     emitter: [
         {
             id: "default",
-            texture: "player.png",
+            texture: ["player.png", "meteorSmall.png", "meteorBig.png"],
             x: 0,
             y: 0,
             width: 10,
@@ -99,7 +102,7 @@ var defaultConfig = {
             depth: 0,
             blend: null,
 
-            particlesPerEmission: 100,
+            particlesPerEmission: 50,
             emissionTime: 20,
 
             scale: {
@@ -129,7 +132,7 @@ var defaultConfig = {
             speed: {
                 min: 400,
                 max: 520,
-                increase: -8000,
+                increase: -800,
                 easing: null
             },
 

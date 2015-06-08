@@ -23,7 +23,6 @@ Particle.prototype.setEmitter = function(emitter){
     this.emitter = emitter;
 
     var config = emitter.config;
-    this.texture = config.texture;
     this.life = utils.randomRange(config.life.min, config.life.max);
     this.lifeElapsed = 0;
     this.velocity = utils.randomRange(config.speed.min, config.speed.max);
