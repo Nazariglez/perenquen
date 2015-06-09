@@ -25,6 +25,8 @@ ParticleEmitter.prototype._init = function(config){
     this.tempParticles = [];
 
     this.particles = 0;
+
+    this.nonInteractiveChildren = true;
 };
 
 ParticleEmitter.prototype.start = function(burst){

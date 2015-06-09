@@ -147,7 +147,7 @@ Mouse.prototype.getGlobalCoords = function(e){
 };
 
 Mouse.prototype.processEvent = function(parent){
-    if(!parent)return;
+    if(!parent||parent.nonInteractiveChildren)return;
     var len = parent.children.length;
 
     for(var i = len-1; i >= 0; i--){
