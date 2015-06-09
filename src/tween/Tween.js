@@ -1,5 +1,4 @@
-var Easing = require('./Easing'),
-    TweenManager = require('./TweenManager');
+var Easing = require('./Easing');
 
 function Tween(target, manager){
     this._init(target, manager);
@@ -224,7 +223,7 @@ Tween.prototype.setPath = function(path, reverse){
 };
 
 Tween.prototype.addTo = function(manager){
-    if(!(manager instanceof TweenManager)) {
+    if(!manager.isTweenManager) {
         manager = findManager(manager);
     }
 
