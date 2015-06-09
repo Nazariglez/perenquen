@@ -1,5 +1,5 @@
 var Tween = require('./Tween');
-console.log(Tween);
+
 function TweenManager(){
     this._init();
 }
@@ -49,8 +49,6 @@ TweenManager.prototype.getTweensForTarget = function(target){
 };
 
 TweenManager.prototype.createTween = function(target){
-    console.log('ok', Tween);
-
     return new Tween(target, this);
 };
 

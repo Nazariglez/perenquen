@@ -76,10 +76,6 @@ Game.prototype._init = function(width, height, options){
     this.renderer = getRenderer(this.width, this.height, rendererOptions, !this.config.game.useWebGL);
     this.resize(this.width, this.height);
 
-    if(this.config.sayHello){
-        this.sayHello();
-    }
-
     /**
      * Canvas element
      * @member {HTMLCanvasElement}
@@ -171,6 +167,10 @@ Game.prototype._init = function(width, height, options){
      */
     if(this.config.game.scaleType !== CONST.GAME_SCALE_TYPE.NONE){
         this.enableAutoResize(true);
+    }
+
+    if(this.config.sayHello){
+        this.sayHello();
     }
 };
 
@@ -353,7 +353,10 @@ Game.prototype.setFullScreen = function(value){
 };
 
 Game.prototype.sayHello = function(){
-  console.log('Powered by Perenquen v'+CONST.VERSION + ' [http://.com]');
+    var renderer = this.isWebGL ? "WebGL" : "Canvas",
+        audio = this.isWebAudio ? "WebAudio" : "HTMLAudio";
+
+    console.log('Powered by Perenquen v'+CONST.VERSION + ' (' + renderer + ' - ' + audio + ') [http://perenquenjs.com]');
     return this;
 };
 
