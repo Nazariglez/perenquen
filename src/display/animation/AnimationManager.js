@@ -4,7 +4,7 @@ function AnimationManager(sprite){
     this._init(sprite);
 }
 
-Object.prototype.constructor = AnimationManager;
+AnimationManager.prototype.constructor = AnimationManager;
 
 AnimationManager.prototype._init = function(sprite){
     this.sprite = sprite;
