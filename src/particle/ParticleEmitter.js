@@ -1,5 +1,6 @@
 var Container = require('../display/Container'),
     Particle = require('./Particle'),
+    utils = require('../core/utils'),
     Pool = require('../extra/Pool');
 
 function ParticleEmitter(config){
@@ -66,14 +67,14 @@ ParticleEmitter.prototype.animate = function(gameTime, delta){
 
 ParticleEmitter.prototype.emit = function(){
     for(var i = 0; i < this.config.particlesPerEmission; i++){
-        var xx = Math.random()*this.config.width,
-            yy = Math.random()*this.config.height;
+        var xx = utils.randomRange(this.config.x, this.config.x + this.config.width),
+            yy = utils.randomRange(this.config.y, this.config.y + this.config.height);
 
         //TODO: mover el emitter sin mover particulas
         this.pool.getObject()
             .setTexture(this.getRandomTexture())
             .setEmitter(this)
-            .setPosition(xx-this.config.width/2,yy-this.config.height/2)
+            .setPosition(xx,yy)
             .addTo(this);
 
         this.particles++;
@@ -94,15 +95,15 @@ var defaultConfig = {
     emitter: [
         {
             id: "default",
-            texture: ["player.png", "meteorSmall.png", "meteorBig.png"],
+            texture: ["player.png"],
             x: 0,
             y: 0,
-            width: 10,
-            height: 10,
+            width: 2,
+            height: 2,
             depth: 0,
             blend: null,
 
-            particlesPerEmission: 50,
+            particlesPerEmission: 10,
             emissionTime: 20,
 
             scale: {
@@ -124,15 +125,15 @@ var defaultConfig = {
             },
 
             color: {
-                start: 0xffffff,
-                end: 0xff0000,
+                start: 0x00ffff,
+                end: 0x00ff00,
                 easing: null
             },
 
             speed: {
                 min: 400,
                 max: 520,
-                increase: -800,
+                increase: 800,
                 easing: null
             },
 
