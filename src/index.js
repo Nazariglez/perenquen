@@ -65,5 +65,3 @@ for(var c in CONST) {
 
 
 module.exports = core;
-
-//TODO: Revisar que dependencias son realmente necesarias para dev y cuales para prod, teniendo en cuenta la cli
