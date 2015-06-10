@@ -27,6 +27,37 @@ AssetCache.prototype.getAudio = function(name){
     return this._getAssetFrom(this.audios, name);
 };
 
+AssetCache.prototype.addParticle = function(name, url, particle){
+    return this._addAssetIn(this.particles, name, url, particle);
+};
+
+AssetCache.prototype.getParticle = function(name){
+    return this._getAssetFrom(this.particles, name);
+};
+
+AssetCache.prototype.getParticleEmitter = function(particle, emitter){
+    var config = this.getParticle(particle);
+    if(config){
+        var em = null;
+
+        if(typeof emitter === "string") {
+            var len = config.emitters.length;
+            for (var i = 0; i < len; i++) {
+                if(config.emitters[i].id === emitter){
+                    em = config.emitters[i];
+                    break;
+                }
+            }
+        }else if(typeof emitter === "number"){
+            em = config.emitters[emitter];
+        }
+
+        return em;
+    }
+
+    return null;
+};
+
 AssetCache.prototype._addAssetIn = function(list, name, url, asset){
     name = name || url;
     list[name] = {
