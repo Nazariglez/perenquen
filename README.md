@@ -1,6 +1,8 @@
 Perenquen Core
 ===========
 
+#UNDER DEVELOPMENT
+
 ![Perenquen Engine logo](https://raw.githubusercontent.com/PerenquenEngine/perenquen-core/dev-v1/media/logo.png)
 ##WebGL and Canvas HTML5 Game Framework
 
