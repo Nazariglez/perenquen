@@ -29,7 +29,6 @@ var core = {
     Polygon : Class.parse(require('../lib/pixi/src/core/math/shapes/Polygon')),
     RoundedRectangle : Class.parse(require('../lib/pixi/src/core/math/shapes/RoundedRectangle')),
     Ellipse : Class.parse(require('../lib/pixi/src/core/math/shapes/Ellipse')),
-    ParticleContainer : Class.parse(require('./display/ParticleContainer')),
     Text : Class.parse(require('./display/Text')),
     BitmapText : Class.parse(require('./display/BitmapText')),
     TimerManager : Class.parse(require('./timer/TimerManager')),
@@ -50,7 +49,9 @@ var core = {
     Animation : Class.parse(require('./display/animation/Animation')),
     AudioManager : Class.parse(require('./audio/AudioManager')),
     Transition : Class.parse(require('./extra/Transition')),
+    Particle : Class.parse(require('./particle/Particle')),
     ParticleEmitter : Class.parse(require('./particle/ParticleEmitter')),
+    ParticleContainer : Class.parse(require('./particle/ParticleContainer')),
     filters : require('../lib/pixi/src/filters')
 
 };
