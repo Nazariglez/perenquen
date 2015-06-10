@@ -12,21 +12,18 @@ ParticleEmitter.prototype.constructor = ParticleEmitter;
 
 ParticleEmitter.prototype._init = function(config){
     Container.prototype._init.call(this);
-    this.config = cloneConfig(config);
+    this.config = parseConfig(config);
 
     var max = (this.config.life.max/this.config.emissionTime) * this.config.particlesPerEmission;
     this.pool = new Pool(Particle, [], max);
 
     this.isStarted = false;
-
     this.emissionTime = 0;
     this.burst = 0;
-
     this.tempParticles = [];
-
     this.particles = 0;
-
     this.nonInteractiveChildren = true;
+    this.depth = this.config.depth;
 };
 
 ParticleEmitter.prototype.start = function(burst){
@@ -41,30 +38,50 @@ ParticleEmitter.prototype.stop = function(){
 };
 
 ParticleEmitter.prototype.animate = function(gameTime, delta){
-    if(this.isStarted) {
-        this.emissionTime += delta*1000;
-        if (this.emissionTime >= this.config.emissionTime) {
+    if(this.update(gameTime, delta) !== false){
 
-            if(this.burst){
-                this.burst--;
-                if(this.burst === 0){
-                    this.stop();
+        if(this.isStarted) {
+            this.emissionTime += delta*1000;
+            if (this.emissionTime >= this.config.emissionTime) {
+
+                if(this.burst){
+                    this.burst--;
+                    if(this.burst === 0){
+                        this.stop();
+                    }
                 }
-            }
 
-            this.emissionTime = 0;
-            this.emit();
+                this.emissionTime = 0;
+                this.emit();
+            }
+        }
+
+        for(var i = 0; i < this.tempParticles.length; i++){
+            this.tempParticles[i].returnToPool();
+            this.tempParticles[i].remove();
+            this.particles--;
+        }
+        this.tempParticles.length = 0;
+
+
+        var tick = (config.useDeltaAnimation) ? delta : 1;
+
+        if(this.speed && (this.speed.x !== 0 || this.speed.y !== 0)){
+            this.position.x += this.speed.x * tick;
+            this.position.y += this.speed.y * tick;
+        }
+
+        if(this.rotationSpeed && this.rotationSpeed !== 0){
+            this.rotation += this.rotationSpeed * tick;
+        }
+
+        var len = this.children.length;
+        for(var n = 0; n < len; n++){
+            this.children[n].animate(gameTime, delta);
         }
     }
 
-    for(var i = 0; i < this.tempParticles.length; i++){
-        this.tempParticles[i].returnToPool();
-        this.tempParticles[i].remove();
-        this.particles--;
-    }
-    this.tempParticles.length = 0;
-
-    return Container.prototype.animate.call(this, gameTime, delta);
+    return this;
 };
 
 ParticleEmitter.prototype.emit = function(){
@@ -72,7 +89,9 @@ ParticleEmitter.prototype.emit = function(){
         var xx = utils.randomRange(this.config.x, this.config.x + this.config.width),
             yy = utils.randomRange(this.config.y, this.config.y + this.config.height);
 
-        //TODO: mover el emitter sin mover particulas
+        xx += this.parent.width/2;
+        yy += this.parent.height/2;
+
         this.pool.getObject()
             .setTexture(this.getRandomTexture())
             .setEmitter(this)
@@ -91,83 +110,76 @@ ParticleEmitter.prototype.getRandomTexture = function(){
 
 module.exports = ParticleEmitter;
 
-
 var defaultConfig = {
-    particlePQ: true,
-    emitter: [
-        {
-            id: "default",
-            texture: ["player.png"],
-            x: 0,
-            y: 0,
-            width: 2,
-            height: 2,
-            depth: 0,
-            blend: null,
+    id: "default",
+    texture: [],
+    x: 0,
+    y: 0,
+    width: 2,
+    height: 2,
+    depth: 0,
+    blend: null,
 
-            particlesPerEmission: 10,
-            emissionTime: 20,
+    particlesPerEmission: 1,
+    emissionTime: 30,
 
-            scale: {
-                x:1,
-                y:1
-            },
+    scale: {
+        x:1,
+        y:1
+    },
 
-            size: {
-                min: 1,
-                max: 1,
-                increase: 0,
-                easing: null
-            },
+    size: {
+        min: 1,
+        max: 1,
+        increase: 0,
+        easing: null
+    },
 
-            alpha: {
-                start: 0.6,
-                end: 1,
-                easing: null
-            },
+    alpha: {
+        start: 1,
+        end: 1,
+        easing: null
+    },
 
-            color: {
-                start: 0x00ffff,
-                end: 0x00ff00,
-                easing: null
-            },
+    color: {
+        start: 0xffffff,
+        end: 0xffffff,
+        easing: null
+    },
 
-            speed: {
-                min: 400,
-                max: 520,
-                increase: 800,
-                easing: null
-            },
+    speed: {
+        min: 100,
+        max: 109,
+        increase: 0,
+        easing: null
+    },
 
-            gravity: {
-                amount: 0,
-                angle: 0
-            },
+    gravity: {
+        amount: 0,
+        angle: 0
+    },
 
-            rotation: {
-                min: 0,
-                max: 359,
-                increase: 360,
-                easing: null
-            },
+    rotation: {
+        min: 0,
+        max: 359,
+        increase: 0,
+        easing: null
+    },
 
-            direction: {
-                min: 0,
-                max: 359,
-                increase: -700,
-                easing: null
-            },
+    direction: {
+        min: 0,
+        max: 359,
+        increase: 0,
+        easing: null
+    },
 
-            life: {
-                min: 3000,
-                max: 5000
-            }
-        }
-    ]
+    life: {
+        min: 1000,
+        max: 2000
+    }
 };
 
-module.exports.default = defaultConfig.emitter[0];
-
-function cloneConfig(config){
-    return JSON.parse(JSON.stringify(config));
+function parseConfig(config){
+    return utils.defaultObject(defaultConfig, config);
 }
+
