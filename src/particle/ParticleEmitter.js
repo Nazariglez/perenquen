@@ -1,6 +1,7 @@
 var Container = require('../display/Container'),
     Particle = require('./Particle'),
     utils = require('../core/utils'),
+    config = require('../core/config'),
     Pool = require('../extra/Pool');
 
 function ParticleEmitter(config){
