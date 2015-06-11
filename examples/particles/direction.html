@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Particle Basic with Direction</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #c0c0c0;
+            overflow: hidden;
+        }
+
+        button {
+            z-index: 10;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+        }
+        
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 20px;
+            background-color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<script src="../../build/perenquen.dev.js"></script>
+<script>
+
+    /*
+        How to create a basic particle in one angle
+     */
+    var game = new PQ.Game();
+
+    game.assetLoader.add([
+        {url: "../assets/game.json"}
+    ]).load(init);
+
+
+    function init(){
+        game.start();
+
+        //Particle config
+        var particleConfig = {
+
+            //Required: Emitters is an array with all the emitters config
+            emitters : [
+
+                {
+                    texture : ["meteorSmall.png"],
+
+                    //Alter the direction
+                    direction : {
+                        min: 0, //Min degree (0 is always right side)
+                        max: 45, //Max angle
+                        increase: 0,
+                        easing: null
+                    }
+                }
+
+            ]
+        };
+
+        //Create the particle container using our particleConfig
+        var particle = new PQ.ParticleContainer(particleConfig)
+                .setPosition(100, 100)
+                .addTo(game.scene);
+
+        particle.start();
+
+
+        //New particle, same config but other angle
+        var particle2 = new PQ.ParticleContainer(particleConfig)
+                .setPosition(game.scene.width - 100, 100)
+                .addTo(game.scene);
+
+        //Change the angle
+        var emitter = particle2.getEmitter(0);
+        emitter.config.direction.min = 140;
+        emitter.config.direction.max = 180;
+
+        particle2.start();
+
+
+        //In this case we change the "increase" value to make a cool effect
+        var particle3 = new PQ.ParticleContainer(particleConfig)
+                .setPosition(200, game.scene.height - 150)
+                .addTo(game.scene);
+
+        //Change the icnrease value
+        var emitter3 = particle3.getEmitter(0);
+        emitter3.config.direction.increase = 300;
+
+        particle3.start();
+
+
+        //Same like particle3, but now with other easing effect (by default is linear())
+        var particle4 = new PQ.ParticleContainer(particleConfig)
+                .setPosition(game.scene.width - 200, game.scene.height - 150)
+                .addTo(game.scene);
+
+        //Change the increase and the easing effect
+        var emitter4 = particle4.getEmitter(0);
+        emitter4.config.direction.increase = 300;
+        emitter4.config.direction.easing = PQ.Easing.outExpo();
+
+        particle4.start();
+
+
+
+        //Show the particles number
+        var div = document.querySelector("#particles");
+        game.update = function(gameTime, delta){
+            var p = 0;
+            p += particle.particles;
+            p += particle2.particles;
+            p += particle3.particles;
+            p += particle4.particles;
+
+            div.innerHTML = p;
+        };
+    }
+</script>
+<div id="particles"></div>
+</body>
+</html>

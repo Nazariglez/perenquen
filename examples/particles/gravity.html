@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Particle Basic</title>
+    <title>Particle Basic with Gravity</title>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
@@ -36,7 +36,7 @@
 <script>
 
     /*
-        How to create a basic particle
+        How to use a particle gravity
      */
     var game = new PQ.Game();
 
@@ -55,8 +55,23 @@
             emitters : [
 
                 {
-                    //All you need to make a basic particle is define the texture
-                    texture : ["meteorSmall.png"]
+                    texture : ["meteorSmall.png"],
+
+                    //More particles
+                    particlesPerEmission: 3,
+
+                    //Emit in all directions
+                    direction: {
+                        min: 0,
+                        max: 359,
+                        increase: 400
+                    },
+
+                    //Gravity values
+                    gravity: {
+                        amount: 230,
+                        angle: 90 //Bottom, all particles are pulled down
+                    }
                 }
 
             ]
@@ -64,17 +79,16 @@
 
         //Create the particle container using our particleConfig
         var particle = new PQ.ParticleContainer(particleConfig)
-                .setPosition(game.scene.width/2, game.scene.height/2)
+                .setPosition(game.scene.width/2, 100)
                 .addTo(game.scene);
 
         particle.start();
 
 
-
         //Show the particles number
         var div = document.querySelector("#particles");
-        particle.update = function(gameTime, delta){
-            div.innerHTML = this.particles;
+        game.update = function(gameTime, delta){
+            div.innerHTML = particle.particles;
         };
     }
 </script>
