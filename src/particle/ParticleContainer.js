@@ -71,3 +71,17 @@ ParticleContainer.prototype.addEmitter = function(emitter){
 };
 
 module.exports = ParticleContainer;
+
+Object.defineProperties(ParticleContainer.prototype, {
+    particles : {
+        get: function(){
+            var particles = 0;
+            var len = this.emitters.length;
+            for(var i = 0; i < len; i++){
+                particles += this.emitters[i].particles;
+            }
+
+            return particles;
+        }
+    }
+});
