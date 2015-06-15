@@ -40,7 +40,7 @@ module.exports = function() {
         game.audioManager._decodeAudio(resource.name, resource.url, resource.data, function(){
             next();
         });
-        
+
     };
 
 };

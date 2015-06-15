@@ -136,7 +136,7 @@ AudioManager.prototype._play = function(id, lines, loop, callback){
         console.error('Not found audio "' + id + '"');
         return this;
     }
-    console.log(audio.source);
+
     line.setAudio(audio, loop, callback)
         .play();
     return this;

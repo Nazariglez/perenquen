@@ -9,10 +9,15 @@ AudioLine.prototype._init = function(manager){
     this.available = true;
     this.audio = null;
     this.htmlAudio = null;
+    this.webAudio = null;
     this.loop = false;
     this.paused = false;
     this.callback = null;
     this.muted = false;
+
+    this.startTime = 0;
+    this.lastPauseTime = 0;
+    this.offsetTime = 0;
 
     if(!this.manager.context){
         this.htmlAudio = new Audio();
@@ -27,27 +32,50 @@ AudioLine.prototype.reset = function(){
     this.callback = null;
     this.paused = false;
     this.muted = false;
+    this.webAudio = null;
+
+    this.startTime = 0;
+    this.lastPauseTime = 0;
+    this.offsetTime = 0;
     return this;
 };
 
 AudioLine.prototype.setAudio = function(audio, loop, callback){
     if(typeof loop === "function"){
-        loop = false;
         callback = loop;
+        loop = false;
     }
 
     this.audio = audio;
     this.available = false;
     this.loop = loop;
     this.callback = callback;
+
     return this;
 };
 
-AudioLine.prototype.play = function(){
-    if(this.paused)return this;
+AudioLine.prototype.play = function(pause){
+    if(!pause && this.isPaused)return this;
 
     if(this.manager.context){
+        this.webAudio = this.manager.context.createBufferSource();
+        this.webAudio.start = this.webAudio.start || this.webAudio.noteOn;
+        this.webAudio.stop = this.webAudio.stop || this.webAudio.noteOff;
 
+        this.webAudio.buffer = this.audio.source;
+
+        this.webAudio.loop = this.loop || this.audio.loop;
+        this.startTime = this.manager.context.currentTime;
+
+        this.webAudio.onended = this._onEnd.bind(this);
+
+        this.webAudio.gainNode = this.manager.createGainNode();
+        this.webAudio.gainNode.value = (this.audio.muted || this.muted) ? 0 : this.audio.volume;
+        this.webAudio.gainNode.connect(this.manager.gainNode);
+
+        this.webAudio.connect(this.webAudio.gainNode);
+
+        this.webAudio.start(0, (pause) ? this.lastPauseTime : null);
     }else{
         var audio = this.htmlAudio;
         audio.src = (this.audio.source.src !== "") ? this.audio.source.src : this.audio.source.children[0].src;
@@ -62,7 +90,7 @@ AudioLine.prototype.play = function(){
 AudioLine.prototype.mute = function(){
     this.muted = true;
     if(this.manager.context){
-
+        this.webAudio.gainNode.gain.value = 0;
     }else{
         if(this.htmlAudio){
             this.htmlAudio.volume = 0;
@@ -74,7 +102,7 @@ AudioLine.prototype.mute = function(){
 AudioLine.prototype.unmute = function(){
     this.muted = false;
     if(this.manager.context){
-
+        this.webAudio.gainNode.gain.value = this.audio.volume;
     }else{
         if(this.htmlAudio){
             this.htmlAudio.volume = this.audio.volume;
@@ -85,18 +113,21 @@ AudioLine.prototype.unmute = function(){
 
 AudioLine.prototype.stop = function(){
     if(this.manager.context){
-
+        this.webAudio.stop(0);
     }else{
         this.htmlAudio.pause();
         this.htmlAudio.currentTime = 0;
-        this.reset();
     }
+
+    this.reset();
     return this;
 };
 
 AudioLine.prototype.pause = function(){
     if(this.manager.context){
-
+        this.offsetTime += this.manager.context.currentTime - this.startTime;
+        this.lastPauseTime = this.offsetTime%this.webAudio.buffer.duration;
+        this.webAudio.stop(0);
     }else{
         this.htmlAudio.pause();
     }
@@ -106,9 +137,8 @@ AudioLine.prototype.pause = function(){
 
 AudioLine.prototype.resume = function(){
     if(this.paused){
-
         if(this.manager.context){
-
+            this.play(true);
         }else{
             this.htmlAudio.play();
         }
@@ -130,7 +160,10 @@ AudioLine.prototype._onEnd = function(){
         }else{
             this.reset();
         }
+    }else if(this.manager.context && !this.paused){
+        this.reset();
     }
+
 };
 
 module.exports = AudioLine;
