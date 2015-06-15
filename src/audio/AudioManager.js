@@ -12,14 +12,14 @@ AudioManager.prototype.constructor = AudioManager;
 AudioManager.prototype._init = function(game){
     this.game = game;
     this.soundMaxLines = 10;
-    this.musicMaxLines = 2;
+    this.musicMaxLines = 1;
 
     this.musicMuted = false;
     this.soundMuted = false;
 
     if(this.game.isWebAudio){
         this.context = new Device.webAudioContext();
-        this.gainNode = this.context.createGain ? this.context.createGain() : this.context.createGainNode();
+        this.gainNode = this.createGainNode();
         this.gainNode.connect(this.context.destination);
     }
 
@@ -37,6 +37,10 @@ AudioManager.prototype._init = function(game){
 
     this._tempLines = [];
 
+};
+
+AudioManager.prototype.createGainNode = function(){
+    return  this.context.createGain ? this.context.createGain() : this.context.createGainNode();
 };
 
 AudioManager.prototype._getAvailableLineFrom = function(lines){
@@ -58,9 +62,17 @@ AudioManager.prototype.add = function(audio){
     return this;
 };
 
-AudioManager.prototype._decodeAudio = function(name, url, data){
+AudioManager.prototype._decodeAudio = function(name, url, data, next){
     name = name || url;
-    utils.assetCache.addAudio(name, url, new Audio(this, data, name));
+    if(this.context){
+        this.context.decodeAudioData(data, function(buffer){
+            utils.assetCache.addAudio(name, url, new Audio(this, buffer, name));
+            next();
+        });
+    }else{
+        utils.assetCache.addAudio(name, url, new Audio(this, data, name));
+        next();
+    }
     return this;
 };
 
@@ -124,7 +136,7 @@ AudioManager.prototype._play = function(id, lines, loop, callback){
         console.error('Not found audio "' + id + '"');
         return this;
     }
-
+    console.log(audio.source);
     line.setAudio(audio, loop, callback)
         .play();
     return this;

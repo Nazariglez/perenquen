@@ -37,9 +37,10 @@ module.exports = function() {
             return next();
         }
 
-        game.audioManager._decodeAudio(resource.name, resource.url, resource.data);
-
-        next();
+        game.audioManager._decodeAudio(resource.name, resource.url, resource.data, function(){
+            next();
+        });
+        
     };
 
 };
