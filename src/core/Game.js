@@ -116,7 +116,7 @@ Game.prototype._init = function(width, height, options){
      * Is webAudio using in this game
      * @type {boolean}
      */
-    this.isWebAudio = false; //(Device.hasWebAudio && this.config.audio.useWebAudio);
+    this.isWebAudio = (Device.hasWebAudio && this.config.audio.useWebAudio);
 
     /**
      * The scene manager for this game
