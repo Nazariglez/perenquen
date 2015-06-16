@@ -37,7 +37,8 @@ var isIphone = /iphone/i.test(userAgent),
 
 var hasVibrate = !!navigator.vibrate && (isMobile || isTablet),
     hasMouseWheel = 'onwheel' in window || 'onmousewheel' in window || 'MouseScrollEvent' in window,
-    hasAccelerometer = 'DeviceMotionEvent' in window;
+    hasAccelerometer = 'DeviceMotionEvent' in window,
+    hasGamepad = !!navigator.getGamepads || !!navigator.webkitGetGamepads;
 
 //FullScreen
 var div = document.createElement('div');
@@ -98,6 +99,7 @@ var Device = module.exports = {
     hasMouseWheel : hasMouseWheel,
     hasFullScreen : hasFullScreen,
     hasAccelerometer : hasAccelerometer,
+    hasGamepad : hasGamepad,
 
     fullScreenRequest : fullScreenRequest ? fullScreenRequest.name : undefined,
     fullScreenCancel : fullScreenCancel ? fullScreenCancel.name : undefined,
