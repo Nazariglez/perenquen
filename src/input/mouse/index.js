@@ -4,8 +4,8 @@ var math = require('../../../lib/pixi/src/core/math'),
     HotKey = require('./HotKey'),
     EventData = require('./EventData');
 
-function Mouse(game, preventDefault, checkFrecuency){
-    this._init(game, preventDefault, checkFrecuency);
+function Mouse(game, preventDefault, interactive, checkFrecuency){
+    this._init(game, preventDefault, interactive, checkFrecuency);
 }
 
 Mouse.prototype.constructor = Mouse;
