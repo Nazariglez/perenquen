@@ -262,4 +262,6 @@ AudioManager.prototype.resumeAllLines = function(){
     return this;
 };
 
+//TODO: FadeIn, FadeOut
+
 module.exports = AudioManager;
