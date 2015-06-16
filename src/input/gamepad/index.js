@@ -57,11 +57,12 @@ Gamepad.prototype.update = function(gameTime, delta){
         if(gamepads[i]){
             this._connectedGamepads[gamepads[i].index] = true;
 
-            if(!this.controllers[gamepads[i].index].isConnected){
+            if(!this.getController(gamepads[i].index).isConnected){
                 this._connect(gamepads[i]);
             }
 
-            //todo: events;
+            this.getController(gamepads[i].index).updateData(gamepads[i]);
+
         }
     }
 

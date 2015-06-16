@@ -57,7 +57,7 @@ utils.degToRad = function(value){
  * @returns {number}
  */
 utils.radToDeg = function(value){
-    return value * CONT.RAD_TO_DEG;
+    return value * CONST.RAD_TO_DEG;
 };
 
 utils.randomRange = function(min, max){
