@@ -10,6 +10,7 @@ ControllerData.prototype._init = function(id){
 };
 
 ControllerData.prototype.connect = function(data){
+    console.log(data);
     this.isConnected = true;
 
     return this;

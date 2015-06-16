@@ -41,12 +41,10 @@ Gamepad.prototype.disable = function(){
 };
 
 Gamepad.prototype._onGamepadConnected = function(e){
-    console.log('gamepad connected', e);
     this._onGamepadConnectedCallback(e);
 };
 
 Gamepad.prototype._onGamepadDisconnected = function(e){
-    console.log('gamepad disconnected', e);
     this._onGamepadDisconnectedCallback(e);
 };
 
