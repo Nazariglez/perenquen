@@ -1,6 +1,7 @@
 var Mouse = require('./mouse'),
     Keyboard = require('./keyboard'),
-    Accelerometer = require('./Accelerometer');
+    Accelerometer = require('./Accelerometer'),
+    Gamepad = require('./Gamepad');
 
 function InputManager(game){
     this._init(game);
@@ -15,6 +16,7 @@ InputManager.prototype._init = function(game){
     this.mouse = null;
     this.keyboard = null;
     this.accel = null;
+    this.gamepad = [];
 
     if(this.config.disableContextMenu){
         //Disable context menu
