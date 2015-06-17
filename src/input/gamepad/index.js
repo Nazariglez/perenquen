@@ -12,11 +12,13 @@ Gamepad.prototype._init = function(game){
     this.game = game;
     this.isEnabled = false;
 
+    this.axeSensibility = 0.2;
+
     this.controllers = [
-        new ControllerData(0),
-        new ControllerData(1),
-        new ControllerData(2),
-        new ControllerData(3)
+        new ControllerData(0, this),
+        new ControllerData(1, this),
+        new ControllerData(2, this),
+        new ControllerData(3, this)
     ];
 
     this._connectedGamepads = [false, false, false, false];
