@@ -1,4 +1,5 @@
 var ControllerData = require('./ControllerData'),
+    Device = require('../../core/Device'),
     tempArray = [];
 
 function Gamepad(game){
@@ -25,6 +26,8 @@ Gamepad.prototype._init = function(game){
 };
 
 Gamepad.prototype.enable = function(value){
+    if(!Device.hasGamepad)return this;
+
     value = (value !== false);
 
     if(value&&!this.isEnabled) {
