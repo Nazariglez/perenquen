@@ -1,10 +1,10 @@
-function ControllerData(id, gamepadManager){
+function Controller(id, gamepadManager){
     this._init(id, gamepadManager);
 }
 
-ControllerData.prototype.constructor = ControllerData;
+Controller.prototype.constructor = Controller;
 
-ControllerData.prototype._init = function(id, gamepadManager){
+Controller.prototype._init = function(id, gamepadManager){
     this.id = id;
     this.manager = gamepadManager;
     this.axeSensibility = this.manager.axeSensibility;
@@ -16,7 +16,7 @@ ControllerData.prototype._init = function(id, gamepadManager){
     this.lastTime = 0;
 };
 
-ControllerData.prototype.connect = function(data){
+Controller.prototype.connect = function(data){
     this.isConnected = true;
     this._reset();
 
@@ -27,12 +27,12 @@ ControllerData.prototype.connect = function(data){
     return this;
 };
 
-ControllerData.prototype.disconnect = function(){
+Controller.prototype.disconnect = function(){
     this.isConnected = false;
     return this;
 };
 
-ControllerData.prototype.updateData = function(data){
+Controller.prototype.updateData = function(data){
     if(data.timestamp === this.lastTime)return this;
     this.lastTime = data.timestamp;
 
@@ -45,14 +45,14 @@ ControllerData.prototype.updateData = function(data){
         }
     }
     this.buttons = data.buttons;
-    
+
 };
 
-ControllerData.prototype._reset = function(){
+Controller.prototype._reset = function(){
     this.axes = [];
     this.buttons = [];
     this.type = "";
     this.lastTime = 0;
 };
 
-module.exports = ControllerData;
+module.exports = Controller;

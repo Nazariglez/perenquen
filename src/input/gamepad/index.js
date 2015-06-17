@@ -1,4 +1,4 @@
-var ControllerData = require('./ControllerData'),
+var Controller = require('./Controller'),
     Device = require('../../core/Device'),
     tempArray = [];
 
@@ -15,10 +15,10 @@ Gamepad.prototype._init = function(game){
     this.axeSensibility = 0.2;
 
     this.controllers = [
-        new ControllerData(0, this),
-        new ControllerData(1, this),
-        new ControllerData(2, this),
-        new ControllerData(3, this)
+        new Controller(0, this),
+        new Controller(1, this),
+        new Controller(2, this),
+        new Controller(3, this)
     ];
 
     this._connectedGamepads = [false, false, false, false];
