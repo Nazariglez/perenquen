@@ -102,5 +102,10 @@ module.exports = {
     OPEN_BRACKET: 219,
     BACK_SLASH: 220,
     CLOSE_BRACKET: 221,
-    SINGLE_QUOTE: 222
+    SINGLE_QUOTE: 222,
+
+    GAMEPAD: {
+        //TODO: Xbox360/one mapping in chrome and firefox (are differents)
+        //TODO: ps3/ps4 mapping chrome and firefox
+    }
 };

@@ -1,4 +1,4 @@
-var GamepadButton = require('./GamepadButton');
+var HotKey = require('./HotKey');
 
 function Controller(id, gamepadManager){
     this._init(id, gamepadManager);
@@ -14,12 +14,15 @@ Controller.prototype._init = function(id, gamepadManager){
     this.pressedButtons = [];
     this.releasedButtons = [];
     this.downButtons = [];
+    this.buttonValues = [];
+
+    this.hotKeys = {};
 
     this.isConnected = false;
     this.axes = [];
-    this.buttons = [];
     this.type = "";
     this.lastTime = 0;
+    this.mapping = "";
 
     this.callbacks = {
         down : [],
@@ -32,7 +35,7 @@ Controller.prototype.connect = function(data){
     this.isConnected = true;
     this._reset();
 
-    console.log(data);
+    this.mapping = data.mapping;
     this.type = data.id;
 
     this.updateData(data);
@@ -45,6 +48,7 @@ Controller.prototype.disconnect = function(){
 };
 
 Controller.prototype.updateData = function(data){
+    if(this.lastTime === data.timestamp && this.releasedButtons.length === 0)return this;
     this.lastTime = data.timestamp;
 
     var i;
@@ -63,6 +67,8 @@ Controller.prototype.updateData = function(data){
 
 
         if(button.pressed){
+            this.buttonValues[i] = button.value;
+
             if(!this.downButtons[i]){
                 this.pressedButtons[i] = true;
                 this.downButtons[i] = true;
@@ -80,15 +86,39 @@ Controller.prototype.updateData = function(data){
         }
 
     }
-    this.buttons = data.buttons;
+
+    for(var key in this.hotKeys){
+        this.hotKeys[key].update();
+    }
 
 };
 
 Controller.prototype._reset = function(){
     this.axes = [];
-    this.buttons = [];
     this.type = "";
     this.lastTime = 0;
+    this.mapping = "";
+};
+
+Controller.prototype.getHotKey = function(key){
+    var hotKey;
+    if(this.hotKeys[key]){
+        hotKey = this.hotKeys[key];
+    }else{
+        hotKey = new HotKey(key, this);
+    }
+
+    this.hotKeys[key] = hotKey;
+
+    return hotKey;
+};
+
+Controller.prototype.removeHotKey = function(key){
+    if(this.hotKeys[key]){
+        delete this.hotKeys[key];
+    }
+
+    return this;
 };
 
 Controller.prototype.isPressed = function(key){
@@ -134,6 +164,10 @@ Controller.prototype._callback = function(callbacks, key){
     for(var i = 0; i < len; i++){
         callbacks[i](key);
     }
+};
+
+Controller.prototype.getValue = function(key){
+    return this.isDown(key) ? this.buttonValues[key] : 0;
 };
 
 module.exports = Controller;
