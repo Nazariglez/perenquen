@@ -76,7 +76,7 @@ Game.prototype._init = function(width, height, options){
      */
     this.canvas = this.renderer.view;
 
-    this.gameTime = new GameTime(this);
+    this.time = new GameTime(this);
 
     /**
      * Whether the renderer is a webgl
@@ -151,7 +151,7 @@ Game.prototype._init = function(width, height, options){
  * @returns {Game}
  */
 Game.prototype.start = function(){
-    this.gameTime.start();
+    this.time.start();
     this.audioManager.resumeAllLines();
     return this;
 };
@@ -161,7 +161,7 @@ Game.prototype.start = function(){
  * @returns {Game}
  */
 Game.prototype.stop = function(){
-    this.gameTime.stop();
+    this.time.stop();
     this.audioManager.pauseAllLines();
     return this;
 };
@@ -182,10 +182,10 @@ Game.prototype.animate = function(){
     this.update(this.time, this.delta);
 
     this.renderer.render(this.sceneManager);
-    this.sceneManager.animate(this.gameTime.total, this.gameTime.delta);
-    this.inputManager.update(this.gameTime.total, this.gameTime.delta);
+    this.sceneManager.animate(this.time.total, this.time.delta);
+    this.inputManager.update(this.time.total, this.time.delta);
 
-    this.postUpdate(this.gameTime.total, this.gameTime.delta);
+    this.postUpdate(this.time.total, this.time.delta);
     return this;
 };
 

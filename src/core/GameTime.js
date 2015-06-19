@@ -12,8 +12,6 @@ GameTime.prototype._init = function(game){
     this.minFrameLimit = this.game.config.game.minFrameLimit;
     this.maxFrameLimit = this.game.config.game.maxFrameLimit;
 
-    console.log(this.minFrameLimit);
-
     /**
      * The time between frames
      * @member {number}
