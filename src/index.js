@@ -9,6 +9,7 @@ var core = {
     plugin : require('./core/plugin'),
 
     Class : Class,
+    SystemTimer : Class.parse(require('./core/GameTime')),
     Game : Class.parse(require('./core/Game')),
     Container : Class.parse(require('./display/Container')),
     SceneManager : Class.parse(require('./core/SceneManager')),

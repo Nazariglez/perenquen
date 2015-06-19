@@ -7,6 +7,7 @@ var CONST = require('./const'),
     AudioManager = require('../audio/AudioManager'),
     autoDetectRenderer = require('../../lib/pixi/src/core').autoDetectRenderer,
     SceneManager = require('./SceneManager'),
+    GameTime = require('./GameTime'),
     Device = require('./Device');
 
 /**
@@ -37,13 +38,6 @@ Game.prototype._init = function(width, height, options){
      */
     this.config = parseConfig(options);
     var rendererOptions = parseRendererConfig(CONST.DEFAULT_RENDER_OPTIONS, this.config);
-
-    /**
-     * The id of requestAnimationFrame
-     *
-     * @member {number}
-     */
-    this.raf = -1;
 
     /**
      * The renderer width
@@ -82,29 +76,7 @@ Game.prototype._init = function(width, height, options){
      */
     this.canvas = this.renderer.view;
 
-    /**
-     * The time between frames
-     * @member {number}
-     */
-    this.frameElapsedTime = 0;
-
-    /**
-     * Last frame time
-     * @member {number}
-     */
-    this.frameLastTime = 0;
-
-    /**
-     * The total game time
-     * @member {number}
-     */
-    this.time = 0;
-
-    /**
-     * The delta time
-     * @member {number}
-     */
-    this.delta = 0;
+    this.gameTime = new GameTime(this);
 
     /**
      * Whether the renderer is a webgl
@@ -179,8 +151,7 @@ Game.prototype._init = function(width, height, options){
  * @returns {Game}
  */
 Game.prototype.start = function(){
-    this.updateTime();
-    this.animate();
+    this.gameTime.start();
     this.audioManager.resumeAllLines();
     return this;
 };
@@ -190,7 +161,7 @@ Game.prototype.start = function(){
  * @returns {Game}
  */
 Game.prototype.stop = function(){
-    window.cancelAnimationFrame(this.raf);
+    this.gameTime.stop();
     this.audioManager.pauseAllLines();
     return this;
 };
@@ -210,28 +181,11 @@ Game.prototype.postUpdate = function(gameTime, delta){
 Game.prototype.animate = function(){
     this.update(this.time, this.delta);
 
-    this.raf = window.requestAnimationFrame(this.animate.bind(this));
-    this.updateTime();
     this.renderer.render(this.sceneManager);
-    this.sceneManager.animate(this.time, this.delta);
-    this.inputManager.update(this.time, this.delta);
+    this.sceneManager.animate(this.gameTime.total, this.gameTime.delta);
+    this.inputManager.update(this.gameTime.total, this.gameTime.delta);
 
-    this.postUpdate(this.time, this.delta);
-    return this;
-};
-
-/**
- * Calculate all game times
- * @returns {Game}
- */
-Game.prototype.updateTime = function(){
-    var now = Date.now();
-    var time = now - this.frameLastTime;
-    this.frameElapsedTime = (time <= this.config.game.minFrameLimit) ? time : this.config.game.minFrameLimit;
-    this.frameLastTime = now;
-    this.delta = this.frameElapsedTime/1000;
-    this.time += this.delta;
-
+    this.postUpdate(this.gameTime.total, this.gameTime.delta);
     return this;
 };
 
@@ -378,6 +332,12 @@ Object.defineProperties(Game.prototype, {
     keyboard: {
         get: function(){
             return this.inputManager.keyboard;
+        }
+    },
+
+    gamepad: {
+        get: function(){
+            return this.inputManager.gamepad;
         }
     }
 });
