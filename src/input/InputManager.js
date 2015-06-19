@@ -28,6 +28,18 @@ InputManager.prototype._init = function(game){
     if(this.config.enableMouse){
         this.enableMouse();
     }
+
+    if(this.config.enableKeyboard){
+        this.enableKeyboard();
+    }
+
+    if(this.config.enableAccelerometer){
+        this.enableAccelerometer();
+    }
+
+    if(this.config.enableGamepad){
+        this.enableGamepad();
+    }
 };
 
 InputManager.prototype.enableMouse = function(value){
