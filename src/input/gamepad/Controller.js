@@ -9,7 +9,7 @@ Controller.prototype.constructor = Controller;
 Controller.prototype._init = function(id, gamepadManager){
     this.id = id;
     this.manager = gamepadManager;
-    this.axeSensibility = this.manager.axeSensibility;
+    this.axeDeadZone = this.manager.axeDeadZone;
 
     this.pressedButtons = [];
     this.releasedButtons = [];
@@ -48,12 +48,9 @@ Controller.prototype.disconnect = function(){
 };
 
 Controller.prototype.updateData = function(data){
-    if(this.lastTime === data.timestamp && this.releasedButtons.length === 0)return this;
-    this.lastTime = data.timestamp;
-
     var i;
     for(i = 0; i < data.axes.length; i++){
-        if( (data.axes[i] < 0 && data.axes[i] < -this.axeSensibility) || (data.axes[i] > 0 && data.axes[i] > this.axeSensibility)){
+        if( (data.axes[i] < 0 && data.axes[i] < -this.axeDeadZone) || (data.axes[i] > 0 && data.axes[i] > this.axeDeadZone)){
             this.axes[i] = data.axes[i];
         }else{
             this.axes[i] = 0;
@@ -65,9 +62,9 @@ Controller.prototype.updateData = function(data){
         this.pressedButtons[i] = false;
         this.releasedButtons[i] = false;
 
+        this.buttonValues[i] = button.value;
 
         if(button.pressed){
-            this.buttonValues[i] = button.value;
 
             if(!this.downButtons[i]){
                 this.pressedButtons[i] = true;
@@ -86,6 +83,8 @@ Controller.prototype.updateData = function(data){
         }
 
     }
+
+    this.lastTime = data.timestamp;
 
     for(var key in this.hotKeys){
         this.hotKeys[key].update();
@@ -168,6 +167,10 @@ Controller.prototype._callback = function(callbacks, key){
 
 Controller.prototype.getValue = function(key){
     return this.isDown(key) ? this.buttonValues[key] : 0;
+};
+
+Controller.prototype.getAxeValue = function(id){
+    return this.axes[id];
 };
 
 module.exports = Controller;

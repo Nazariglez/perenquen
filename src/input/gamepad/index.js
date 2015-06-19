@@ -12,7 +12,7 @@ Gamepad.prototype._init = function(game){
     this.game = game;
     this.isEnabled = false;
 
-    this.axeSensibility = 0.2;
+    this.axeDeadZone = 0.2;
 
     this.controllers = [
         new Controller(0, this),
