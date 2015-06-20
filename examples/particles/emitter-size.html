@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Particle with different emitter size</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #c0c0c0;
+            overflow: hidden;
+        }
+
+        button {
+            z-index: 10;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+        }
+        
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 20px;
+            background-color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<script src="../../build/perenquen.dev.js"></script>
+<script>
+
+    /*
+        How to use and emitter with widht and height
+     */
+    var game = new PQ.Game();
+
+    game.assetLoader.add([
+        {url: "../assets/game.json"}
+    ]).load(init);
+
+
+    function init(){
+        game.start();
+
+        //Particle config
+        var particleConfig = {
+
+            //Required: Emitters is an array with all the emitters config
+            emitters : [
+
+                {
+                    texture : ["meteorSmall.png"],
+
+                    particlesPerEmission: 1,
+
+                    //Set the position and the size for this emitter (200x200)
+                    x: -100,
+                    y: -100,
+                    width: 200,
+                    height: 200
+                }
+
+            ]
+        };
+
+        //Create the particle container using our particleConfig
+        var particle = new PQ.ParticleContainer(particleConfig)
+                .setPosition(game.scene.width/2, game.scene.height/2)
+                .addTo(game.scene);
+
+        particle.start();
+
+
+        //Show the particles number
+        var div = document.querySelector("#particles");
+        game.update = function(gameTime){
+            div.innerHTML = particle.particles;
+        };
+    }
+</script>
+<div id="particles"></div>
+</body>
+</html>

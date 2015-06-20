@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Sprite Animation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        How to use sprite animation with grids, or atlas (spritesheets)
+     */
+    var game = new PQ.Game();
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {name: "mascot", url: "../assets/mascot_run.png"}, //Grid asset
+        {url: "../assets/mascot-full.json"}
+    ]).load(onAssetsLoaded);
+
+    function onAssetsLoaded(){
+
+        //Basic sprite
+        var sprite = new PQ.Sprite()
+                .setPosition(game.scene.width/2 - 200, game.scene.height/2)
+                .addTo(game.scene);
+
+        //Creating a new animation named "run" from a grid (mascot_run.png asset)
+        var runAnimation = sprite.animationManager.createFromGrid('run', {
+            rows : 1, //The asset had just a one row
+            cols : 5, //5 cols
+            textures: "mascot", //texture name or texture object
+            time: 350, //Total time to run the whole animation
+            loop: true, //Repeat animation in the end?
+
+            //You can change the frame order or repeat some frames
+            //order: [4,3,2,1,0,4,4,3,3,3,2,2,1,0]
+        });
+
+        //Callbacks
+        runAnimation.onStart(function(sprite){
+            console.log('[Run Animation] start here!');
+        });
+
+        runAnimation.onFrame(function(sprite, frame){
+            console.log('[Run Animation] frame change to', frame);
+        });
+
+        runAnimation.onEnd(function(sprite){
+            console.log('[Run Animation] ends here')
+        });
+
+        runAnimation.onRepeat(function(sprite, repeat){
+            console.log('[Run Animation] repeat n:', repeat);
+
+            //after 6 loops cancel the loop
+            if(repeat === 6){
+                this.setLoop(false);
+
+                //You also can use this.stop() to stop at any time
+                //this.stop()
+            }
+        });
+
+
+        //You can play an animation with animationManager
+        //sprite.animationManager.play('run');
+
+        //Or directly with the animation object
+        runAnimation.play();
+
+
+        //Other sprite with animations from spritesheet (atlas)
+        var sprite2 = new PQ.Sprite()
+                .setPosition(game.scene.width/2 + 200, game.scene.height/2)
+                .addTo(game.scene);
+
+
+        //Create a new animation with frame names
+        var runAnim = sprite2.animationManager.createFromFrames('run', {
+            time: 450,
+            loop: false,
+            textures : [
+                "run/frame-1.png",
+                "run/frame-2.png",
+                "run/frame-3.png",
+                "run/frame-4.png",
+                "run/frame-5.png"
+            ]
+        });
+
+        var faintAnim = sprite2.animationManager.createFromFrames('faint', {
+            time: 450,
+            loop: false,
+            textures : [
+                "faint/frame-1.png",
+                "faint/frame-2.png",
+                "faint/frame-3.png",
+                "faint/frame-4.png",
+                "faint/frame-5.png"
+            ]
+        });
+
+        var standingAnim = sprite2.animationManager.createFromFrames('standing', {
+            time: 750,
+            loop: false,
+            textures : [
+                "standing/frame-1.png",
+                "standing/frame-2.png",
+                "standing/frame-1.png",
+                "standing/frame-2.png",
+                "standing/frame-1.png",
+                "standing/frame-2.png"
+            ]
+        });
+
+        //Chain all animations
+        standingAnim.onEnd(function(sprite){
+            sprite.animationManager.play('run');
+        });
+
+        runAnim.onEnd(function(sprite){
+            sprite.animationManager.play('faint');
+        });
+
+        faintAnim.onEnd(function(sprite){
+            sprite.animationManager.play('standing');
+        });
+
+        //Start with standing animation
+        sprite2.animationManager.play('standing')
+
+    }
+</script>
+</body>
+</html>

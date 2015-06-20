@@ -1,0 +1,74 @@
+{
+  "particleConfig" : {
+    "emitters" : [
+      {
+        "id": "default",
+        "texture": ["player.png"],
+        "x": 0,
+        "y": 0,
+        "width": 2,
+        "height": 2,
+        "depth": 0,
+        "blend": "add",
+
+        "particlesPerEmission": 50,
+        "emissionTime": 20,
+
+        "scale": {
+          "x":1,
+          "y":1
+        },
+
+        "size": {
+          "min": 10,
+          "max": 10,
+          "increase": 10,
+          "easing": null
+        },
+
+        "alpha": {
+          "start": 0.7,
+          "end": 1,
+          "easing": null
+        },
+
+        "color": {
+          "start": "0xff0000",
+          "end": "0x00ff00",
+          "easing": null
+        },
+
+        "speed": {
+          "min": 800,
+          "max": 1009,
+          "increase": 100,
+          "easing": null
+        },
+
+        "gravity": {
+          "amount": 0,
+          "angle": 0
+        },
+
+        "rotation": {
+          "min": 0,
+          "max": 359,
+          "increase": 100,
+          "easing": null
+        },
+
+        "direction": {
+          "min": 0,
+          "max": 359,
+          "increase": 400,
+          "easing": null
+        },
+
+        "life": {
+          "min": 2000,
+          "max": 3500
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Canvas Draw</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        Draw in any context with a easy and similar API like a Canvas 2dContext API
+     */
+
+    //Create and start game, for default the game size is 800x600 landscape
+    var game = new PQ.Game();
+    game.start();
+
+    //Add a new graphic
+    var graph = new PQ.Graphics()
+            .addTo(game.scene);
+
+    //draw a circle
+    graph.beginFill(0xff0000, 1)
+            .drawCircle(100, 100, 40)
+            .endFill();
+
+    //draw a rectangle
+    graph.beginFill(0x00ff00, 1)
+            .drawRect(150, 100, 80, 80)
+            .endFill();
+
+    //draw a empty polygon
+    graph.lineStyle(10, 0x0000ff, 1)
+            .moveTo(100, 100)
+            .lineTo(50, 150)
+            .lineTo(50, 200)
+            .lineTo(100, 250)
+            .lineTo(150, 250)
+            .lineTo(200, 200)
+            .lineTo(200, 150)
+            .lineTo(150, 100)
+            .lineTo(100, 100);
+
+    //Draw an arc
+    graph.lineStyle(15, 0xc0c0c0, 1)
+            .moveTo(300, 300)
+            .arcTo(100, 400, 200, 50, 80);
+
+    //draw a rounded rectangle filled with semi-transparent color
+    var graph2 = new PQ.Graphics()
+            .addTo(game.scene);
+
+    graph2.lineStyle(10, 0x00ff00, 1)
+            .beginFill(0xff00f0, 0.4)
+            .drawRoundedRect(30, 30, 740, 540, 40)
+            .endFill();
+
+    //Draw a big empty circle
+    var graph3 = new PQ.Graphics()
+            .lineStyle(15, 0x00f0ff, 1)
+            .drawCircle(500, 300, 150)
+            .addTo(game.scene);
+
+    var graphAnimated = new PQ.Graphics()
+            .setPosition(game.scene.width/2, game.scene.height/2)
+            .setRotationSpeed(50*PQ.DEG_TO_RAD)
+            .addTo(game.scene);
+
+    var count = 0;
+    graphAnimated.update = function(gameTime){
+        //From http://www.goodboydigital.com/pixijs/examples/13/
+        count += 0.1;
+
+        this.clear();
+        this.lineStyle(30, 0xff0000, 1);
+        this.beginFill(0xffFF00, 0.5);
+
+        this.moveTo(-120 + Math.sin(count) * 20, -100 + Math.cos(count)* 20);
+        this.lineTo(120 + Math.cos(count) * 20, -100 + Math.sin(count)* 20);
+        this.lineTo(120 + Math.sin(count) * 20, 100 + Math.cos(count)* 20);
+        this.lineTo(-120 + Math.cos(count)* 20, 100 + Math.sin(count)* 20);
+        this.lineTo(-120 + Math.sin(count) * 20, -100 + Math.cos(count)* 20);
+
+    };
+
+</script>
+</body>
+</html>

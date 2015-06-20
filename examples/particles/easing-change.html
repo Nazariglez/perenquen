@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Particle Easing Change</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #c0c0c0;
+            overflow: hidden;
+        }
+
+        button {
+            z-index: 10;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+        }
+        
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 20px;
+            background-color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<script src="../../build/perenquen.dev.js"></script>
+<script>
+
+    /*
+        Load Particles from json files, and change it
+     */
+    var config = {
+
+        game: {
+            width: window.innerWidth,
+            height: window.innerHeight
+        }
+    };
+
+    var game = new PQ.Game(config);
+
+    game.assetLoader.add([
+        {url: "../assets/game.json"},
+        {name: "test", url:"easing-change.json"} //Particle config
+    ]).load(init);
+
+    //Get a randome Easing
+    function getEasing(){
+        var keys = Object.keys(PQ.Easing);
+        var rnd = Math.floor(Math.random() * keys.length);
+        return PQ.Easing[keys[rnd]]();
+    }
+
+    function init(){
+        game.start();
+
+        //Create the particle container using the asset id, in this case "test"
+        var particle = new PQ.ParticleContainer("test")
+                .setPosition(game.scene.width/2, game.scene.height/2)
+                .setScale(0.2, 0.2)
+                .addTo(game.scene);
+
+        particle.start();
+
+
+
+
+        //We make now some random effects
+        var emitter = particle.getEmitter('default'); //Get the emitter named default
+
+        //Change easing effect in speed and direction config
+        var timer1 = game.scene.createTimer(4000)
+                .setLoop()
+                .onRepeat(function(){
+                    emitter.config.direction.easing = getEasing();
+                    emitter.config.speed.easing = getEasing();
+                }).start();
+
+        //Change the color start and end
+        var colors = [0xff0000, 0xffff00, 0x00ff00, 0x0000ff];
+        var timer2 = game.scene.createTimer(9000)
+                .setLoop()
+                .onRepeat(function(){
+                    var c = colors[Math.floor(Math.random() * colors.length)];
+
+                    if(Math.random() < 0.5){
+                        emitter.config.color.start = c;
+                    }else{
+                        emitter.config.color.end = c;
+                    }
+                }).start();
+
+        //Tween to change the direction angle
+        var directionTween = game.scene.createTween(emitter.config.direction)
+                .setLoop()
+                .setPingPong()
+                .to({
+                    max: 0
+                }).setTime(30000)
+                .onRepeat(function(){
+                    this.setDelay(50000);
+                })
+                .start();
+
+
+
+        //Show the particles number
+        var div = document.querySelector("#particles");
+        particle.update = function(gameTime){
+            div.innerHTML = this.particles;
+        };
+    }
+</script>
+<div id="particles"></div>
+</body>
+</html>

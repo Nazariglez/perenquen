@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Depth</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        All the actors are painted in the same order they were created,
+        but we can alter this order with "depth" property.
+
+        You can enable this feature in the game config before create the renderer to be used internally,
+        but it's a expensive feature if you had many actors, or you are continuously creating new actors.
+
+        So, otherwise it would be used just when you want it, to sort only the containers what you want.
+     */
+
+    var config = {
+        //Automatic children sort (all the containers are affected)
+        //useSortChildrenByDepth: true
+    };
+
+    //Create and start game, for default the game size is 800x600 landscape
+    var game = new PQ.Game(config);
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/ui.json"}
+    ]).load(onAssetsLoaded);
+
+    function createPanel(order, depth){
+        order = order || (0).toString();
+        depth = depth || (0).toString();
+        var panel = new PQ.Sprite('panel_brown.png')
+                .setDepth(depth);
+
+        //Show order (white color)
+        var textOrder= new PQ.Text(order, {
+            fill: 0xffffff,
+            font: "30px Arial"
+        }).setPosition(panel.width/2 - 20, panel.height/2)
+                .addTo(panel);
+
+        //Show depth (green color)
+        var depthOrder= new PQ.Text(depth, {
+            fill: 0x00ff00,
+            font: "30px Arial"
+        }).setPosition(panel.width/2 + 20, panel.height/2)
+                .addTo(panel);
+
+        return panel;
+    }
+
+    function onAssetsLoaded(){
+        var xx = 100;
+        var yy = 100;
+
+        var tintColors = [0xff0000, 0xffff00, 0xc0c0c0, 0x0000ff, 0xb2fba1, 0xac00ff];
+
+        //Add actors with random depth
+        for(var i = 0; i < 6; i++){
+            //Depth between -3 and +3
+            var depth = (-3 + Math.floor(Math.random() * 6));
+
+            //New panel, with the order number and the depth number
+            var panel = createPanel(i, depth)
+                    .setPosition(xx, yy)
+                    .setTint(tintColors[i])
+                    .addTo(game.scene);
+
+            xx += 50;
+            yy += 70;
+        }
+
+        /**
+         *  If is useSortChildrenByDepth disabled (false) in the general config, you can sort manually
+         *  Use container.sortChildrenByDepth();
+         *  In this case game.scene.sortChildrenByDepth();
+         */
+
+        //If you enable useSortChildrenByDepth in the config, comment the line below
+        game.scene.sortChildrenByDepth();
+
+
+    }
+</script>
+</body>
+</html>

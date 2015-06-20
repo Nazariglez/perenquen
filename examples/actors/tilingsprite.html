@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example TilingSprite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        Perenquen.js can use a sprite like a tilingsprite
+     */
+
+    //Create and start game, for default the game size is 800x600 landscape
+    var game = new PQ.Game();
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/game.json"}
+    ]).load(onAssetsLoaded);
+
+    function onAssetsLoaded(){
+
+        //Original Sprite
+        var bg = new PQ.Sprite('starBackground.png')
+                .setPosition(100,100)
+                .addTo(game.scene);
+
+        //Tilingsprite 500x100
+        var tiling1 = new PQ.TilingSprite('starBackground.png', 500, 100)
+                .setPosition(bg.x + 100, 100)
+                .setAnchor(0, 0.5)
+                .addTo(game.scene);
+
+        //Same sprite, but with different tileScale
+        var tiling2 = new PQ.TilingSprite('starBackground.png', 500, 100)
+                .setPosition(bg.x + 100, 250)
+                .setAnchor(0, 0.5)
+                .setTileScale(4,4)
+                .addTo(game.scene);
+
+        //Same sprite, but this time with tile speed
+        var tiling3 = new PQ.TilingSprite('starBackground.png', 100, 350)
+                .setPosition(100, 200)
+                .setAnchor(0.5, 0)
+                .setTileSpeed(0, 50)
+                .addTo(game.scene);
+
+    }
+</script>
+</body>
+</html>

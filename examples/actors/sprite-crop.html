@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Sprite Crop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+     * Perenquen can draw a cropped sprite, or crop it dynamically
+     */
+
+    var game = new PQ.Game();
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {name: "bg", url: "../assets/background.png"}
+    ]).load(onAssetsLoaded);
+
+    function onAssetsLoaded(){
+
+        //Original sprite
+        var sprite = new PQ.Sprite('bg')
+                .setScale(0.4)
+                .setAnchor(0,0)
+                .setPosition(30,30)
+                .addTo(game.scene);
+
+
+
+        //Sprite cropped, 1/4 of this real sprite
+        var sprite2 = new PQ.Sprite('bg')
+                .setScale(0.4)
+                .setAnchor(0,0)
+                .setPosition(400, 30)
+                .setCrop(0,0, 400, 300) //left-top corner
+                .addTo(game.scene);
+
+        var sprite3 = new PQ.Sprite('bg')
+                .setScale(0.4)
+                .setAnchor(0,0)
+                .setPosition(570, 30)
+                .setCrop(400,0, 400, 300) //right-top corner
+                .addTo(game.scene);
+
+        var sprite4 = new PQ.Sprite('bg')
+                .setScale(0.4)
+                .setAnchor(0,0)
+                .setPosition(400, 160)
+                .setCrop(0,300, 400, 300) //left-bottom corner
+                .addTo(game.scene);
+
+        var sprite5 = new PQ.Sprite('bg')
+                .setScale(0.4)
+                .setAnchor(0,0)
+                .setPosition(570, 160)
+                .setCrop(400,300, 400, 300) //right-bottom corner
+                .addTo(game.scene);
+
+
+
+        //Horizontal dinamic crop
+        var sprite6 = new PQ.Sprite('bg')
+                .setScale(0.4)
+                .setPosition(190, 440)
+                .addTo(game.scene);
+
+        var horizontalCropX = 0;
+        var horizontalPingPong = false;
+        sprite6.update = function(gameTime){
+            this.setCrop(horizontalCropX, 0, 800 - horizontalCropX*2, 600);
+
+            if(!horizontalPingPong){
+                horizontalCropX+=100*gameTime.delta;
+            }else{
+                horizontalCropX-=100*gameTime.delta;
+            }
+
+            if(horizontalCropX >= 400){
+                horizontalPingPong = !horizontalPingPong;
+            }else if(horizontalCropX <= 0){
+                horizontalPingPong = !horizontalPingPong;
+            }
+        };
+
+        //Vertical dinamic crop
+        var sprite7 = new PQ.Sprite('bg')
+                .setScale(0.4)
+                .setPosition(560, 440)
+                .addTo(game.scene);
+
+        var verticalCropY = 0;
+        var verticalPingPong = false;
+        sprite7.update = function(gameTime){
+            this.setCrop(0, verticalCropY, 800, 600 - verticalCropY*2);
+
+            if(!verticalPingPong){
+                verticalCropY+=100*gameTime.delta;
+            }else{
+                verticalCropY-=100*gameTime.delta;
+            }
+
+            if(verticalCropY >= 300){
+                verticalPingPong = !verticalPingPong;
+            }else if(verticalCropY <= 0){
+                verticalPingPong = !verticalPingPong;
+            }
+        };
+
+    }
+</script>
+</body>
+</html>

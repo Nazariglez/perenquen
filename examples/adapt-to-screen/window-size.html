@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Window Size</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        In this way you can work always with the same size, no matter the screen size
+     */
+
+    //Set the game config
+    var config = {
+        //Full screen size
+        game : {
+            width: window.innerWidth,
+            height: window.innerHeight
+        }
+    };
+
+    //You always work with the same size, in this case 800x600 landscape
+    var WW = 800;
+    var HH = 600;
+
+    //Create and start game
+    var game = new PQ.Game(config);
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {name: "logo", url: "../../media/logo.png"},
+        {name: "background", url: "../assets/background.png"}
+    ]).load(onAssetsLoaded);
+
+
+    function onAssetsLoaded(){
+        //create the main container to content the game
+        var container = new PQ.Container()
+                .setSize(WW, HH) //Set the working size
+                .setPosition(game.scene.width/2, game.scene.height/2) //set in the middle of this scene
+                .addTo(game.scene); //Add to the scene
+
+        //Calculate the container scale and set it
+        var scale = Math.min(game.width/WW, game.height/HH);
+        container.setScale(scale, scale);
+
+        //It's ready, easy, right?, now add a simple background
+        var background = new PQ.Sprite('background')
+                .setPosition(container.width/2, container.height/2)
+                .addTo(container);
+
+        //add the PQ logo to he middle of the container
+        var logo = new PQ.Sprite('logo')
+                .setPosition(container.width/2, container.height/2)
+                .addTo(container);
+    }
+
+</script>
+</body>
+</html>

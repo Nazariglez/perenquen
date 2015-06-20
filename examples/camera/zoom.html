@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Camera Zoom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        In this example we learn how to do Zoom
+     */
+
+    var game = new PQ.Game();
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/game.json"}
+    ]).load(onAssetsLoaded);
+
+    function onAssetsLoaded(){
+        //Create a 2000x2000 container
+        var container = new PQ.Container()
+                .setSize(2000, 2000)
+                .setPosition(game.scene.width/2, game.scene.height/2)
+                .addTo(game.scene);
+
+        //Add a tilingbackground
+        var background = new PQ.TilingSprite('starBackground.png', container.width, container.height)
+                .setPosition(container.width/2, container.height/2)
+                .addTo(container);
+
+
+        //Create and label each sectors to know where you are.
+        var graphic = new PQ.Graphics()
+                .lineStyle(1, 0xffffff, 0.1)
+                .addTo(container);
+
+        var sectorSize = 200;
+
+        for(var i = 1; i <= sectorSize; i++){
+            graphic.moveTo(sectorSize * i, 0)
+                    .lineTo(sectorSize * i, container.height)
+                    .moveTo(0, sectorSize*i)
+                    .lineTo(container.width, sectorSize*i);
+        }
+
+        function getText(x,y){
+            return new PQ.Text(x + " - " + y, {
+                fill: 0xffffff,
+                font: "30px Arial"
+            }).setAlpha(0.2);
+        }
+
+        for(var x = 0; x < 10; x++){
+            for(var y = 0; y < 10; y++){
+
+                getText(x,y).setPosition(200*x + 100, 200*y + 100)
+                        .addTo(container);
+
+            }
+        }
+
+        //Now we can add the play
+        var player = new PQ.Sprite('player.png')
+                .setPosition(container.width/2, container.height/2)
+                .setRotation(PQ.utils.degToRad(90))
+                .setScale(3)
+                .addTo(container);
+
+        //Camera zoom
+        var camera = game.scene.camera;
+        camera.setZoom(0.5); //Start in 0.2
+
+        //Use a simple tween to do the zoom
+        camera.tween().to({
+            zoom: 2
+        }).setPingPong()
+            .setTime(4000)
+            .setLoop()
+            .start();
+
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{"frames": {
+
+"skill-desc_0000_foreground.png":
+{
+	"frame": {"x":2,"y":316,"w":272,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":272,"h":104},
+	"sourceSize": {"w":272,"h":104},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"skill-desc_0001_buildings.png":
+{
+	"frame": {"x":2,"y":164,"w":272,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":272,"h":150},
+	"sourceSize": {"w":272,"h":150},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"skill-desc_0002_far-buildings.png":
+{
+	"frame": {"x":276,"y":2,"w":213,"h":142},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":213,"h":142},
+	"sourceSize": {"w":213,"h":142},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"skill-desc_0003_bg.png":
+{
+	"frame": {"x":2,"y":2,"w":272,"h":160},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":272,"h":160},
+	"sourceSize": {"w":272,"h":160},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "parallax.png",
+	"format": "RGBA8888",
+	"size": {"w":512,"h":512},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:0cee11e4b03b82f77c1a2430588198d2:6cfcdac034e752429a88612acacd4224:0918d5491a1ee5b069719b67206dab97$"
+}
+}

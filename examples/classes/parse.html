@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Class Parse</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        we can parse a normal javascript class to PQClass easily if we wont it
+     */
+
+    //Define our javascript class
+    function CustomClass(){
+        console.log('custom class');
+    }
+
+    CustomClass.prototype.constructor = CustomClass;
+
+    CustomClass.prototype.sayHello = function(){
+        console.log('hello world');
+    };
+
+    //Now we want parse CustomClass to PQClass using PQ.Class.parse
+    CustomClass = PQ.Class.parse(CustomClass);
+
+    var myClass = new CustomClass();
+    myClass.sayHello();
+
+    //Now we can extend from it
+    var CustomClass2 = CustomClass.extend({
+        _init: function(){
+            this._super();
+            console.log('Custom Class2');
+        }
+    });
+
+    var myClass2 = new CustomClass2();
+</script>
+</body>
+</html>

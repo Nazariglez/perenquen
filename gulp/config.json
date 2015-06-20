@@ -1,0 +1,10 @@
+{
+  "namespace" : "PQ",
+  "scripts" : "./src/**/*.js",
+  "entryPoint" : "./src/index.js",
+  "bundleName" : "perenquen",
+  "devSuffix" : ".dev",
+  "bundleDest" : "./build",
+
+  "defaultTask" : ["jshint","build"]
+}

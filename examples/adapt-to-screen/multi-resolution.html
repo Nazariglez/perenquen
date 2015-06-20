@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Multi Resolution</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        You can change the game resolution,
+        with this way the renderer size change, adapting to the screen size for example,
+        also you can load assets with many sizes
+     */
+
+    //Get the resolution from the screen
+    var res = window.devicePixelRatio || 1; //2 in retina display (you can use any number)
+
+    //Set the game config
+    var config = {
+        game : {
+            resolution: res
+        }
+    };
+
+    //Create and start game
+    var game = new PQ.Game(config);
+    game.start();
+
+    //We will load a HD assets, or low assets
+    var asset = (res === 2) ? "game@2x.json" : "game.json";
+    console.log('Load:', asset, "Resolution:", res);
+
+    //Load assets
+    game.assetLoader.add([
+        {name: "logo", url: "../../media/logo.png"},
+        {name: "background", url: "../assets/background.png"},
+        {url: "../assets/"+asset}
+    ]).load(onAssetsLoaded);
+
+
+    function onAssetsLoaded(){
+        //You can see this sprites in the game always with the same size
+        //but, if the game resolution is 2, the sprites looks better
+
+        var player = new PQ.Sprite('player.png')
+                .setPosition(game.scene.width/2 - 100, game.scene.height/2)
+                .addTo(game.scene);
+
+        var meteor = new PQ.Sprite('meteorBig.png')
+                .setPosition(game.scene.width/2 + 100, game.scene.height/2)
+                .addTo(game.scene);
+    }
+
+</script>
+</body>
+</html>

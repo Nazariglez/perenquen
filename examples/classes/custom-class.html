@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Custom Classes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        Perenquen.js has a custom class system,
+        with him you can inject code in core or custom classes, or extend them
+
+        Now we can learn how to create a basic class and extend from it
+     */
+
+    //Creating a basic class, for that we need extend from PQ.Class
+    var CustomClass = PQ.Class.extend({
+        _init: function(arg1, arg2){
+            console.log('Ey, look at me! I am a customClass constructor!!');
+            console.log('[Args: ',arg1, arg2, ']');
+        }
+    });
+
+    var instanceCustomClass = new CustomClass('Argument1', 12+50);
+
+
+    //Creating a new class extended from our customClass
+    var CustomClass2 = CustomClass.extend({
+        _init: function(arg1, arg2, arg3){
+            //call parent constructor
+            this._super(arg1, arg2);
+            console.log('And I am a CustomClass2 extended from CustomClass', arg3);
+        }
+    });
+
+    var instanceCustomClass2 = new CustomClass2('Awesome Class!', 'trolololo', true);
+
+</script>
+</body>
+</html>

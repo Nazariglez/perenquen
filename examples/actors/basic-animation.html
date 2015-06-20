@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example Basic Animations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+         Basic animations, speed and rotation
+     */
+
+    //By default all animation use delta time, you can disable it to use frames
+    var config = {
+        //useDeltaAnimation: false
+    };
+
+    //Create and start game, for default the game size is 800x600 landscape
+    var game = new PQ.Game(config);
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/game.json"}
+    ]).load(onAssetsLoaded);
+
+    function onAssetsLoaded(){
+
+        //Rotation speed, always in radians, for degrees use "degree * PQ.DEG_TO_RAD"
+        var sprite = new PQ.Sprite("player.png")
+                .setScale(3,3)
+                .setPosition(200,100)
+                .setRotationSpeed(50 * PQ.DEG_TO_RAD) //set speed rotation
+                .addTo(game.scene);
+
+        var sprite2 = new PQ.Sprite("player.png")
+                .setScale(3,3)
+                .setPosition(200,400)
+                .setRotationSpeed(-50 * PQ.DEG_TO_RAD) //set speed rotation
+                .addTo(game.scene);
+
+        //Lineal speed axis X
+        var sprite3 = new PQ.Sprite("player.png")
+                .setScale(3,3)
+                .setPosition(400,200)
+                .setSpeed(40, 0)
+                .addTo(game.scene);
+
+        sprite3.update = function(gameTime){
+
+            //PingPong
+            if(this.x > 600){
+                this.setSpeed(-40, 0);
+            }else if(this.x < 400){
+                this.setSpeed(40, 0);
+            }
+        };
+
+        //Lineal speed axis Y
+        var sprite4 = new PQ.Sprite("player.png")
+                .setScale(3,3)
+                .setPosition(600,200)
+                .setSpeed(0, 40)
+                .addTo(game.scene);
+
+        sprite4.update = function(gameTime){
+
+            //PingPong
+            if(this.y > 400){
+                this.setSpeed(0, -40);
+            }else if(this.y < 200){
+                this.setSpeed(0, 40);
+            }
+        };
+
+        //Lineal speed both axis
+        var sprite5 = new PQ.Sprite("player.png")
+                .setScale(3,3)
+                .setPosition(400,400)
+                .setSpeed(60, -60)
+                .addTo(game.scene);
+
+        sprite5.update = function(gameTime){
+
+            //PingPong
+            if(this.y > 400){
+                this.setSpeed(60, -60);
+            }else if(this.y < 200){
+                this.setSpeed(-60, 60);
+            }
+        };
+
+        //General angularSpeed and directional movement
+        var initialDirection = 45*PQ.DEG_TO_RAD;
+        var fixRotation = 90*PQ.DEG_TO_RAD; //This sprite (asset) is not aligned correctly
+
+        var sprite6 = new PQ.Sprite("player.png")
+                .setScale(3,3)
+                .setPosition(300,300)
+                .setRotation(fixRotation + initialDirection)
+                .setAngularSpeed(100) //General angularSpeed
+                .setDirection(initialDirection) //Movement direction in degrees
+                .addTo(game.scene);
+
+        sprite6.update = function(gameTime){
+            //Circular movement
+            this.direction += 0.8 * gameTime.delta;
+
+            //The sprite always looks in the correct direction
+            this.rotation = this.direction + (fixRotation);
+        }
+
+    }
+</script>
+</body>
+</html>

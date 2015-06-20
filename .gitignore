@@ -1,2 +1,6 @@
 /node_modules
-/examples
+/examples/test
+/test.js
+/docs
+/jsdoc.conf.json
+/lib/pixi/node_modules

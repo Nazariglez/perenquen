@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Example NinePatch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="../../build/perenquen.dev.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    /*
+        Creating Nine Patchs sprites to use like a buttons or background
+     */
+
+    //Create and start game, for default the game size is 800x600 landscape
+    var game = new PQ.Game();
+    game.start();
+
+    //Load assets
+    game.assetLoader.add([
+        {url: "../assets/ui.json"}
+    ]).load(onAssetsLoaded);
+
+    function onAssetsLoaded(){
+        //Just show the sprite in its normal way
+        var sprite = new PQ.Sprite('buttonLong_blue.png')
+                .setPosition(50,50)
+                .setAnchor(0,0)
+                .addTo(game.scene);
+
+        //Same texture, but now in NinePatch mode, 300x100
+        var ninePatch1 = new PQ.NinePatch('buttonLong_blue.png', 300, 100)
+                .setPosition(50, 150)
+                .setAnchor(0,0)
+                .addTo(game.scene);
+
+        //Same but with other dimensions, 350x250
+        var ninePatch2 = new PQ.NinePatch('buttonLong_blue.png', 350, 250)
+                .setPosition(50, 300)
+                .setAnchor(0,0)
+                .addTo(game.scene);
+
+        //Now look other texture in its normal way
+        var sprite2 = new PQ.Sprite('buttonLong_brown.png')
+                .setPosition(450,50)
+                .setAnchor(0,0)
+                .addTo(game.scene);
+
+        //And the same texture, but with less width and more height
+        var ninePatch3 = new PQ.NinePatch('buttonLong_brown.png', 100, 300)
+                .setAnchor(0,0)
+                .setPosition(450, 150)
+                .addTo(game.scene);
+
+
+        //Also we can resize the NinePatchs after create it
+        var ninePatch4 = new PQ.NinePatch('buttonLong_brown.png', 150, 150)
+                .setAnchor(0,0)
+                .setPosition(600, 150)
+                .addTo(game.scene);
+
+        //Resize the texture with "resize" method, comment the line below to see it a 150x150
+        ninePatch4.resize(150, 350); //Change te size from 150x150 to 150x350
+
+    }
+</script>
+</body>
+</html>
