@@ -71,7 +71,7 @@ Scene.prototype.animate = function(gameTime){
     }
 
     this.timerManager.tick(gameTime);
-    this.tweenManager.tick(gameTime.delta);
+    this.tweenManager.tick(gameTime);
 
     var len = this.children.length;
     for(var i = 0; i < len; i++){

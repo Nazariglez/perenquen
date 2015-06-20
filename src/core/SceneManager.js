@@ -66,7 +66,7 @@ SceneManager.prototype.addScene = function(scene, id){
  * @returns {SceneManager}
  */
 SceneManager.prototype.animate = function(gameTime){
-    this.tweenManager.tick(gameTime.delta);
+    this.tweenManager.tick(gameTime);
 
     if(this.currentScene&&this.currentScene.animate){
         this.currentScene.animate(gameTime);
