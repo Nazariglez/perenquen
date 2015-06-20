@@ -13,7 +13,7 @@ HotKey.prototype._init = function(key, controller){
     this.value = 0;
 };
 
-HotKey.prototype.update = function(gameTime, delta){
+HotKey.prototype.update = function(gameTime){
     this.isDown = this.controller.isDown(this.key);
     this.isPressed = this.controller.isPressed(this.key);
     this.isReleased = this.controller.isReleased(this.key);

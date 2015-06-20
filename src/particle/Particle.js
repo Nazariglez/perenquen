@@ -75,8 +75,8 @@ Particle.prototype.setEmitter = function(emitter){
     return this;
 };
 
-Particle.prototype.animate = function(gameTime, delta){
-    var t = delta*1000;
+Particle.prototype.animate = function(gameTime){
+    var t = gameTime.delta*1000;
     this.life -= t;
     this.lifeElapsed += t;
     if(this.life <= 0){
@@ -86,15 +86,13 @@ Particle.prototype.animate = function(gameTime, delta){
 
     this.updateConfig();
 
-    var tick = (config.useDeltaAnimation) ? delta : 1;
-
     if(this.speed && (this.speed.x !== 0 || this.speed.y !== 0)){
-        this.position.x += this.speed.x * tick;
-        this.position.y += this.speed.y * tick;
+        this.position.x += this.speed.x * gameTime.delta;
+        this.position.y += this.speed.y * gameTime.delta;
     }
 
     if(this.rotationSpeed && this.rotationSpeed !== 0){
-        this.rotation += this.rotationSpeed * tick;
+        this.rotation += this.rotationSpeed * gameTime.delta;
     }
 
     return this;

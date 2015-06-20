@@ -38,11 +38,11 @@ ParticleEmitter.prototype.stop = function(){
     return this;
 };
 
-ParticleEmitter.prototype.animate = function(gameTime, delta){
-    if(this.update(gameTime, delta) !== false){
+ParticleEmitter.prototype.animate = function(gameTime){
+    if(this.update(gameTime) !== false){
 
         if(this.isStarted) {
-            this.emissionTime += delta*1000;
+            this.emissionTime += gameTime.delta*1000;
             if (this.emissionTime >= this.config.emissionTime) {
 
                 if(this.burst){
@@ -64,21 +64,18 @@ ParticleEmitter.prototype.animate = function(gameTime, delta){
         }
         this.tempParticles.length = 0;
 
-
-        var tick = (config.useDeltaAnimation) ? delta : 1;
-
         if(this.speed && (this.speed.x !== 0 || this.speed.y !== 0)){
-            this.position.x += this.speed.x * tick;
-            this.position.y += this.speed.y * tick;
+            this.position.x += this.speed.x * gameTime.delta;
+            this.position.y += this.speed.y * gameTime.delta;
         }
 
         if(this.rotationSpeed && this.rotationSpeed !== 0){
-            this.rotation += this.rotationSpeed * tick;
+            this.rotation += this.rotationSpeed * gameTime.delta;
         }
 
         var len = this.children.length;
         for(var n = 0; n < len; n++){
-            this.children[n].animate(gameTime, delta);
+            this.children[n].animate(gameTime);
         }
     }
 

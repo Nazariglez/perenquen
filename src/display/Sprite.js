@@ -27,25 +27,23 @@ Sprite.prototype._init = function(texture){
     this._unCroppedTexture = null;
 };
 
-Sprite.prototype.animate = function(gameTime, delta){
-    if(this.update(gameTime, delta) === false)return this;
+Sprite.prototype.animate = function(gameTime){
+    if(this.update(gameTime) === false)return this;
 
-    this.animationManager.animate(gameTime, delta);
-
-    var tick = (config.useDeltaAnimation) ? delta : 1;
+    this.animationManager.animate(gameTime);
 
     if(this.speed && (this.speed.x !== 0 || this.speed.y !== 0)){
-        this.position.x += this.speed.x * tick;
-        this.position.y += this.speed.y * tick;
+        this.position.x += this.speed.x * gameTime.delta;
+        this.position.y += this.speed.y * gameTime.delta;
     }
 
     if(this.rotationSpeed && this.rotationSpeed !== 0){
-        this.rotation += this.rotationSpeed * tick;
+        this.rotation += this.rotationSpeed * gameTime.delta;
     }
 
     var len = this.children.length;
     for(var i = 0; i < len; i++){
-        this.children[i].animate(gameTime, delta);
+        this.children[i].animate(gameTime);
     }
 
     return this;

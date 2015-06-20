@@ -100,12 +100,12 @@ Tween.prototype._parseData = function(){
     }
 };
 
-Tween.prototype.tick = function(delta){
+Tween.prototype.tick = function(gameTime){
     if(!(this._canUpdate()&&(this._to||this.path))){
         return this;
     }
     var _to, _from;
-    var tick = delta*1000;
+    var tick = gameTime.msDelta;
 
     if(this.delay > this._delayTime){
         this._delayTime += tick;
@@ -115,7 +115,7 @@ Tween.prototype.tick = function(delta){
     if(!this.isStarted) {
         this._parseData();
         this.isStarted = true;
-        this.onTweenStart(this._elapsedTime, delta);
+        this.onTweenStart(this._elapsedTime, gameTime.delta);
     }
 
     var time = (this.pingPong) ? this.time/2 : this.time;
@@ -129,7 +129,7 @@ Tween.prototype.tick = function(delta){
         this._apply(time);
 
         var realElapsed = (this._pingPong) ? time+this._elapsedTime : this._elapsedTime;
-        this.onTweenUpdate(realElapsed, delta);
+        this.onTweenUpdate(realElapsed, gameTime.delta);
 
         if(ended){
             if(this.pingPong && !this._pingPong){
@@ -149,7 +149,7 @@ Tween.prototype.tick = function(delta){
                 }
 
                 //this._parseData();
-                this.onTweenPingPong(realElapsed, delta);
+                this.onTweenPingPong(realElapsed, gameTime.delta);
 
                 this._elapsedTime = 0;
                 return this;
@@ -157,7 +157,7 @@ Tween.prototype.tick = function(delta){
 
             if(this.loop || this.repeat > this._repeat){
                 this._repeat++;
-                this.onTweenRepeat(realElapsed, delta, this._repeat);
+                this.onTweenRepeat(realElapsed, gameTime.delta, this._repeat);
                 this._elapsedTime = 0;
 
                 if(this.pingPong&&this._pingPong){
@@ -182,7 +182,7 @@ Tween.prototype.tick = function(delta){
 
             this.isEnded = true;
             this.active = false;
-            this.onTweenEnd(realElapsed, delta);
+            this.onTweenEnd(realElapsed, gameTime.delta);
 
             if(this._chainTween){
                 this._chainTween.addTo(this.manager)

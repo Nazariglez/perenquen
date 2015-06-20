@@ -12,9 +12,9 @@ AnimationManager.prototype._init = function(sprite){
     this.currentAnimIndex = 0;
 };
 
-AnimationManager.prototype.animate = function(gameTime, delta){
+AnimationManager.prototype.animate = function(gameTime){
     if(this.isPlaying){
-        this.anims[this.currentAnimIndex].animate(gameTime, delta);
+        this.anims[this.currentAnimIndex].animate(gameTime);
     }
     return this;
 };

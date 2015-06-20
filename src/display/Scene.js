@@ -65,17 +65,17 @@ Scene.prototype.setManager = function(manager){
     return this;
 };
 
-Scene.prototype.animate = function(gameTime, delta){
-    if(this.paused || this.update(gameTime, delta) === false){
+Scene.prototype.animate = function(gameTime){
+    if(this.paused || this.update(gameTime) === false){
         return this;
     }
 
-    this.timerManager.tick(delta);
-    this.tweenManager.tick(delta);
+    this.timerManager.tick(gameTime);
+    this.tweenManager.tick(gameTime.delta);
 
     var len = this.children.length;
     for(var i = 0; i < len; i++){
-        this.children[i].animate(gameTime, delta);
+        this.children[i].animate(gameTime);
     }
 
     return this;

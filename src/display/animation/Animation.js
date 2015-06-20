@@ -128,7 +128,7 @@ Animation.prototype.stop = function(){
 
 //TODO: Reverse mode?
 
-Animation.prototype.animate = function(gameTime, delta){
+Animation.prototype.animate = function(gameTime){
     var len = this.frames.length;
     if(len === 0 || !this.sprite)return this;
 
@@ -140,7 +140,7 @@ Animation.prototype.animate = function(gameTime, delta){
     this.sprite.setTexture(this.frames[this.index]);
 
     //TODO: usar tick para eliminar el delta animation dependiendo del config?
-    this._time += delta*1000;
+    this._time += gameTime.delta*1000;
     if(this._time >= this.time){
         this._time = 0;
         if(!this.loop){

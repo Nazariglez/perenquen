@@ -53,7 +53,7 @@ Gamepad.prototype._onGamepadDisconnected = function(e){
     this._onGamepadDisconnectedCallback(e);
 };
 
-Gamepad.prototype.update = function(gameTime, delta){
+Gamepad.prototype.update = function(gameTime){
     if(!this.isEnabled)return;
 
     var i, gamepads = this._getGamepads();

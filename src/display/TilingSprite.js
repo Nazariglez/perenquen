@@ -113,28 +113,26 @@ TilingSprite.prototype.displayObjectUpdateTransform = function(){
     this._currentBounds = null;
 };
 
-TilingSprite.prototype.animate = function(gameTime, delta){
-    if(this.update(gameTime, delta) === false)return this;
-
-    var tick = (config.useDeltaAnimation) ? delta : 1;
+TilingSprite.prototype.animate = function(gameTime){
+    if(this.update(gameTime) === false)return this;
 
     if(this.speed && (this.speed.x !== 0 || this.speed.y !== 0)){
-        this.position.x += this.speed.x * tick;
-        this.position.y += this.speed.y * tick;
+        this.position.x += this.speed.x * gameTime.delta;
+        this.position.y += this.speed.y * gameTime.delta;
     }
 
     if(this.rotationSpeed && this.rotationSpeed !== 0){
-        this.rotation += this.rotationSpeed * tick;
+        this.rotation += this.rotationSpeed * gameTime.delta;
     }
 
     if(this.tileSpeed && (this.tileSpeed.x !== 0 || this.tileSpeed.y !== 0)){
-        this.tilePosition.x += this.tileSpeed.x * tick;
-        this.tilePosition.y += this.tileSpeed.y * tick;
+        this.tilePosition.x += this.tileSpeed.x * gameTime.delta;
+        this.tilePosition.y += this.tileSpeed.y * gameTime.delta;
     }
 
     var len = this.children.length;
     for(var i = 0; i < len; i++) {
-        this.children[i].animate(gameTime, delta);
+        this.children[i].animate(gameTime);
     }
 
     return this;

@@ -14,7 +14,7 @@ MouseHotKey.prototype._init = function(key, manager){
     this.isReleased = false;
 };
 
-MouseHotKey.prototype.update = function(gameTime, delta){
+MouseHotKey.prototype.update = function(gameTime){
     this.isDown = this.manager.isDown(this.key);
     this.isPressed = this.manager.isPressed(this.key);
     this.isReleased = this.manager.isReleased(this.key);

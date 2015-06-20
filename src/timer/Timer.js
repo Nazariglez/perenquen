@@ -83,9 +83,9 @@ Timer.prototype.remove = function(){
     return this;
 };
 
-Timer.prototype.tick = function(delta){
+Timer.prototype.tick = function(gameTime){
     if(!this.active)return this;
-    var tick = delta*1000;
+    var tick = gameTime.msDelta;
 
     if(this.delay > this._delayTime){
         this._delayTime += tick;
@@ -94,7 +94,7 @@ Timer.prototype.tick = function(delta){
 
     if(!this.isStarted) {
         this.isStarted = true;
-        this.onTimerStart(this._elapsedTime, delta);
+        this.onTimerStart(this._elapsedTime, gameTime.delta);
     }
 
     if(this.time > this._elapsedTime){
@@ -102,19 +102,19 @@ Timer.prototype.tick = function(delta){
             ended = (t>=this.time);
 
         this._elapsedTime = (ended) ? this.time : t;
-        this.onTimerUpdate(this._elapsedTime, delta);
+        this.onTimerUpdate(this._elapsedTime, gameTime.delta);
 
         if(ended){
             if(this.loop || this.repeat > this._repeat){
                 this._repeat++;
-                this.onTimerRepeat(this._elapsedTime, delta, this._repeat);
+                this.onTimerRepeat(this._elapsedTime, gameTime.delta, this._repeat);
                 this._elapsedTime = 0;
                 return this;
             }
 
             this.isEnded = true;
             this.active = false;
-            this.onTimerEnd(this._elapsedTime, delta);
+            this.onTimerEnd(this._elapsedTime, gameTime.delta);
         }
 
         return this;

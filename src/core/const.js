@@ -64,7 +64,6 @@ constants.DEFAULT_GAME_OPTIONS = {
     debug: false,
     sayHello: true,
 
-    useDeltaAnimation: true,
     useSortChildrenByDepth: false,
 
     game : {

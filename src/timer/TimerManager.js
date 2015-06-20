@@ -12,11 +12,11 @@ TimerManager.prototype._init = function(){
     this._toDelete = [];
 };
 
-TimerManager.prototype.tick = function(delta){
+TimerManager.prototype.tick = function(gameTime){
     var len = this.timers.length;
     for(var i = 0; i < len; i++){
         if(this.timers[i].active){
-            this.timers[i].tick(delta);
+            this.timers[i].tick(gameTime);
             if(this.timers[i].isEnded && this.timers[i].expire){
                 this.timers[i].remove();
             }

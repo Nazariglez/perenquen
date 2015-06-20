@@ -11,12 +11,7 @@ Timeline.prototype._init = function(manager){
     this._listeners = [];
     this.index = 0;
     this.timer = new Timer(null, manager);
-    //this.timer.onUpdate(this.tick.bind(this));
     this.timer.onEnd(this.end.bind(this));
-};
-
-Timeline.prototype.tick = function(time, delta){
-    console.log('tick',time);
 };
 
 Timeline.prototype.end = function(time, delta){

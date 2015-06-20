@@ -141,9 +141,9 @@ Keyboard.prototype.isReleased = function(key){
     return !!this.releasedKeys[key];
 };
 
-Keyboard.prototype.update = function(gameTime, delta){
+Keyboard.prototype.update = function(gameTime){
     for(var key in this.hotKeys){
-        this.hotKeys[key].update(gameTime, delta);
+        this.hotKeys[key].update(gameTime);
     }
 
     var len = this.callbacks.down.length;

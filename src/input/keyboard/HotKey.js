@@ -18,7 +18,7 @@ HotKey.prototype._init = function(key, manager){
     this.alt = false;
 };
 
-HotKey.prototype.update = function(gameTime, delta){
+HotKey.prototype.update = function(gameTime){
     this.isDown = this.manager.isDown(this.key);
     this.isPressed = this.manager.isPressed(this.key);
     this.isReleased = this.manager.isReleased(this.key);

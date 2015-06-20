@@ -166,11 +166,11 @@ Game.prototype.stop = function(){
     return this;
 };
 
-Game.prototype.update = function(gameTime, delta){
+Game.prototype.update = function(gameTime){
 
 };
 
-Game.prototype.postUpdate = function(gameTime, delta){
+Game.prototype.postUpdate = function(gameTime){
 
 };
 
@@ -179,13 +179,13 @@ Game.prototype.postUpdate = function(gameTime, delta){
  * @returns {Game}
  */
 Game.prototype.animate = function(){
-    this.update(this.time.total, this.time.delta);
+    this.update(this.time);
 
     this.renderer.render(this.sceneManager);
-    this.sceneManager.animate(this.time.total, this.time.delta);
-    this.inputManager.update(this.time.total, this.time.delta);
+    this.sceneManager.animate(this.time);
+    this.inputManager.update(this.time);
 
-    this.postUpdate(this.time.total, this.time.delta);
+    this.postUpdate(this.time);
     return this;
 };
 
@@ -353,7 +353,6 @@ function getRenderer(width, height, options, noWebGL){
 
 function parseConfig(options){
     var cfg = utils.defaultObject(CONST.DEFAULT_GAME_OPTIONS, options);
-    config.useDeltaAnimation = cfg.useDeltaAnimation;
     config.useSortChildrenByDepth = cfg.useSortChildrenByDepth;
     return cfg;
 }

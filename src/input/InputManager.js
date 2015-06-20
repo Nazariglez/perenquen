@@ -118,17 +118,17 @@ InputManager.prototype.disableGamepad = function(){
     return this.enableGamepad(false);
 };
 
-InputManager.prototype.update = function(gameTime, delta){
+InputManager.prototype.update = function(gameTime){
     if(this.mouse && this.mouse.isEnabled){
-        this.mouse.update(gameTime, delta);
+        this.mouse.update(gameTime);
     }
 
     if(this.keyboard && this.keyboard.isEnabled){
-        this.keyboard.update(gameTime, delta);
+        this.keyboard.update(gameTime);
     }
 
     if(this.gamepad && this.gamepad.isEnabled){
-        this.gamepad.update(gameTime, delta);
+        this.gamepad.update(gameTime);
     }
 };
 

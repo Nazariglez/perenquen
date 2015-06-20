@@ -416,10 +416,10 @@ Mouse.prototype.removeHotKey = function(key){
     return this;
 };
 
-Mouse.prototype.update = function(gameTime, delta){
+Mouse.prototype.update = function(gameTime){
     if(!this.interactive){
         for(var key in this.hotKeys){
-            this.hotKeys[key].update(gameTime, delta);
+            this.hotKeys[key].update(gameTime);
         }
 
         for(var j = -5; j < 0; j++) {
@@ -430,14 +430,14 @@ Mouse.prototype.update = function(gameTime, delta){
     }
 
     //Interactivity
-    var t = gameTime - this.lastTime;
+    var t = gameTime.total - this.lastTime;
     var diff = (t*this.checkFrecuency);
 
     if(diff < 1){
         return;
     }
 
-    this.lastTime = gameTime;
+    this.lastTime = gameTime.total;
 
     if(!this.dirty){
         return;

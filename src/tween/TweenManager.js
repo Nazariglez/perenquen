@@ -13,11 +13,11 @@ TweenManager.prototype._init = function(){
     this.isTweenManager = true;
 };
 
-TweenManager.prototype.tick = function(delta){
+TweenManager.prototype.tick = function(gameTime){
     var len = this.tweens.length;
     for(var i = 0; i < len; i++){
         if(this.tweens[i].active){
-            this.tweens[i].tick(delta);
+            this.tweens[i].tick(gameTime);
             if(this.tweens[i].isEnded && this.tweens[i].expire){
                 this.tweens[i].remove();
             }
