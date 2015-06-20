@@ -90,7 +90,7 @@
 
         //Implement a simple control system with arrow keys
         var speed = 300;
-        player.update = function(gameTime, delta){
+        player.update = function(gameTime){
             if(up.isDown){
                 this.setVelocity(speed);
             }else if(down.isDown){
@@ -100,9 +100,9 @@
             }
 
             if(left.isDown){
-                this.direction -= 3*delta;
+                this.direction -= 3*gameTime.delta;
             }else if(right.isDown){
-                this.direction += 3*delta;
+                this.direction += 3*gameTime.delta;
             }
 
             this.rotation = this.direction + PQ.utils.degToRad(90);

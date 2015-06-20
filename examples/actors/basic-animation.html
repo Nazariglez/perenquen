@@ -56,7 +56,7 @@
                 .setSpeed(40, 0)
                 .addTo(game.scene);
 
-        sprite3.update = function(gameTime, delta){
+        sprite3.update = function(gameTime){
 
             //PingPong
             if(this.x > 600){
@@ -73,7 +73,7 @@
                 .setSpeed(0, 40)
                 .addTo(game.scene);
 
-        sprite4.update = function(gameTime, delta){
+        sprite4.update = function(gameTime){
 
             //PingPong
             if(this.y > 400){
@@ -90,7 +90,7 @@
                 .setSpeed(60, -60)
                 .addTo(game.scene);
 
-        sprite5.update = function(gameTime, delta){
+        sprite5.update = function(gameTime){
 
             //PingPong
             if(this.y > 400){
@@ -112,9 +112,9 @@
                 .setDirection(initialDirection) //Movement direction in degrees
                 .addTo(game.scene);
 
-        sprite6.update = function(gameTime, delta){
+        sprite6.update = function(gameTime){
             //Circular movement
-            this.direction += 0.8 * delta;
+            this.direction += 0.8 * gameTime.delta;
 
             //The sprite always looks in the correct direction
             this.rotation = this.direction + (fixRotation);

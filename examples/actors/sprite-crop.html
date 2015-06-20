@@ -78,13 +78,13 @@
 
         var horizontalCropX = 0;
         var horizontalPingPong = false;
-        sprite6.update = function(gameTime, delta){
+        sprite6.update = function(gameTime){
             this.setCrop(horizontalCropX, 0, 800 - horizontalCropX*2, 600);
 
             if(!horizontalPingPong){
-                horizontalCropX+=100*delta;
+                horizontalCropX+=100*gameTime.delta;
             }else{
-                horizontalCropX-=100*delta;
+                horizontalCropX-=100*gameTime.delta;
             }
 
             if(horizontalCropX >= 400){
@@ -102,13 +102,13 @@
 
         var verticalCropY = 0;
         var verticalPingPong = false;
-        sprite7.update = function(gameTime, delta){
+        sprite7.update = function(gameTime){
             this.setCrop(0, verticalCropY, 800, 600 - verticalCropY*2);
 
             if(!verticalPingPong){
-                verticalCropY+=100*delta;
+                verticalCropY+=100*gameTime.delta;
             }else{
-                verticalCropY-=100*delta;
+                verticalCropY-=100*gameTime.delta;
             }
 
             if(verticalCropY >= 300){

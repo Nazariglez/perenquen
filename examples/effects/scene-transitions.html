@@ -109,7 +109,7 @@
                 .addTo(scene);
 
         //Movement and flip
-        sprite.update = function(gameTime, delta){
+        sprite.update = function(gameTime){
             if(this.x < 100){
                 this.setSpeed(100,0);
                 this.setFlipX(false);
