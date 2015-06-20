@@ -118,7 +118,7 @@ Game.prototype._init = function(width, height, options){
      * The manager for mouse, keyboard, etc...
      * @type {InputManager}
      */
-    this.inputManager = new InputManager(this); //TODO: Maybe rename to "input" instead "inputManager" ?
+    this.inputManager = new InputManager(this);
 
     /**
      * Store the resize method

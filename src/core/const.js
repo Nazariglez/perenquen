@@ -79,7 +79,6 @@ constants.DEFAULT_GAME_OPTIONS = {
         usePersitantData: false,
         scaleType: constants.GAME_SCALE_TYPE.NONE,
         minFrameLimit: 30,
-        //todo: maxFrameLimit
         stopAtVisibilityChange: true,
         clearBeforeRender: true
         //TODO: fustrum culling?
