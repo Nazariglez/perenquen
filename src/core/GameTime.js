@@ -9,19 +9,8 @@ GameTime.prototype._init = function(game){
 
     this.raf = -1;
 
-    this.minFrameLimit = this.game.config.game.minFrameLimit;
-    this.maxFrameLimit = this.game.config.game.maxFrameLimit;
+    this.minFrameLimit = 1000/this.game.config.game.minFrameLimit;
 
-    /**
-     * The time between frames
-     * @member {number}
-     */
-    this.frameElapsedTime = 0;
-
-    /**
-     * Last frame time
-     * @member {number}
-     */
     this.frameLastTime = 0;
 
     this.speed = 1;
@@ -45,8 +34,6 @@ GameTime.prototype.update = function(){
 
     var now = Date.now();
     var time = now - this.frameLastTime;
-
-    //console.log(time);
 
     this.msDelta = (time <= this.minFrameLimit) ? time : this.minFrameLimit;
     this.msDelta /= this.speed;

@@ -179,7 +179,7 @@ Game.prototype.postUpdate = function(gameTime, delta){
  * @returns {Game}
  */
 Game.prototype.animate = function(){
-    this.update(this.time, this.delta);
+    this.update(this.time.total, this.time.delta);
 
     this.renderer.render(this.sceneManager);
     this.sceneManager.animate(this.time.total, this.time.delta);
