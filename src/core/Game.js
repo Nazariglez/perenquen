@@ -310,7 +310,7 @@ Game.prototype.sayHello = function(){
     var renderer = this.isWebGL ? "WebGL" : "Canvas",
         audio = this.isWebAudio ? "WebAudio" : "HTMLAudio";
 
-    console.log('Powered by Perenquen v'+CONST.VERSION + ' (' + renderer + ' - ' + audio + ') [http://perenquenjs.com]');
+    console.log('Powered by Perenquen v'+CONST.VERSION + ' (' + renderer + ' - ' + audio + ') [http://perenquen.tarentoladigital.com]');
     return this;
 };
 
