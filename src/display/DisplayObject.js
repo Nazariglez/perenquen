@@ -55,8 +55,8 @@ DisplayObject.prototype.setRotationSpeed = function(value){
     return this;
 };
 
-DisplayObject.prototype.setVelocity = function(vel){
-    this.velocity = vel;
+DisplayObject.prototype.setAngularSpeed = function(vel){
+    this.angularSpeed = vel;
     return this;
 };
 
@@ -168,7 +168,7 @@ Object.defineProperties(DisplayObject.prototype, {
             var velX = Math.cos(this.direction) * this.speed.x,
                 velY = Math.sin(this.direction) * this.speed.y;
 
-            this._velocity = velX + velY;
+            this._angularSpeed = velX + velY;
         }
 
     },
@@ -187,28 +187,28 @@ Object.defineProperties(DisplayObject.prototype, {
             var velX = Math.cos(this.direction) * this.speed.x,
                 velY = Math.sin(this.direction) * this.speed.y;
 
-            this._velocity = velX + velY;
+            this._angularSpeed = velX + velY;
         }
 
     },
 
-    velocity : { //todo: rename to angularSpeed
+    angularSpeed : {
         get: function(){
-            if(this._velocity === undefined){
+            if(this._angularSpeed === undefined){
                 var velX = Math.cos(this.direction) * this.speed.x,
                     velY = Math.sin(this.direction) * this.speed.y;
 
-                this._velocity = velX + velY;
+                this._angularSpeed = velX + velY;
             }
-            return this._velocity;
+            return this._angularSpeed;
         },
 
         set: function(value){
-            if(value === this._velocity)return;
-            this._velocity = value;
+            if(value === this._angularSpeed)return;
+            this._angularSpeed = value;
 
-            this.speed.x = this._velocity * Math.cos(this.direction);
-            this.speed.y = this._velocity * Math.sin(this.direction);
+            this.speed.x = this._angularSpeed * Math.cos(this.direction);
+            this.speed.y = this._angularSpeed * Math.sin(this.direction);
         }
     },
 
@@ -225,8 +225,8 @@ Object.defineProperties(DisplayObject.prototype, {
             if(value === this._direction)return;
             this._direction = value;
 
-            this.speed.x = this.velocity * Math.cos(this._direction);
-            this.speed.y = this.velocity * Math.sin(this._direction);
+            this.speed.x = this.angularSpeed * Math.cos(this._direction);
+            this.speed.y = this.angularSpeed * Math.sin(this._direction);
 
         }
     },

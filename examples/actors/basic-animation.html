@@ -100,7 +100,7 @@
             }
         };
 
-        //General velocity and directional movement
+        //General angularSpeed and directional movement
         var initialDirection = 45*PQ.DEG_TO_RAD;
         var fixRotation = 90*PQ.DEG_TO_RAD; //This sprite (asset) is not aligned correctly
 
@@ -108,7 +108,7 @@
                 .setScale(3,3)
                 .setPosition(300,300)
                 .setRotation(fixRotation + initialDirection)
-                .setVelocity(100) //General velocity
+                .setAngularSpeed(100) //General angularSpeed
                 .setDirection(initialDirection) //Movement direction in degrees
                 .addTo(game.scene);
 

@@ -92,11 +92,11 @@
         var speed = 300;
         player.update = function(gameTime){
             if(up.isDown){
-                this.setVelocity(speed);
+                this.setAngularSpeed(speed);
             }else if(down.isDown){
-                this.setVelocity(-speed);
+                this.setAngularSpeed(-speed);
             }else if(down.isReleased || up.isReleased){
-                this.setVelocity(0);
+                this.setAngularSpeed(0);
             }
 
             if(left.isDown){

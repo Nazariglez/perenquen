@@ -25,11 +25,11 @@ Particle.prototype.setEmitter = function(emitter){
     var config = emitter.config;
     this.life = utils.randomRange(config.life.min, config.life.max);
     this.lifeElapsed = 0;
-    this.velocity = utils.randomRange(config.speed.min, config.speed.max);
+    this.angularSpeed = utils.randomRange(config.speed.min, config.speed.max);
     this.direction = utils.degToRad(utils.randomRange(config.direction.min, config.direction.max));
     this.rotation = utils.degToRad(utils.randomRange(config.rotation.min, config.rotation.max));
 
-    this.cachedVelocity = this.velocity;
+    this.cachedVelocity = this.angularSpeed;
     this.cachedDirection = this.direction;
 
     this.blendMode = config.blend || CONST.BLEND_MODES.NORMAL;
@@ -43,7 +43,7 @@ Particle.prototype.setEmitter = function(emitter){
     this.maxWidth = this.minWidth + config.size.increase;
     this.maxHeight = this.minHeight + config.size.increase;
 
-    this.minVelocity = this.velocity;
+    this.minVelocity = this.angularSpeed;
     this.maxVelocity = this.minVelocity + config.speed.increase;
 
     this.minRotation = this.rotation;
@@ -105,9 +105,9 @@ Particle.prototype.updateConfig = function(){
     }
 
     if(this.emitter.config.speed.increase){
-        this.velocity = this.applyEasing(this.minVelocity, this.maxVelocity, this.emitter.config.speed.easing);
+        this.angularSpeed = this.applyEasing(this.minVelocity, this.maxVelocity, this.emitter.config.speed.easing);
     }else{
-        this.velocity = this.cachedVelocity;
+        this.angularSpeed = this.cachedVelocity;
     }
 
     if(this.emitter.config.direction.increase){
