@@ -1,6 +1,6 @@
 {
   "name": "perenquen",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "http://perenquen.tarentoladigital.com",
   "description": "HTML5 Game Engine",
   "author": "Nazari Gonzalez <nazari.nz@gmail.com> (http://www.nazariglez.com)",
@@ -9,9 +9,9 @@
     "type": "git",
     "url": "https://github.com/TarentolaDigital/perenquen"
   },
-  "private": true,
+  "private": false,
   "browser": "./src/index.js",
-  "devDependencies": {
+  "dependencies": {
     "async": "^0.9.0",
     "object-assign": "^2.0.0",
     "path": "^0.11.14",

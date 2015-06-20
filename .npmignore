@@ -1,0 +1,11 @@
+/examples
+/build
+/gulp
+/media
+/gulpfile.js
+
+#pixi
+/lib/pixi/gulp
+/lib/pixi/test
+/lib/pixi/bower.json
+/lib/pixi/gulpfile.js
