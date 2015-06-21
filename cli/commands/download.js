@@ -1,37 +1,52 @@
 var program = require('commander'),
     http = require('https'),
-    fs = require('fs'),
+    fs = require('extfs'),
     path = require('path'),
     utils = require('../utils'),
-    tmpPath =  path.normalize(__dirname + "/../tmp/"),
-    templates = require('../config/templates.json');
+    templates = require('../list/templates.json');
 
 
 program.command('download <type> <name>')
     .description('download templates, plugins, etc...')
 
     .action(function(type, name) {
-        /*if (!fs.existsSync(tmpPath)){
-            fs.mkdirSync(tmpPath);
-        }*/
+        if(Object.keys(templates).length === 0){
+            utils.updateList(function(){
+                delete require.cache[require.resolve('../list/templates.json')];
+                //delete require.cache[require.resolve('../list/plugins.json')];
+                templates = require('../list/templates.json');
 
-
-        switch(type){
-            case "template":
-                downloadTemplate(name);
-                break;
-            case "plugin":
-                downloadPlugin(name);
-                break;
-            default:
-                console.log('Unknow type'.red);
-                break;
+                checkType(type, name);
+            });
+        }else{
+            checkType(type, name);
         }
     });
+
+function checkType(type, name){
+    switch(type){
+        case "template":
+            downloadTemplate(name);
+            break;
+        case "plugin":
+            downloadPlugin(name);
+            break;
+        default:
+            console.log('Unknow type'.red);
+            break;
+    }
+}
 
 function downloadTemplate(name){
     if(!templates[name]){
         console.log('Unknow template name'.red);
+        return;
+    }
+
+    var dir = process.cwd();
+
+    if(!fs.isEmptySync(dir)){
+        console.log('This is not an empty directory!'.red);
         return;
     }
 

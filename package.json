@@ -1,6 +1,6 @@
 {
   "name": "perenquen",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "homepage": "http://perenquen.tarentoladigital.com",
   "description": "HTML5 Game Engine",
   "author": "Nazari Gonzalez <nazari.nz@gmail.com> (http://www.nazariglez.com)",
@@ -22,6 +22,7 @@
     "commander": "^2.8.1",
     "download": "^4.1.2",
     "eventemitter3": "^0.1.6",
+    "extfs": "0.0.7",
     "gulp": "^3.8.11",
     "gulp-cached": "^1.0.2",
     "gulp-jshint": "^1.9.2",
