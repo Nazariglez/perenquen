@@ -1,6 +1,6 @@
 {
   "name": "perenquen",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "homepage": "http://perenquen.tarentoladigital.com",
   "description": "HTML5 Game Engine",
   "author": "Nazari Gonzalez <nazari.nz@gmail.com> (http://www.nazariglez.com)",
@@ -11,21 +11,26 @@
   },
   "private": false,
   "browser": "./src/index.js",
+  "bin": {
+    "perenquen": "./cli/perenquen"
+  },
   "dependencies": {
     "async": "^0.9.0",
-    "object-assign": "^2.0.0",
-    "path": "^0.11.14",
-    "resource-loader": "^1.6.0",
     "brfs": "^1.4.0",
     "browserify": "^9.0.3",
     "colors": "^1.0.3",
+    "commander": "^2.8.1",
+    "download": "^4.1.2",
     "eventemitter3": "^0.1.6",
     "gulp": "^3.8.11",
     "gulp-cached": "^1.0.2",
     "gulp-jshint": "^1.9.2",
     "gulp-rename": "^1.2.0",
     "gulp-uglify": "^1.1.0",
+    "object-assign": "^2.0.0",
+    "path": "^0.11.14",
     "require-dir": "^0.1.0",
+    "resource-loader": "^1.6.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^2.4.0"

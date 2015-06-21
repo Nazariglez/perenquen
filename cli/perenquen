@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+var program = require('commander'),
+    colors = require('colors'),
+    requireDir = require('require-dir');
+
+var VERSION = require('../package.json').version;
+
+global.perenquenBin = __filename;
+
+module.exports = (function(){
+    var isCLI = !(!!module.parent);
+
+    program.version(VERSION)
+        .usage('<command> --help');
+
+    var cmds = requireDir('./commands', {recurse : true});
+
+    program.parse(process.argv);
+
+    if(isCLI) {
+        if (!program.args.length) {
+            var header = [
+                '',
+                '  #############################################',
+                '  #          Perenquen Engine  v' + VERSION + '         #',
+                '  #   http://perenquen.tarentoladigital.com   #',
+                '  #############################################'
+            ];
+
+            for (var i = 0; i < header.length; i++) {
+                console.log(header[i].yellow);
+            }
+
+            program.help();
+        }
+    }else{
+
+        //TODO: callbacks for cmds
+        cmds.help = program.help.bind(program);
+        return cmds;
+    }
+})();
