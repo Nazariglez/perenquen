@@ -28,4 +28,8 @@ MouseHotKey.prototype.hit = function(object){
     return this.manager.hit(object);
 };
 
+MouseHotKey.prototype.getLocalPosition = function(displayObject, point, globalPoint){
+    return this.manager.getLocalPosition(displayObject, point, globalPoint);
+};
+
 module.exports = MouseHotKey;
