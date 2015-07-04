@@ -180,4 +180,3 @@ var defaultConfig = {
 function parseConfig(config){
     return utils.defaultObject(defaultConfig, config);
 }
-
