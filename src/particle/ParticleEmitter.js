@@ -127,8 +127,8 @@ var defaultConfig = {
     },
 
     size: {
-        min: 1,
-        max: 1,
+        min: 0,
+        max: 0,
         increase: 0,
         easing: null
     },
@@ -180,4 +180,3 @@ var defaultConfig = {
 function parseConfig(config){
     return utils.defaultObject(defaultConfig, config);
 }
-

@@ -34,9 +34,14 @@ Particle.prototype.setEmitter = function(emitter){
 
     this.blendMode = config.blend || CONST.BLEND_MODES.NORMAL;
 
-    var size = utils.randomRange(config.size.min, config.size.max);
-    this.setSize(size, size);
-    this.setScale(config.scale.x, config.scale.y);
+    if(config.size.min <= 0 && config.size.max <= 0){
+        //Keep original size
+        this.setScale(config.scale.x, config.scale.y);
+    }else {
+        //custom size
+        var size = utils.randomRange(config.size.min, config.size.max);
+        this.setSize(size * config.scale.x, size * config.scale.y);
+    }
 
     this.minWidth = this.width;
     this.minHeight = this.height;

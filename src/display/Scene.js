@@ -163,11 +163,30 @@ Object.defineProperties(Scene.prototype, {
     width : {
         get: function(){
             return this.size.x;
+        },
+
+        set: function(value){
+            if(value !== this.size.x) {
+                this.size.x = value;
+
+                if(this.backgroundColor){
+                    this._backgroundColorDirty = true;
+                }
+            }
         }
     },
     height: {
         get: function(){
             return this.size.y;
+        },
+        set: function(value){
+            if(value !== this.size.y) {
+                this.size.y = value;
+
+                if(this.backgroundColor){
+                    this._backgroundColorDirty = true;
+                }
+            }
         }
     }
 });

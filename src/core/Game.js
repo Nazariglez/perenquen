@@ -193,10 +193,12 @@ Game.prototype.animate = function(){
  * Resize the view using DOM Style
  * @param width {number}
  * @param height {number}
+ * @param renderer {boolean}
  * @returns {Game}
  */
-Game.prototype.resize = function(width, height){
+Game.prototype.resize = function(width, height, renderer){
     var canvas = this.renderer.view;
+    if(renderer)this.renderer.resize(width, height);
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
     return this;
@@ -343,10 +345,12 @@ Object.defineProperties(Game.prototype, {
 });
 
 function getRenderer(width, height, options, noWebGL){
-    if(navigator.isCocoonJS&&!options.view)options.view = window.document.createElement("screencanvas");
+    if(navigator.isCocoonJS&&!options.view){
+        options.view = window.document.createElement("screencanvas");
+    }
 
     var renderer = new autoDetectRenderer(width, height, options, noWebGL);
-    window.document.body.appendChild(renderer.view);
+    if(!options.view)window.document.body.appendChild(renderer.view);
 
     return renderer;
 }
