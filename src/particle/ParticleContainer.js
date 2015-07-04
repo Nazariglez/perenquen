@@ -12,7 +12,7 @@ ParticleContainer.prototype.constructor = ParticleContainer;
 ParticleContainer.prototype._init = function(config){
     Container.prototype._init.call(this);
     this.emitters = [];
-    this.setConfig(config);
+    if(config)this.setConfig(config);
 };
 
 ParticleContainer.prototype.setConfig = function(config){
