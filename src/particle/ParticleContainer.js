@@ -11,14 +11,21 @@ ParticleContainer.prototype.constructor = ParticleContainer;
 
 ParticleContainer.prototype._init = function(config){
     Container.prototype._init.call(this);
+    this.emitters = [];
+    this.setConfig(config);
+};
+
+ParticleContainer.prototype.setConfig = function(config){
     config = (typeof config === "string") ? utils.assetCache.getParticle(config) : config;
 
-    this.emitters = [];
+    this.emitters.length = 0;
 
     var len = config.emitters.length;
     for(var i = 0; i < len; i++){
         this.addEmitter(new ParticleEmitter(config.emitters[i]));
     }
+
+    return this;
 };
 
 ParticleContainer.prototype.getEmitter = function(id){
