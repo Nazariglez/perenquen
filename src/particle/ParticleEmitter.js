@@ -177,6 +177,8 @@ var defaultConfig = {
     }
 };
 
+module.exports.defaultConfig = defaultConfig;
+
 function parseConfig(config){
     return utils.defaultObject(defaultConfig, config);
 }
