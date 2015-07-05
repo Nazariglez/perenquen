@@ -77,6 +77,19 @@ ParticleContainer.prototype.addEmitter = function(emitter){
     return this;
 };
 
+ParticleContainer.prototype.removeEmitter = function(id){
+    var emitter = this.getEmitter(id);
+    if(emitter){
+        var index = this.emitters.indexOf(emitter);
+        if(index !== -1){
+            this.emitters.splice(index, 1);
+            emitter.remove();
+        }
+    }
+
+    return this;
+};
+
 module.exports = ParticleContainer;
 
 Object.defineProperties(ParticleContainer.prototype, {
