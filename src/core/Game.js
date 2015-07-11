@@ -201,7 +201,22 @@ Game.prototype.resize = function(width, height, renderer){
     if(renderer)this.renderer.resize(width, height);
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
+
+    if(this.sceneManager)this._dispatchOnResize(width, height);
     return this;
+};
+
+Game.prototype._dispatchOnResize = function(width, height){
+    if(this.onResize){
+        this.onResize(width, height);
+    }
+
+    var len = this.sceneManager.scenes.length;
+    for(var i = 0; i < len; i++){
+        if(this.sceneManager.scenes[i].onResize){
+            this.sceneManager.scenes[i].onResize(width, height);
+        }
+    }
 };
 
 
