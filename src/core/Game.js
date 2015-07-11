@@ -198,7 +198,13 @@ Game.prototype.animate = function(){
  */
 Game.prototype.resize = function(width, height, renderer){
     var canvas = this.renderer.view;
-    if(renderer)this.renderer.resize(width, height);
+    
+    if(renderer){
+        this.renderer.resize(width, height);
+        this.width = width;
+        this.height = height;
+    }
+
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
 
