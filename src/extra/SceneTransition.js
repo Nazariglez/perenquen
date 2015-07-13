@@ -54,12 +54,12 @@ SceneTransition.prototype.sortScenes = function(first, second){
 SceneTransition.prototype._onTransitionStart = function(){
     this.sceneIn.visible = true;
     this.manager.currentScene = null;
-    this._onStartCallback();
+    this._onStartCallback(this.sceneIn, this.sceneOut);
 };
 
 SceneTransition.prototype._onTransitionEnd = function(){
     this.manager.setCurrentScene(this.sceneIn);
-    this._onEndCallback();
+    this._onEndCallback(this.sceneIn, this.sceneOut);
 };
 
 SceneTransition.prototype.onStart = function(callback){
