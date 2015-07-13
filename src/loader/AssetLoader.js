@@ -72,4 +72,4 @@ AssetLoader.prototype.setAudioType = function(){
 // Add custom extentions
 var Resource = ResourceLoader.Resource;
 
-Resource.setExtensionXhrType('fnt', Resource.XHR_RESPONSE_TYPE.DOCUMENT);
+//Resource.setExtensionXhrType('fnt', Resource.XHR_RESPONSE_TYPE.TEXT);
