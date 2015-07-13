@@ -135,6 +135,8 @@ Camera.prototype.animate = function(gameTime){
             this.children[i].animate(gameTime);
         }
 
+        this._cleanChildrens();
+
         this.applyFollowTarget();
 
         if(this.speed && (this.speed.x !== 0 || this.speed.y !== 0)){

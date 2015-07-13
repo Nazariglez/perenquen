@@ -10,7 +10,31 @@ DisplayObject.prototype.addTo = function(parent){
 };
 
 DisplayObject.prototype.remove = function(){
-    if(this.parent)this.parent.removeChild(this);
+    if(this.parent){
+        this.parent.removeChild(this);
+    }
+    return this;
+};
+
+DisplayObject.prototype._cleanChildrens = function(){
+    if(this._childrensToRemove && this._childrensToRemove.length >= 1){
+        for(var i = 0; i < this._childrensToRemove.length; i++){
+            this.removeChild(this._childrensToRemove[i]);
+        }
+
+        this._childrensToRemove.length = 0;
+    }
+};
+
+DisplayObject.prototype.kill = function(){
+    if(this.parent){
+        if(typeof this.parent._childrensToRemove === "undefined"){
+            this.parent._childrensToRemove = [];
+        }
+
+        this.parent._childrensToRemove.push(this);
+    }
+
     return this;
 };
 
@@ -81,6 +105,8 @@ DisplayObject.prototype.animate = function(gameTime){
         for(var i = 0; i < len; i++){
             this.children[i].animate(gameTime);
         }
+
+        this._cleanChildrens();
     }
 
     return this;
