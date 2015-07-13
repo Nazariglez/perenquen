@@ -1,3 +1,5 @@
+var last = 0;
+
 function GameTime(game){
     this._init(game);
 }
@@ -9,12 +11,11 @@ GameTime.prototype._init = function(game){
 
     this.raf = -1;
 
-    this.minFrameLimit = 1000/this.game.config.game.minFrameLimit;
-
-    this.frameLastTime = 0;
+    this.minFrameLimit = 1/this.game.config.game.minFrameLimit;
 
     this.speed = 1;
-    this.total = 0;
+    this.time = 0;
+    this.lastTime = 0;
     this.delta = 0;
     this.msDelta = 0;
 };
@@ -33,15 +34,14 @@ GameTime.prototype.update = function(){
     this.raf = window.requestAnimationFrame(this.update.bind(this));
 
     var now = Date.now();
-    var time = now - this.frameLastTime;
 
-    this.msDelta = (time <= this.minFrameLimit) ? time : this.minFrameLimit;
-    this.msDelta /= this.speed;
+    this.time += Math.min((now - last)/1000, this.minFrameLimit);
+    this.delta = this.time - this.lastTime;
+    this.lastTime = this.time;
 
-    this.frameLastTime = now;
+    this.msDelta = this.delta*1000;
 
-    this.delta = this.msDelta/1000;
-    this.total += this.delta;
+    last = now;
 
     this.game.animate();
 
