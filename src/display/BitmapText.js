@@ -285,3 +285,5 @@ function getWordWidth(word, font){
         spaceWidth: spaceWidth*scale
     };
 }
+
+//TODO: IMPORTANTE getLocalBounds no devuelve height, por es complicado setear anchors o medir para maquetar
