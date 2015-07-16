@@ -76,7 +76,7 @@ Game.prototype._init = function(width, height, options){
      */
     this.canvas = this.renderer.view;
 
-    this.time = new GameTime(this);
+    this.time = new GameTime(this, this.animate.bind(this));
 
     /**
      * Whether the renderer is a webgl
@@ -333,7 +333,13 @@ Game.prototype.sayHello = function(){
     var renderer = this.isWebGL ? "WebGL" : "Canvas",
         audio = this.isWebAudio ? "WebAudio" : "HTMLAudio";
 
-    console.log('Powered by Perenquen v'+CONST.VERSION + ' (' + renderer + ' - ' + audio + ') [http://perenquen.tarentoladigital.com]');
+    //console.log('Powered by Perenquen v'+CONST.VERSION + ' (' + renderer + ' - ' + audio + ') [http://perenquen.tarentoladigital.com]');
+    console.log(
+        "Powered by Perenquen v" + CONST.VERSION + " [http://perenquen.tarentoladigital.com]\n" +
+        "and Pixi.js v" + CONST.PIXI_VERSION + " [http://www.pixijs.com]\n\n\n" +
+        "Renderer: " + renderer + "\n" +
+        "Audio: " + audio
+    );
     return this;
 };
 
