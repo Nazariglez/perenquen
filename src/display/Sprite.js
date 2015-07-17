@@ -46,8 +46,6 @@ Sprite.prototype.animate = function(gameTime){
         this.children[i].animate(gameTime);
     }
 
-    this._cleanChildrens();
-
     return this;
 };
 

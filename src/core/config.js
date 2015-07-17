@@ -1,3 +1,4 @@
 module.exports = {
-    useSortChildrenByDepth: false
+    useSortChildrenByDepth: false,
+    _killedObjects: []
 };

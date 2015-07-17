@@ -183,6 +183,8 @@ Game.prototype.animate = function(){
 
     this.renderer.render(this.sceneManager);
     this.sceneManager.animate(this.time);
+    cleanObjects();
+
     this.inputManager.update(this.time);
 
     this.postUpdate(this.time);
@@ -414,4 +416,13 @@ function parseRendererConfig(defaultConfig, config){
     }
 
     return cfg;
+}
+
+function cleanObjects(){
+    if(config._killedObjects.length){
+        for(var i = 0; i < config._killedObjects.length; i++){
+            config._killedObjects[i].remove();
+        }
+        config._killedObjects.length = 0;
+    }
 }
