@@ -181,10 +181,10 @@ Game.prototype.postUpdate = function(gameTime){
 Game.prototype.animate = function(){
     this.update(this.time);
 
-    this.renderer.render(this.sceneManager);
     this.sceneManager.animate(this.time);
     cleanObjects();
 
+    this.renderer.render(this.sceneManager);
     this.inputManager.update(this.time);
 
     this.postUpdate(this.time);
