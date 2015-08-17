@@ -120,6 +120,8 @@ Game.prototype._init = function(width, height, options){
      */
     this.inputManager = new InputManager(this);
 
+    this.hasFocus = true;
+
     /**
      * Store the resize method
      * @member {null|function}
@@ -236,8 +238,10 @@ Game.prototype._dispatchOnResize = function(width, height){
 Game.prototype.visibilityChange = function(hidden){
     if(this.config.game.stopAtVisibilityChange){
         if(hidden){
+            this.hasFocus = false;
             this.stop();
         }else{
+            this.hasFocus = true;
             this.start();
         }
     }
