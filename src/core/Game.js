@@ -76,7 +76,7 @@ Game.prototype._init = function(width, height, options){
      */
     this.canvas = this.renderer.view;
 
-    this.time = new GameTime(this);
+    this.time = new GameTime(this, this.animate.bind(this));
 
     /**
      * Whether the renderer is a webgl
@@ -119,6 +119,8 @@ Game.prototype._init = function(width, height, options){
      * @type {InputManager}
      */
     this.inputManager = new InputManager(this);
+
+    this.hasFocus = true;
 
     /**
      * Store the resize method
@@ -181,8 +183,10 @@ Game.prototype.postUpdate = function(gameTime){
 Game.prototype.animate = function(){
     this.update(this.time);
 
-    this.renderer.render(this.sceneManager);
     this.sceneManager.animate(this.time);
+    cleanObjects();
+
+    this.renderer.render(this.sceneManager);
     this.inputManager.update(this.time);
 
     this.postUpdate(this.time);
@@ -234,8 +238,10 @@ Game.prototype._dispatchOnResize = function(width, height){
 Game.prototype.visibilityChange = function(hidden){
     if(this.config.game.stopAtVisibilityChange){
         if(hidden){
+            this.hasFocus = false;
             this.stop();
         }else{
+            this.hasFocus = true;
             this.start();
         }
     }
@@ -333,7 +339,13 @@ Game.prototype.sayHello = function(){
     var renderer = this.isWebGL ? "WebGL" : "Canvas",
         audio = this.isWebAudio ? "WebAudio" : "HTMLAudio";
 
-    console.log('Powered by Perenquen v'+CONST.VERSION + ' (' + renderer + ' - ' + audio + ') [http://perenquen.tarentoladigital.com]');
+    //console.log('Powered by Perenquen v'+CONST.VERSION + ' (' + renderer + ' - ' + audio + ') [http://perenquen.tarentoladigital.com]');
+    console.log(
+        "Powered by Perenquen v" + CONST.VERSION + " [http://perenquen.tarentoladigital.com]\n" +
+        "and Pixi.js v" + CONST.PIXI_VERSION + " [http://www.pixijs.com]\n\n\n" +
+        "Renderer: " + renderer + "\n" +
+        "Audio: " + audio
+    );
     return this;
 };
 
@@ -408,4 +420,13 @@ function parseRendererConfig(defaultConfig, config){
     }
 
     return cfg;
+}
+
+function cleanObjects(){
+    if(config._killedObjects.length){
+        for(var i = 0; i < config._killedObjects.length; i++){
+            config._killedObjects[i].remove();
+        }
+        config._killedObjects.length = 0;
+    }
 }

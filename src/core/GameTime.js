@@ -1,12 +1,12 @@
 var last = 0;
 
-function GameTime(game){
-    this._init(game);
+function GameTime(game, gameAnimate){
+    this._init(game, gameAnimate);
 }
 
 GameTime.prototype.constructor = GameTime;
 
-GameTime.prototype._init = function(game){
+GameTime.prototype._init = function(game, gameAnimate){
     this.game = game;
 
     this.raf = -1;
@@ -18,6 +18,8 @@ GameTime.prototype._init = function(game){
     this.lastTime = 0;
     this.delta = 0;
     this.msDelta = 0;
+
+    this.gameAnimate = gameAnimate;
 };
 
 GameTime.prototype.start = function(){
@@ -43,7 +45,7 @@ GameTime.prototype.update = function(){
 
     last = now;
 
-    this.game.animate();
+    this.gameAnimate();
 
     return this;
 };
